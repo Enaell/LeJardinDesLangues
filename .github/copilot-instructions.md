@@ -53,16 +53,18 @@ When provided with a code block and an instructions file, follow these steps:
 - **Framework** : React + TypeScript.
 - **UI** : Material-UI couplé avec Tailwind CSS pour une personnalisation avancée.
 - **Build Tool** : Vite pour un développement rapide.
+- **Runtime** : Node.js 22.
 
 ### Frontend Mobile
 - **Framework** : React Native.
 
 ### Backend
-- **Serveur** : Node.js avec NestJS.
+- **Serveur** : Node.js 22 avec NestJS.
 - **ORM** : Prisma pour une gestion simplifiée de la base de données.
 
 ### Base de données
-- **Type** : PostgreSQL.
+- **Type** : PostgreSQL 16.
+- **Environnement de test** : PostgreSQL 16 en conteneur dédié.
 
 ### Environnement de développement
 - **Conteneurisation** : Docker Compose pour un environnement reproductible.
@@ -124,6 +126,23 @@ When provided with a code block and an instructions file, follow these steps:
 - **Scopes OAuth** : Limiter les permissions demandées aux fournisseurs tiers (ex. : email, profil de base).
 - **Expiration des tokens** : Configurer une expiration courte et utiliser des tokens de rafraîchissement.
 - **Stockage sécurisé** : Utiliser des cookies sécurisés (httpOnly).
+
+---
+
+## 🐳 Architecture Docker
+
+### Services Docker Compose
+- **postgres** : Base de données principale PostgreSQL 16
+- **postgres_test** : Base de données dédiée aux tests (profile: test)
+- **server** : Backend NestJS avec Prisma
+- **client** : Frontend React avec Vite
+- **redis** : Cache et sessions (production uniquement)
+
+### Multi-stage Dockerfiles
+- **Développement** : Hot reload activé, volumes montés
+- **Production** : Images optimisées, utilisateurs non-root
+- **Test** : Environnement isolé pour les tests
+
 
 ---
 
