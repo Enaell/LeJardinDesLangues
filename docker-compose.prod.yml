@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  # Base de données principale PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: lejardin_postgres_prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+      - ./server/prisma/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - lejardin_network_prod
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    # En production, ne pas exposer le port vers l'extérieur
+    # ports:
+    #   - "5432:5432"
+
+    # Backend NestJS
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: production
+    container_name: lejardin_server_prod
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      CORS_ORIGIN: ${CORS_ORIGIN}
+    networks:
+      - lejardin_network_prod
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:3000/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    # En production, utiliser un reverse proxy (nginx/traefik)
+    # ports:
+    #   - "3000:3000"
+
+    # Frontend React avec Nginx
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      target: production
+    container_name: lejardin_client_prod
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - lejardin_network_prod
+    depends_on:
+      - server
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    # Pour SSL en production
+    volumes:
+      - ./ssl/certs:/etc/ssl/certs:ro
+      - ./ssl/private:/etc/ssl/private:ro
+
+  # Redis pour le cache et les sessions (optionnel mais recommandé en production)
+  redis:
+    image: redis:7-alpine
+    container_name: lejardin_redis_prod
+    restart: always
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data_prod:/data
+    networks:
+      - lejardin_network_prod
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data_prod:
+    driver: local
+  redis_data_prod:
+    driver: local
+
+networks:
+  lejardin_network_prod:
+    driver: bridge

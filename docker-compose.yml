@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  # Base de données principale PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: lejardin_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-lejardin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-lejardin_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./server/prisma/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - lejardin_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lejardin} -d ${POSTGRES_DB:-lejardin_db}" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Base de données de test PostgreSQL
+  postgres_test:
+    image: postgres:16-alpine
+    container_name: lejardin_postgres_test
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_TEST_USER:-lejardin_test}
+      POSTGRES_PASSWORD: ${POSTGRES_TEST_PASSWORD:-password_test}
+      POSTGRES_DB: ${POSTGRES_TEST_DB:-lejardin_test_db}
+    ports:
+      - "${POSTGRES_TEST_PORT:-5433}:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    networks:
+      - lejardin_network
+    profiles:
+      - test
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_TEST_USER:-lejardin_test} -d ${POSTGRES_TEST_DB:-lejardin_test_db}" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend NestJS avec Prisma
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: ${NODE_ENV:-development}
+    container_name: lejardin_server
+    restart: unless-stopped
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: ${SERVER_PORT:-3000}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-lejardin}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-lejardin_db}
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1h}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+    ports:
+      - "${SERVER_PORT:-3000}:3000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+      - /app/dist
+    networks:
+      - lejardin_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:3000/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend React avec Vite
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      target: ${NODE_ENV:-development}
+    container_name: lejardin_client
+    restart: unless-stopped
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:3000}
+      VITE_APP_NAME: ${VITE_APP_NAME:-Le Jardin des Langues}
+    ports:
+      - "${CLIENT_PORT:-5173}:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+      - /app/dist
+    networks:
+      - lejardin_network
+    depends_on:
+      - server
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:5173 || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Service de test (optionnel, activé via profile)
+  test:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: test
+    container_name: lejardin_test
+    environment:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://${POSTGRES_TEST_USER:-lejardin_test}:${POSTGRES_TEST_PASSWORD:-password_test}@postgres_test:5432/${POSTGRES_TEST_DB:-lejardin_test_db}
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    networks:
+      - lejardin_network
+    depends_on:
+      postgres_test:
+        condition: service_healthy
+    profiles:
+      - test
+    command: npm run test
+
+volumes:
+  postgres_data:
+    driver: local
+  postgres_test_data:
+    driver: local
+
+networks:
+  lejardin_network:
+    driver: bridge

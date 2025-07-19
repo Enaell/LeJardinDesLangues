@@ -1,0 +1,6 @@
+# Git ignore pour Prisma
+# Fichiers de migration temporaires
+*tmp*
+
+# Fichiers de sauvegarde
+*.bak
