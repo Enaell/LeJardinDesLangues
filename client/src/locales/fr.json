@@ -1,0 +1,47 @@
+{
+  "welcome": "Bienvenue sur Le Jardin des Langues",
+  "navigation": {
+    "home": "Accueil",
+    "dictionary": "Dictionnaire",
+    "flashcards": "Cartes mémoire",
+    "exercises": "Exercices",
+    "community": "Communauté",
+    "profile": "Profil"
+  },
+  "dictionary": {
+    "search": "Rechercher un mot...",
+    "searchResults": "Résultats de recherche",
+    "noResults": "Aucun résultat trouvé",
+    "translation": "Traduction",
+    "pinyin": "Pinyin",
+    "examples": "Exemples"
+  },
+  "flashcards": {
+    "myCards": "Mes cartes",
+    "createCard": "Créer une carte",
+    "study": "Étudier",
+    "showAnswer": "Voir la réponse",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "nextCard": "Carte suivante"
+  },
+  "exercises": {
+    "availableExercises": "Exercices disponibles",
+    "difficulty": "Difficulté",
+    "beginner": "Débutant",
+    "intermediate": "Intermédiaire",
+    "advanced": "Avancé",
+    "start": "Commencer",
+    "submit": "Valider",
+    "score": "Score"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "cancel": "Annuler",
+    "save": "Sauvegarder",
+    "delete": "Supprimer",
+    "edit": "Modifier"
+  }
+}

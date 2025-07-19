@@ -1,0 +1,47 @@
+{
+  "welcome": "欢迎来到语言花园",
+  "navigation": {
+    "home": "主页",
+    "dictionary": "词典",
+    "flashcards": "记忆卡",
+    "exercises": "练习",
+    "community": "社区",
+    "profile": "个人资料"
+  },
+  "dictionary": {
+    "search": "搜索单词...",
+    "searchResults": "搜索结果",
+    "noResults": "未找到结果",
+    "translation": "翻译",
+    "pinyin": "拼音",
+    "examples": "例句"
+  },
+  "flashcards": {
+    "myCards": "我的卡片",
+    "createCard": "创建卡片",
+    "study": "学习",
+    "showAnswer": "显示答案",
+    "correct": "正确",
+    "incorrect": "错误",
+    "nextCard": "下一张卡片"
+  },
+  "exercises": {
+    "availableExercises": "可用练习",
+    "difficulty": "难度",
+    "beginner": "初级",
+    "intermediate": "中级",
+    "advanced": "高级",
+    "start": "开始",
+    "submit": "提交",
+    "score": "分数"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "发生错误",
+    "retry": "重试",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑"
+  }
+}
