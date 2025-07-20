@@ -26,17 +26,17 @@ Cette application utilise :
 - **Tailwind CSS** pour le styling personnalisé
 - **Vite** comme outil de build et serveur de développement
 
-## Structure du projet
+### Architecture Feature-Oriented
+
+L'application suit une architecture orientée fonctionnalités pour une meilleure organisation et maintenabilité. Consultez [README-ARCHITECTURE.md](./README-ARCHITECTURE.md) pour plus de détails.
 
 ```
 src/
-├── assets/          # Images, icônes et autres ressources
-├── components/      # Composants React réutilisables
-├── pages/          # Pages principales de l'application
-├── hooks/          # Hooks React personnalisés
-├── services/       # Services API et logique métier
-├── types/          # Définitions TypeScript
-└── utils/          # Fonctions utilitaires
+├── features/     # Fonctionnalités métier (auth, dictionary, flashcards, etc.)
+├── core/         # Code partagé et composants réutilisables
+├── pages/        # Pages principales de l'application
+├── routes/       # Configuration du routage
+└── store/        # Gestion d'état globale
 ```
 
 ## Fonctionnalités

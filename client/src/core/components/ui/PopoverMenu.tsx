@@ -1,7 +1,7 @@
 import { Button, Menu, MenuItem } from '@mui/material';
 import * as React from 'react';
 
-export default function PopoverMenu() {
+export const PopoverMenu = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -40,4 +40,4 @@ export default function PopoverMenu() {
       </Menu>
     </React.Fragment>
   );
-}
+};

@@ -153,6 +153,40 @@ When provided with a code block and an instructions file, follow these steps:
   - Chaque fonctionnalité (ex. : authentification, dictionnaire, flashcards) sera implémentée sous forme de modules indépendants dans NestJS.
   - Modélisation facilitant une future séparation en microservices.
 
+### Frontend Feature-Oriented
+Le frontend suit une architecture orientée fonctionnalités avec la structure suivante :
+
+```
+src/
+├── features/           # Fonctionnalités métier
+│   ├── auth/          # Authentification
+│   ├── dictionary/    # Dictionnaire
+│   ├── flashcards/    # Cartes mémoire
+│   ├── exercises/     # Exercices
+│   ├── community/     # Communauté
+│   └── profile/       # Profil utilisateur
+├── core/              # Code partagé et utilitaires
+│   ├── components/    # Composants UI réutilisables
+│   │   ├── ui/        # Composants de base
+│   │   ├── layout/    # Composants de mise en page
+│   │   └── forms/     # Composants de formulaires
+│   ├── hooks/         # Hooks personnalisés
+│   ├── services/      # Services partagés (API, etc.)
+│   ├── utils/         # Fonctions utilitaires
+│   ├── types/         # Types TypeScript globaux
+│   └── i18n/          # Configuration et traductions
+├── pages/             # Pages principales de l'application
+├── routes/            # Configuration du routage
+└── store/             # Gestion d'état globale
+```
+
+Chaque feature contient :
+- `components/` : Composants spécifiques à la fonctionnalité
+- `hooks/` : Hooks métier pour la fonctionnalité
+- `services/` : Services API spécifiques
+- `types/` : Types TypeScript pour la fonctionnalité
+- `index.ts` : Exports publics de la fonctionnalité
+
 ### Transition vers des microservices
 - Préparation d’une communication inter-modules pouvant être remplacée par des messages asynchrones (ex. : RabbitMQ, Kafka).
 - Structuration de la base de données pour éviter les dépendances complexes.
