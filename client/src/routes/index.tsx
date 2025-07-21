@@ -2,7 +2,6 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Link } from '@tanstack/react-router';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import MuiLink from '@mui/material/Link';
 import Slider from '@mui/material/Slider';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
