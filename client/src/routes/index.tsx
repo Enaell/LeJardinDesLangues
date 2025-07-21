@@ -11,27 +11,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import { PopoverMenu, ProTip } from '../core/components/ui';
 
-function Copyright() {
-  return (
-    <Typography
-      variant="body2"
-      align="center"
-      sx={{
-        color: 'text.secondary',
-        mt: 4,
-      }}
-    >
-      {'Copyright © '}
-      <MuiLink color="inherit" href="https://github.com/Enaell/LeJardinDesLangues">
-        Le Jardin des Langues
-      </MuiLink>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-export default function HomePage() {
+export const HomePage = () => {
   const features = [
     {
       title: 'Dictionnaire',
@@ -120,12 +100,10 @@ export default function HomePage() {
           Commencez par explorer le dictionnaire pour découvrir de nouveaux mots,
           puis créez vos premières cartes mémoire pour les mémoriser !
         </ProTip>
-
-        <Copyright />
       </div>
     </Container>
   );
-}
+};
 
 
 export const Route = createFileRoute('/')({

@@ -74,6 +74,36 @@ When provided with a code block and an instructions file, follow these steps:
 
 ---
 
+## 📝 Conventions de codage
+
+### Composants React
+- **Déclaration** : Utiliser la syntaxe `const` avec arrow functions :
+  ```typescript
+  export const MyComponent = (props: MyComponentProps) => {
+    // logique du composant
+    return <div>...</div>;
+  };
+  ```
+- **Éviter** : Les déclarations `function` et `export default`
+- **Props** : Toujours typer les props avec un type dédié
+
+### Types vs Interfaces
+- **Préférer** : Les `type` plutôt que les `interface`
+- **Convention** : Suffixer les types de props avec `Props`
+  ```typescript
+  type MyComponentProps = {
+    title: string;
+    isVisible: boolean;
+  };
+  ```
+
+### Exports
+- **Préférer** : Les exports nommés plutôt que les exports par défaut
+- **Éviter** : `export default` sauf pour les cas spécifiques (routes, configuration)
+- **Organiser** : Regrouper les exports dans des fichiers `index.ts`
+
+---
+
 ## 🧪 Tests et qualité
 
 ### Backend

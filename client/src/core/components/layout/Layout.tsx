@@ -11,12 +11,13 @@ import {
   Menu,
   MenuItem
 } from '@mui/material';
+import { Copyright } from '../ui/Copiright';
 
-interface LayoutProps {
+type LayoutProps = {
   children: React.ReactNode;
-}
+};
 
-export default function Layout({ children }: LayoutProps) {
+export const Layout = ({ children }: LayoutProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -110,16 +111,9 @@ export default function Layout({ children }: LayoutProps) {
 
       <Box component="footer" sx={{ py: 3, px: 2, mt: 'auto', backgroundColor: 'grey.100' }}>
         <Container maxWidth="sm">
-          <Typography variant="body2" color="text.secondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" to="/">
-              Le Jardin des Langues
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-          </Typography>
+          <Copyright />
         </Container>
       </Box>
     </Box>
   );
-}
+};

@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-export function FlashcardsPage() {
+const FlashcardsPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
@@ -12,7 +12,7 @@ export function FlashcardsPage() {
       </div>
     </div>
   );
-}
+};
 
 export const Route = createFileRoute('/flashcards')({
   component: FlashcardsPage,

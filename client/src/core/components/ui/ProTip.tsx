@@ -1,9 +1,9 @@
 import React from 'react';
 
-interface ProTipProps {
+type ProTipProps = {
   children: React.ReactNode;
   className?: string;
-}
+};
 
 export const ProTip = ({ children, className = '' }: ProTipProps) => {
   return (
