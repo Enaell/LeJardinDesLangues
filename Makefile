@@ -122,7 +122,24 @@ clean-all: ## Nettoie tout (containers, volumes, images, cache)
 
 backup-db: ## Sauvegarde la base de données
 	@echo "$(GREEN)Sauvegarde de la base de données...$(NC)"
-	docker-compose -f $(COMPOSE_FILE) exec postgres pg_dump -U $${POSTGRES_USER:-lejardin} -d $${POSTGRES_DB:-lejardin_db} > backup_$$(date +%Y%m%d_%H%M%S).sql
+	@chmod +x postgres-database-project/scripts/backup.sh
+	@./postgres-database-project/scripts/backup.sh
+
+restore-db: ## Restaure la base de données (Usage: make restore-db BACKUP=fichier.sql)
+	@echo "$(GREEN)Restauration de la base de données...$(NC)"
+	@if [ -z "$(BACKUP)" ]; then \
+		echo "$(RED)Usage: make restore-db BACKUP=fichier.sql$(NC)"; \
+		exit 1; \
+	fi
+	@chmod +x postgres-database-project/scripts/restore.sh
+	@./postgres-database-project/scripts/restore.sh $(BACKUP)
+
+reset-db: ## Recrée complètement la base de données avec les migrations
+	@echo "$(YELLOW)Recréation complète de la base de données...$(NC)"
+	docker-compose -f $(COMPOSE_FILE) down postgres
+	docker volume rm lejardindeslanges_postgres_data || true
+	docker-compose -f $(COMPOSE_FILE) up -d postgres
+	@echo "$(GREEN)Base de données recréée avec les dernières migrations!$(NC)"
 
 dev: setup up ## Configuration et démarrage rapide pour le développement
 	@echo "$(GREEN)Environnement de développement prêt!$(NC)"

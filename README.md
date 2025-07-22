@@ -233,6 +233,58 @@ Le hot reload est activé par défaut en mode développement :
 - **GitHub Actions** pour CI/CD
 - **Nginx** pour le reverse proxy en production
 
+## 🗄️ Base de données PostgreSQL
+
+Le projet utilise PostgreSQL 16 avec une configuration complète incluant migrations, seeds, fonctions, vues et triggers.
+
+### Structure de la base de données
+
+```
+postgres-database-project/
+├── src/
+│   ├── migrations/          # Scripts de migration
+│   ├── seeds/              # Données de test
+│   ├── functions/          # Fonctions SQL personnalisées
+│   ├── views/              # Vues analytiques
+│   └── triggers/           # Triggers automatiques
+└── scripts/                # Scripts de sauvegarde/restauration
+```
+
+### Tables principales
+
+- **users** - Gestion des utilisateurs avec validation email
+- **words** - Dictionnaire avec recherche textuelle optimisée
+- **flashcards** - Cartes d'apprentissage liées aux utilisateurs et mots
+
+### Commandes utiles
+
+```bash
+# Accéder à la base de données
+docker-compose exec postgres psql -U lejardin -d lejardin_db
+
+# Sauvegarder la base de données
+make backup-db
+
+# Restaurer une sauvegarde
+make restore-db BACKUP=fichier.sql
+
+# Recréer complètement la base de données
+make reset-db
+
+# Voir les logs de la base de données
+make logs-db
+```
+
+### Test de la configuration
+
+```bash
+# Windows
+.\test-postgres.ps1
+
+# Ou avec le fichier batch
+.\test-postgres.bat
+```
+
 ## 🤝 Contribution
 
 1. Forkez le projet

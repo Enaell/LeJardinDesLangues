@@ -14,7 +14,14 @@ services:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./server/prisma/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      # Scripts d'initialisation - ordre d'exécution alphabétique
+      - ./server/prisma/init.sql:/docker-entrypoint-initdb.d/00_init.sql:ro
+      - ./postgres-database-project/scripts/setup.sql:/docker-entrypoint-initdb.d/01_setup.sql:ro
+      - ./postgres-database-project/src/migrations:/docker-entrypoint-initdb.d/02_migrations:ro
+      - ./postgres-database-project/src/functions:/docker-entrypoint-initdb.d/03_functions:ro
+      - ./postgres-database-project/src/views:/docker-entrypoint-initdb.d/04_views:ro
+      - ./postgres-database-project/src/triggers:/docker-entrypoint-initdb.d/05_triggers:ro
+      - ./postgres-database-project/src/seeds:/docker-entrypoint-initdb.d/06_seeds:ro
     networks:
       - lejardin_network
     healthcheck:
