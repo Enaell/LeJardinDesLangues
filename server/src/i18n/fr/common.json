@@ -1,0 +1,25 @@
+{
+  "auth": {
+    "welcome": "Bienvenue dans Le Jardin des Langues",
+    "login_success": "Connexion réussie",
+    "register_success": "Inscription réussie",
+    "invalid_credentials": "Identifiants invalides",
+    "user_already_exists": "Utilisateur déjà existant"
+  },
+  "flashcards": {
+    "created": "Flashcard créée",
+    "updated": "Flashcard mise à jour",
+    "deleted": "Flashcard supprimée"
+  },
+  "dictionary": {
+    "word_not_found": "Mot non trouvé",
+    "search_results": "Résultats de recherche"
+  },
+  "common": {
+    "success": "Succès",
+    "error": "Erreur",
+    "not_found": "Non trouvé",
+    "unauthorized": "Non autorisé",
+    "forbidden": "Interdit"
+  }
+}

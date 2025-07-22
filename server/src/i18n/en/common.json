@@ -1,0 +1,25 @@
+{
+  "auth": {
+    "welcome": "Welcome to Le Jardin des Langues",
+    "login_success": "Login successful",
+    "register_success": "Registration successful",
+    "invalid_credentials": "Invalid credentials",
+    "user_already_exists": "User already exists"
+  },
+  "flashcards": {
+    "created": "Flashcard created",
+    "updated": "Flashcard updated",
+    "deleted": "Flashcard deleted"
+  },
+  "dictionary": {
+    "word_not_found": "Word not found",
+    "search_results": "Search results"
+  },
+  "common": {
+    "success": "Success",
+    "error": "Error",
+    "not_found": "Not found",
+    "unauthorized": "Unauthorized",
+    "forbidden": "Forbidden"
+  }
+}
