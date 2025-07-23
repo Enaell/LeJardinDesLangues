@@ -10,39 +10,40 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import { PopoverMenu, ProTip } from '../core/components/ui';
 
+const features = [
+  {
+    title: 'Dictionnaire',
+    description: 'Explorez et recherchez des mots dans différentes langues',
+    path: '/dictionary',
+    color: 'primary',
+  },
+  {
+    title: 'Cartes Mémoire',
+    description: 'Créez et étudiez vos propres cartes mémoire',
+    path: '/flashcards',
+    color: 'secondary',
+  },
+  {
+    title: 'Exercices',
+    description: 'Pratiquez avec des exercices interactifs',
+    path: '/exercises',
+    color: 'success',
+  },
+  {
+    title: 'Communauté',
+    description: 'Partagez et découvrez du contenu avec d\'autres apprenants',
+    path: '/community',
+    color: 'info',
+  },
+  {
+    title: 'Profil',
+    description: 'Gérez votre profil et vos préférences',
+    path: '/profile',
+    color: 'warning',
+  },
+];
+
 export const HomePage = () => {
-  const features = [
-    {
-      title: 'Dictionnaire',
-      description: 'Explorez et recherchez des mots dans différentes langues',
-      path: '/dictionary',
-      color: 'primary',
-    },
-    {
-      title: 'Cartes Mémoire',
-      description: 'Créez et étudiez vos propres cartes mémoire',
-      path: '/flashcards',
-      color: 'secondary',
-    },
-    {
-      title: 'Exercices',
-      description: 'Pratiquez avec des exercices interactifs',
-      path: '/exercises',
-      color: 'success',
-    },
-    {
-      title: 'Communauté',
-      description: 'Partagez et découvrez du contenu avec d\'autres apprenants',
-      path: '/community',
-      color: 'info',
-    },
-    {
-      title: 'Profil',
-      description: 'Gérez votre profil et vos préférences',
-      path: '/profile',
-      color: 'warning',
-    },
-  ];
 
   return (
     <Container maxWidth="lg">

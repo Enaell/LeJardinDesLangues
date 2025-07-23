@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Base de données principale PostgreSQL
   postgres:
@@ -22,6 +20,7 @@ services:
       - ./postgres-database-project/src/views:/docker-entrypoint-initdb.d/04_views:ro
       - ./postgres-database-project/src/triggers:/docker-entrypoint-initdb.d/05_triggers:ro
       - ./postgres-database-project/src/seeds:/docker-entrypoint-initdb.d/06_seeds:ro
+      - ./postgres-database-project/init-complete.sql:/docker-entrypoint-initdb.d/99_init_complete.sql:ro
     networks:
       - lejardin_network
     healthcheck:
@@ -73,7 +72,6 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
-      - /app/dist
     networks:
       - lejardin_network
     depends_on:

@@ -5,3 +5,4 @@ export * from './services';
 export * from './utils';
 export * from './types/global';
 export * from './i18n/config';
+export * from './routes.config';
