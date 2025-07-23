@@ -23,6 +23,9 @@ RUN npm install -g prisma
 # Copie du code source
 COPY . .
 
+# Rendre le script exécutable
+RUN chmod +x start-dev.sh
+
 # Génération des clients Prisma
 RUN npx prisma generate
 
@@ -30,7 +33,7 @@ RUN npx prisma generate
 EXPOSE 3000
 
 # Script de démarrage pour le développement
-CMD ["npm", "run", "start:dev"]
+CMD ["./start-dev.sh"]
 
 # Stage de production
 FROM base AS production
