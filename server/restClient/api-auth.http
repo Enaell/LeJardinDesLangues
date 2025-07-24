@@ -1,0 +1,77 @@
+### Configuration des variables
+@baseUrl = http://localhost:3000/api/v1
+@testUserName = testuser
+@testEmail = test@example.com
+@testPassword = TestPassword123!
+### ===========================================
+### AUTHENTIFICATION
+### ===========================================
+
+### 1. Inscription d'un nouvel utilisateur
+# @name register
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "{{testUserName}}",
+  "email": "{{testEmail}}",
+  "password": "{{testPassword}}",
+  "name": "Test User",
+  "nativeLanguage": "fr",
+  "targetLanguage": "zh"
+}
+
+###
+
+@authToken = {{register.response.body.accessToken}}
+
+### 2. Connexion avec email
+# @login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "emailOrUsername": "{{testEmail}}",
+  "password": "{{testPassword}}"
+}
+
+### 3. Connexion avec nom d'utilisateur
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "emailOrUsername": "{{testUserName}}",
+  "password": "{{testPassword}}"
+}
+
+### 4. Obtenir le profil utilisateur (nécessite un token JWT)
+# Copiez le token de la réponse de login et collez-le dans la variable @authToken
+GET {{baseUrl}}/auth/profile
+Authorization: Bearer {{authToken}}
+
+
+### ===========================================
+### INSTRUCTIONS D'UTILISATION
+### ===========================================
+
+# 1. Assurez-vous que le serveur est démarré sur localhost:3000
+# 2. Pour tester l'authentification complète :
+#    - Exécutez d'abord la requête d'inscription
+#    - Puis la requête de connexion
+#    - Copiez the 'accessToken' de la réponse
+#    - Collez-le dans la variable @authToken en haut de ce fichier
+#    - Exécutez la requête de profil pour vérifier que le token fonctionne
+
+# 4. Structure de la réponse d'authentification :
+# {
+#   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+#   "user": {
+#     "id": "uuid",
+#     "username": "testuser",
+#     "email": "test@example.com",
+#     "name": "Test User",
+#     "nativeLanguage": "fr",
+#     "learningLanguages": ["zh"],
+#     "createdAt": "2025-01-20T10:00:00.000Z"
+#   }
+# }
