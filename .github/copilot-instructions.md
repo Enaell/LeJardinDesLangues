@@ -102,6 +102,18 @@ When provided with a code block and an instructions file, follow these steps:
 - **Éviter** : `export default` sauf pour les cas spécifiques (routes, configuration)
 - **Organiser** : Regrouper les exports dans des fichiers `index.ts`
 
+### Styles et CSS
+- **Préférer** : Tailwind CSS pour les styles responsive et layouts
+- **Éviter** : La prop `sx` de Material-UI quand possible
+- **Utiliser Tailwind pour** :
+  - Responsive design : `hidden md:flex`, `flex md:hidden`
+  - Layouts et spacing : `flex`, `flex-col`, `min-h-screen`, `ml-2`
+  - Couleurs et backgrounds : `bg-gray-100`, `text-inherit`
+- **Utiliser `sx` uniquement pour** :
+  - Styles dynamiques complexes liés au thème Material-UI
+  - Intégrations spécifiques avec le système de thème MUI
+- **Sémantique HTML** : Privilégier les balises sémantiques (`<main>`, `<footer>`, `<nav>`) plutôt que `<Box component="...">`
+
 ---
 
 ## 🧪 Tests et qualité
