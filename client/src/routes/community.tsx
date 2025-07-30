@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { CompleteFormExample } from '../core/components/forms/examples';
 
 const CommunityPage = () => {
   return (
@@ -8,6 +9,7 @@ const CommunityPage = () => {
         <p className="text-gray-600">
           Partagez et découvrez du contenu avec la communauté d'apprenants.
         </p>
+        <CompleteFormExample />
         {/* TODO: Intégrer le composant Community de la feature */}
       </div>
     </div>

@@ -286,3 +286,17 @@ Chaque feature contient :
 - Structurer les routes de manière modulaire.
 - Utiliser les hooks pour accéder aux paramètres de route et aux données préchargées.
 - Tester les routes pour garantir une navigation fluide.
+
+---
+
+## 📝 Gestion des formulaires avec TanStack Form
+
+### Référence
+Pour l'implémentation des formulaires avec TanStack Form, consulter le guide dédié : 
+**[Guide TanStack Form](./prompts/tanstack-form-guidelines.md)**
+
+### Principes clés
+- **Composants wrapper** : Utiliser des wrappers dans `core/components/forms/` pour encapsuler la logique TanStack Form + Material-UI
+- **Éviter les render props** : Ne pas utiliser `form.Field` directement dans les formulaires  
+- **Type-safety** : Typage complet des formulaires avec TypeScript
+- **Intégration** : Compatible avec TanStack Router et React Query
