@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import { PopoverMenu, ProTip } from '../core/components/ui';
+import { PopoverMenu, ProTip, ThemeShowcase } from '../core/components/ui';
 
 type FeatureColor = "primary" | "secondary" | "success" | "info" | "warning" | "inherit" | "error";
 
@@ -107,6 +107,11 @@ export const HomePage = () => {
           Commencez par explorer le dictionnaire pour découvrir de nouveaux mots,
           puis créez vos premières cartes mémoire pour les mémoriser !
         </ProTip>
+
+        {/* Démonstration du thème - À supprimer en production */}
+        <div className="mt-8 pt-8 border-t border-gray-200">
+          <ThemeShowcase />
+        </div>
       </div>
     </Container>
   );
