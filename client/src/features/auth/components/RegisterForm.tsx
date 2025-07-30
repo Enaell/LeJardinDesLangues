@@ -1,156 +1,189 @@
-import { useRegisterForm, useAuthValidation } from '../hooks';
+import { Box, Button, Typography } from '@mui/material';
+import { Form, FormTextField, FormPasswordField, FormSelect, FormSubmitButton } from '../../../core/components/forms';
+import { useRegister } from '../hooks';
+import type { RegisterFormData } from '../types/forms';
 
-export const RegisterForm = () => {
-  const {
-    formData,
-    updateField,
-    handleSubmit,
-    isFormValid,
-    isLoading,
-    isError,
-    error,
-  } = useRegisterForm();
+type RegisterFormProps = {
+  onSuccess?: () => void;
+  onSwitchToLogin?: () => void;
+};
 
-  const {
-    validateUsername,
-    validateEmail,
-    validatePassword,
-    validateName,
-  } = useAuthValidation();
+export const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) => {
+  const registerMutation = useRegister();
 
-  // États des erreurs de validation
-  const usernameError = formData.username ? validateUsername(formData.username) : null;
-  const emailError = formData.email ? validateEmail(formData.email) : null;
-  const passwordError = formData.password ? validatePassword(formData.password) : null;
-  const nameError = formData.name ? validateName(formData.name) : null;
+  const handleSubmit = async ({ value }: { value: RegisterFormData; }) => {
+    try {
+      await registerMutation.mutateAsync({
+        username: value.username,
+        email: value.email,
+        password: value.password,
+        name: value.name,
+        nativeLanguage: value.nativeLanguage,
+        targetLanguage: value.targetLanguage,
+      });
+      onSuccess?.();
+    } catch (error) {
+      // L'erreur est déjà gérée par React Query
+      console.error('Erreur d\'inscription:', error);
+    }
+  };
+
+  const validateUsername = (value: string) => {
+    if (value.length < 3) {
+      return 'Le nom d\'utilisateur doit contenir au moins 3 caractères';
+    }
+    if (value.length > 50) {
+      return 'Le nom d\'utilisateur ne peut pas dépasser 50 caractères';
+    }
+    if (!/^[a-zA-Z0-9_-]+$/.test(value)) {
+      return 'Le nom d\'utilisateur ne peut contenir que des lettres, chiffres, tirets et underscores';
+    }
+    return undefined;
+  };
+
+  const validateEmail = (value: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) {
+      return 'L\'adresse email n\'est pas valide';
+    }
+    return undefined;
+  };
+
+  const validatePassword = (value: string) => {
+    if (value.length < 8) {
+      return 'Le mot de passe doit contenir au moins 8 caractères';
+    }
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value)) {
+      return 'Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre';
+    }
+    return undefined;
+  };
+
+  const validateName = (value: string) => {
+    if (value.length === 0) {
+      return 'Le nom est requis';
+    }
+    if (value.length > 100) {
+      return 'Le nom ne peut pas dépasser 100 caractères';
+    }
+    return undefined;
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
-      <div>
-        <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-          Nom d'utilisateur
-        </label>
-        <input
-          id="username"
-          type="text"
-          value={formData.username}
-          onChange={(e) => updateField('username', e.target.value)}
-          className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${usernameError ? 'border-red-300' : 'border-gray-300'
-            }`}
-          placeholder="johndoe"
-          required
-        />
-        {usernameError && (
-          <p className="mt-1 text-sm text-red-600">{usernameError}</p>
-        )}
-      </div>
-
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          Email
-        </label>
-        <input
-          id="email"
-          type="email"
-          value={formData.email}
-          onChange={(e) => updateField('email', e.target.value)}
-          className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${emailError ? 'border-red-300' : 'border-gray-300'
-            }`}
-          placeholder="john.doe@exemple.com"
-          required
-        />
-        {emailError && (
-          <p className="mt-1 text-sm text-red-600">{emailError}</p>
-        )}
-      </div>
-
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          Mot de passe
-        </label>
-        <input
-          id="password"
-          type="password"
-          value={formData.password}
-          onChange={(e) => updateField('password', e.target.value)}
-          className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${passwordError ? 'border-red-300' : 'border-gray-300'
-            }`}
-          placeholder="MonMotDePasse123!"
-          required
-        />
-        {passwordError && (
-          <p className="mt-1 text-sm text-red-600">{passwordError}</p>
-        )}
-      </div>
-
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-          Nom complet
-        </label>
-        <input
-          id="name"
-          type="text"
-          value={formData.name}
-          onChange={(e) => updateField('name', e.target.value)}
-          className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${nameError ? 'border-red-300' : 'border-gray-300'
-            }`}
-          placeholder="John Doe"
-          required
-        />
-        {nameError && (
-          <p className="mt-1 text-sm text-red-600">{nameError}</p>
-        )}
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="nativeLanguage" className="block text-sm font-medium text-gray-700">
-            Langue native
-          </label>
-          <select
-            id="nativeLanguage"
-            value={formData.nativeLanguage}
-            onChange={(e) => updateField('nativeLanguage', e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          >
-            <option value="fr">Français</option>
-            <option value="en">Anglais</option>
-            <option value="zh">Chinois</option>
-            <option value="es">Espagnol</option>
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="targetLanguage" className="block text-sm font-medium text-gray-700">
-            Langue à apprendre
-          </label>
-          <select
-            id="targetLanguage"
-            value={formData.targetLanguage}
-            onChange={(e) => updateField('targetLanguage', e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          >
-            <option value="zh">Chinois</option>
-            <option value="fr">Français</option>
-            <option value="en">Anglais</option>
-            <option value="es">Espagnol</option>
-          </select>
-        </div>
-      </div>
-
-      {isError && error && (
-        <div className="text-red-600 text-sm">
-          {error.message}
-        </div>
-      )}
-
-      <button
-        type="submit"
-        disabled={!isFormValid || isLoading}
-        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+    <Box className="space-y-4 max-w-md mx-auto">
+      <Form<RegisterFormData>
+        defaultValues={{
+          username: '',
+          email: '',
+          password: '',
+          name: '',
+          nativeLanguage: 'fr',
+          targetLanguage: 'zh',
+        }}
+        onFormSubmit={handleSubmit}
+        className="space-y-4"
       >
-        {isLoading ? 'Inscription...' : 'S\'inscrire'}
-      </button>
-    </form>
+        <FormTextField
+          name="username"
+          label="Nom d'utilisateur"
+          type="text"
+          fullWidth
+          placeholder="johndoe"
+          validators={{
+            onChange: ({ value }: { value: string; }) => validateUsername(value),
+            onBlur: ({ value }: { value: string; }) => validateUsername(value),
+          }}
+        />
+
+        <FormTextField
+          name="email"
+          label="Email"
+          type="email"
+          fullWidth
+          placeholder="john.doe@exemple.com"
+          validators={{
+            onChange: ({ value }: { value: string; }) => validateEmail(value),
+            onBlur: ({ value }: { value: string; }) => validateEmail(value),
+          }}
+        />
+
+        <FormPasswordField
+          name="password"
+          label="Mot de passe"
+          fullWidth
+          placeholder="MonMotDePasse123!"
+          validators={{
+            onChange: ({ value }: { value: string; }) => validatePassword(value),
+            onBlur: ({ value }: { value: string; }) => validatePassword(value),
+          }}
+        />
+
+        <FormTextField
+          name="name"
+          label="Nom complet"
+          type="text"
+          fullWidth
+          placeholder="John Doe"
+          validators={{
+            onChange: ({ value }: { value: string; }) => validateName(value),
+            onBlur: ({ value }: { value: string; }) => validateName(value),
+          }}
+        />
+
+        <Box className="grid grid-cols-2 gap-4">
+          <FormSelect
+            name="nativeLanguage"
+            label="Langue native"
+            options={[
+              { value: 'fr', label: 'Français' },
+              { value: 'en', label: 'Anglais' },
+              { value: 'zh', label: 'Chinois' },
+              { value: 'es', label: 'Espagnol' },
+            ]}
+          />
+
+          <FormSelect
+            name="targetLanguage"
+            label="Langue à apprendre"
+            options={[
+              { value: 'zh', label: 'Chinois' },
+              { value: 'fr', label: 'Français' },
+              { value: 'en', label: 'Anglais' },
+              { value: 'es', label: 'Espagnol' },
+            ]}
+          />
+        </Box>
+
+        {registerMutation.isError && registerMutation.error && (
+          <Box className="text-red-600 text-sm">
+            {registerMutation.error.message}
+          </Box>
+        )}
+
+        <FormSubmitButton
+          variant="contained"
+          fullWidth
+          className="bg-indigo-600 hover:bg-indigo-700"
+        >
+          {registerMutation.isPending ? 'Inscription...' : 'S\'inscrire'}
+        </FormSubmitButton>
+      </Form>
+
+      {onSwitchToLogin && (
+        <Box className="text-center mt-4">
+          <Typography variant="body2" className="text-gray-600">
+            Déjà un compte ?{' '}
+            <Button
+              onClick={onSwitchToLogin}
+              variant="text"
+              size="small"
+              className="text-indigo-600 hover:text-indigo-500 font-medium p-0 min-w-0"
+            >
+              Se connecter
+            </Button>
+          </Typography>
+        </Box>
+      )}
+    </Box>
   );
 };
