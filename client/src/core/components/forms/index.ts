@@ -1,5 +1,5 @@
 // Types
-export type { FormApi, FormContextType } from './types';
+export type { FormContextType, AnyFormValidators, AnyReactFormExtendedApi } from './types';
 
 // Composants principaux
 export { Form } from './Form';
