@@ -1,13 +1,14 @@
 import { ReactNode } from 'react';
 import { useForm } from '@tanstack/react-form';
 import { FormProvider } from './FormProvider';
+import { AnyFormValidators } from './types';
 
 type FormProps<TFormData> = {
   children: ReactNode;
   className?: string;
   onFormSubmit: (values: { value: TFormData; }) => void | Promise<void>;
   defaultValues?: TFormData;
-  validators?: any;
+  validators?: AnyFormValidators;
 };
 
 export const Form = <TFormData,>({
@@ -25,11 +26,8 @@ export const Form = <TFormData,>({
     }
   });
 
-  console.log(form.state.values);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted with values:', form.state.values);
     form.handleSubmit();
   };
 
@@ -37,7 +35,7 @@ export const Form = <TFormData,>({
     <FormProvider form={form}>
       <form onSubmit={handleSubmit} className={className}>
         {children}
-      </form> 
+      </form>
     </FormProvider>
   );
 };

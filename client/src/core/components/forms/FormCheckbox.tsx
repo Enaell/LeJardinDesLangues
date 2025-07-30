@@ -1,10 +1,11 @@
 import { FormControlLabel, Checkbox, FormHelperText, FormControl } from '@mui/material';
 import { useFormContext } from './hooks/useFormContext';
+import { AnyFormValidators } from './types';
 
 type FormCheckboxProps = {
   name: string;
   label: string;
-  validators?: any;
+  validators?: AnyFormValidators;
 };
 
 export const FormCheckbox = ({ name, label, validators }: FormCheckboxProps) => {
@@ -12,7 +13,7 @@ export const FormCheckbox = ({ name, label, validators }: FormCheckboxProps) => 
 
   return (
     <form.Field name={name} validators={validators}>
-      {(field: any) => (
+      {(field) => (
         <FormControl error={!!field.state.meta.errors.length}>
           <FormControlLabel
             control={

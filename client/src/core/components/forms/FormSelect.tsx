@@ -1,12 +1,13 @@
 import { FormControl, InputLabel, Select, MenuItem, FormHelperText, SelectProps } from '@mui/material';
 import { useFormContext } from './hooks/useFormContext';
 import { useFieldValue } from './hooks/useFormValues';
+import { AnyFormValidators } from './types';
 
 type FormSelectProps = {
   name: string;
   label: string;
   options: Array<{ value: string | number; label: string; }>;
-  validators?: any;
+  validators?: AnyFormValidators;
 } & Omit<SelectProps, 'value' | 'onChange' | 'error'>;
 
 export const FormSelect = ({ name, label, options, validators, ...selectProps }: FormSelectProps) => {
@@ -17,7 +18,7 @@ export const FormSelect = ({ name, label, options, validators, ...selectProps }:
 
   return (
     <form.Field name={name} validators={validators}>
-      {(field: any) => (
+      {(field) => (
         <FormControl fullWidth error={!!field.state.meta.errors.length}>
           <InputLabel>{label}</InputLabel>
           <Select

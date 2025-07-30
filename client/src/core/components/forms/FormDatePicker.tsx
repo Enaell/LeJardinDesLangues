@@ -1,10 +1,11 @@
 import { TextField } from '@mui/material';
 import { useFormContext } from './hooks/useFormContext';
+import { AnyFormValidators } from './types';
 
 type FormDatePickerProps = {
   name: string;
   label: string;
-  validators?: any;
+  validators?: AnyFormValidators;
 };
 
 export const FormDatePicker = ({ name, label, validators }: FormDatePickerProps) => {
@@ -12,7 +13,7 @@ export const FormDatePicker = ({ name, label, validators }: FormDatePickerProps)
 
   return (
     <form.Field name={name} validators={validators}>
-      {(field: any) => (
+      {(field) => (
         <TextField
           type="date"
           label={label}

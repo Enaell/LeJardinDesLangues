@@ -1,14 +1,15 @@
 import { createContext, ReactNode } from 'react';
-import { FormApi, FormContextType } from './types';
+import { AnyReactFormExtendedApi, FormContextType } from './types';
 
 export const FormContext = createContext<FormContextType>(null);
 
-type FormProviderProps<TFormData = any> = {
-  form: FormApi<TFormData>;
+type FormProviderProps = {
+  // form: AnyFormApi;
+  form: AnyReactFormExtendedApi,
   children: ReactNode;
 };
 
-export const FormProvider = <TFormData,>({ form, children }: FormProviderProps<TFormData>) => {
+export const FormProvider = ({ form, children }: FormProviderProps) => {
   return (
     <FormContext.Provider value={{ form }}>
       {children}

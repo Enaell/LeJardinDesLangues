@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useFormContext } from './hooks/useFormContext';
+import { AnyFormValidators } from './types';
 
 type FormPasswordFieldProps = {
   name: string;
-  validators?: any;
+  validators?: AnyFormValidators;
   label?: string;
   placeholder?: string;
   fullWidth?: boolean;

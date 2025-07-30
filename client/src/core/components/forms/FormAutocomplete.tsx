@@ -1,11 +1,12 @@
 import { Autocomplete, TextField } from '@mui/material';
 import { useFormContext } from './hooks/useFormContext';
+import { AnyFormValidators } from './types';
 
 type FormAutocompleteProps = {
   name: string;
   label: string;
   options: Array<{ value: string | number; label: string; }>;
-  validators?: any;
+  validators?: AnyFormValidators;
   multiple?: boolean;
   freeSolo?: boolean;
 };
@@ -22,7 +23,7 @@ export const FormAutocomplete = ({
 
   return (
     <form.Field name={name} validators={validators}>
-      {(field: any) => (
+      {(field) => (
         <Autocomplete
           multiple={multiple}
           freeSolo={freeSolo}

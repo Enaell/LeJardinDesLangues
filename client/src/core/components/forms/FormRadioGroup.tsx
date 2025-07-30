@@ -7,12 +7,13 @@ import {
   FormHelperText
 } from '@mui/material';
 import { useFormContext } from './hooks/useFormContext';
+import { AnyFormValidators } from './types';
 
 type FormRadioGroupProps = {
   name: string;
   label: string;
   options: Array<{ value: string | number; label: string; }>;
-  validators?: any;
+  validators?: AnyFormValidators;
   row?: boolean;
 };
 
@@ -27,7 +28,7 @@ export const FormRadioGroup = ({
 
   return (
     <form.Field name={name} validators={validators}>
-      {(field: any) => (
+      {(field) => (
         <FormControl error={!!field.state.meta.errors.length}>
           <FormLabel component="legend">{label}</FormLabel>
           <RadioGroup
