@@ -122,6 +122,8 @@ export const colors = {
     default: '#fefefe',
     paper: '#ffffff',
     disabled: '#f5f5f5',
+    primary: '#4a9d4a',
+    secondary: '#6b7f6b'
   },
 
   // Couleurs de texte
@@ -129,6 +131,8 @@ export const colors = {
     primary: 'rgba(0, 0, 0, 0.87)',
     secondary: 'rgba(0, 0, 0, 0.6)',
     disabled: 'rgba(0, 0, 0, 0.38)',
+    primaryContrast: '#ffffff',
+    secondaryContrast: '#ffffff',
   },
 } as const;
 

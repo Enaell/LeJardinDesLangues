@@ -14,12 +14,14 @@ export const createAppTheme = (): Theme => {
         light: colors.primary[300],
         dark: colors.primary[700],
         contrastText: '#ffffff',
+        // contrastText: colors.text.primaryContrast,
       },
       secondary: {
         main: colors.secondary[500],
         light: colors.secondary[300],
         dark: colors.secondary[700],
         contrastText: '#ffffff',
+        // contrastText: colors.text.secondaryContrast,
       },
       error: {
         main: colors.error[500],
@@ -157,7 +159,7 @@ export const createAppTheme = (): Theme => {
         styleOverrides: {
           root: {
             '& .MuiOutlinedInput-root': {
-              borderRadius: 12,
+              borderRadius: 8,
               '&:hover .MuiOutlinedInput-notchedOutline': {
                 borderColor: colors.primary[400],
               },
@@ -187,9 +189,10 @@ export const createAppTheme = (): Theme => {
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: colors.primary[700],
-            color: colors.text.primary,
+            backgroundColor: colors.background.primary,
+            color: colors.text.primaryContrast,
             boxShadow: '0 1px 3px rgba(0, 0, 0, 0.12)',
+            borderRadius: 0,
           },
         },
       },

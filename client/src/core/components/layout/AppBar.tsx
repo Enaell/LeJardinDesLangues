@@ -20,6 +20,7 @@ export const AppBar = ({ navigationItems }: AppBarProps) => {
           component={Link}
           to="/"
           className="flex-grow font-bold text-inherit no-underline"
+          color='primary.contrastText'
         >
           🌸 Le Jardin des Langues
         </Typography>
