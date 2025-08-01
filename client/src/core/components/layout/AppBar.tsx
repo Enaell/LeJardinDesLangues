@@ -7,8 +7,6 @@ import {
 import { AppBarDesktop } from './AppBarDesktop';
 import { AppBarMobile } from './AppBarMobile';
 import { AuthButtons } from '../../../features/auth/components/AuthButtons';
-import { AuthModal } from '../../../features/auth/components';
-import { useAuthModal } from '../../../features/auth/hooks';
 
 type AppBarProps = {
   navigationItems: Array<{ label: string; path: string; }>;
