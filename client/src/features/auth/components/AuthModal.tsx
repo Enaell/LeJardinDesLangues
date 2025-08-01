@@ -11,6 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { LoginForm } from './LoginForm';
 import { RegisterForm } from './RegisterForm';
 import type { AuthModalTab } from '../hooks/useAuthModal';
+import { useCallback } from 'react';
 
 type AuthModalProps = {
   isOpen: boolean;
@@ -18,7 +19,6 @@ type AuthModalProps = {
   onClose: () => void;
   onTabChange: (tab: AuthModalTab) => void;
 };
-
 export const AuthModal = ({
   isOpen,
   activeTab,
@@ -30,6 +30,14 @@ export const AuthModal = ({
     const tab = newValue === 0 ? 'login' : 'register';
     onTabChange(tab);
   };
+
+  const handleTabChangeToRegister = useCallback(() => {
+    onTabChange('register');
+  }, [onTabChange]);
+
+  const handleTabChangeToLogin = useCallback(() => {
+    onTabChange('login');
+  }, [onTabChange]);
 
   return (
     <Dialog
@@ -69,12 +77,12 @@ export const AuthModal = ({
           {activeTab === 'login' ? (
             <LoginForm
               onSuccess={onClose}
-              onSwitchToRegister={() => onTabChange('register')}
+              onSwitchToRegister={handleTabChangeToRegister}
             />
           ) : (
             <RegisterForm
               onSuccess={onClose}
-              onSwitchToLogin={() => onTabChange('login')}
+              onSwitchToLogin={handleTabChangeToLogin}
             />
           )}
         </Box>

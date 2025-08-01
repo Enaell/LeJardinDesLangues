@@ -1,15 +1,13 @@
 import { Button, Avatar, Menu, MenuItem, Divider } from '@mui/material';
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { useAuth, useLogout } from '../hooks';
-import type { AuthModalTab } from '../hooks/useAuthModal';
+import { useAuth, useAuthModal, useLogout } from '../hooks';
+import { AuthModal } from './AuthModal';
 
-type AuthButtonsProps = {
-  onOpenAuthModal: (tab: AuthModalTab) => void;
-};
-
-export const AuthButtons = ({ onOpenAuthModal }: AuthButtonsProps) => {
+export const AuthButtons = () => {
   const { user, isAuthenticated, isUnauthenticated, isLoading } = useAuth();
+  const { isOpen, activeTab, openModal, closeModal, switchTab } = useAuthModal();
+
   const logout = useLogout();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -36,26 +34,34 @@ export const AuthButtons = ({ onOpenAuthModal }: AuthButtonsProps) => {
 
   if (isUnauthenticated) {
     return (
-      <div className="flex items-center space-x-2">
-        <Button
-          color="inherit"
-          variant="outlined"
-          size="small"
-          onClick={() => onOpenAuthModal('login')}
-          className="text-white border-white hover:bg-white hover:text-primary-600"
-        >
-          Connexion
-        </Button>
-        <Button
-          color="inherit"
-          variant="contained"
-          size="small"
-          onClick={() => onOpenAuthModal('register')}
-          className="bg-white text-primary-600 hover:bg-gray-100"
-        >
-          Inscription
-        </Button>
-      </div>
+      <>
+        <div className="flex items-center space-x-2">
+          <Button
+            color="inherit"
+            variant="outlined"
+            size="small"
+            onClick={() => openModal('login')}
+            className="text-white border-white hover:bg-white hover:text-primary-600"
+          >
+            Connexion
+          </Button>
+          <Button
+            color="inherit"
+            variant="contained"
+            size="small"
+            onClick={() => openModal('register')}
+            className="bg-white text-primary-600 hover:bg-gray-100"
+          >
+            Inscription
+          </Button>
+        </div>
+        <AuthModal
+          isOpen={isOpen}
+          activeTab={activeTab}
+          onClose={closeModal}
+          onTabChange={switchTab}
+        />
+      </>
     );
   }
 

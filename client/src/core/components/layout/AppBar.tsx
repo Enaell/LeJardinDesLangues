@@ -15,7 +15,6 @@ type AppBarProps = {
 };
 
 export const AppBar = ({ navigationItems }: AppBarProps) => {
-  const { isOpen, activeTab, openModal, closeModal, switchTab } = useAuthModal();
 
   return (
     <>
@@ -31,19 +30,14 @@ export const AppBar = ({ navigationItems }: AppBarProps) => {
             🌸 Le Jardin des Langues
           </Typography>
 
-          <AppBarDesktop navigationItems={navigationItems} />
-          <AppBarMobile navigationItems={navigationItems} />
-
-          <AuthButtons onOpenAuthModal={openModal} />
+          {true && <>
+            <AppBarDesktop navigationItems={navigationItems} />
+            <AppBarMobile navigationItems={navigationItems} />
+          </>}
+          <AuthButtons />
         </Toolbar>
       </MuiAppBar>
 
-      <AuthModal
-        isOpen={isOpen}
-        activeTab={activeTab}
-        onClose={closeModal}
-        onTabChange={switchTab}
-      />
     </>
   );
 };
