@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from '@mui/material';
-import { Form, FormTextField, FormPasswordField, FormSelect, FormSubmitButton } from '../../../core/components/forms';
+import { Form, FormTextField, FormPasswordField, FormSelect, FormSubmitButton } from '@core/components/forms';
 import { useRegister } from '../hooks';
 import type { RegisterFormData } from '../types/forms';
 

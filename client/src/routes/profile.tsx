@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useProfile } from '../features/auth/hooks/useAuth';
-import { Profile } from '../features/profile/components/Profile';
+import { useProfile } from '@features/auth/hooks/useAuth';
+import { Profile } from '@features/profile/components/Profile';
 
 const ProfilePage = () => {
   const { data: user, isLoading, isError, error } = useProfile();

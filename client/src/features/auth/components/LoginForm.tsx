@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Typography } from '@mui/material';
-import { Form, FormTextField, FormPasswordField, FormSubmitButton } from '../../../core/components/forms';
+import { Form, FormTextField, FormPasswordField, FormSubmitButton } from '@core/components/forms';
 import { useLogin, useGoogleAuth } from '../hooks';
 import type { LoginFormData } from '../types/forms';
 

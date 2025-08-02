@@ -4,4 +4,4 @@ export * from './layout';
 export * from './forms';
 export * from './FlexRow';
 export * from './FlexColumn';
-export * from '../../features/auth/components/ProtectedRoute';
+export * from '@features/auth/components/ProtectedRoute';

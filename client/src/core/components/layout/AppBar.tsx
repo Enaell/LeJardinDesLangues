@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { AppBarDesktop } from './AppBarDesktop';
 import { AppBarMobile } from './AppBarMobile';
-import { AuthButtons } from '../../../features/auth/components/AuthButtons';
+import { AuthButtons } from '@features/auth/components/AuthButtons';
 
 type AppBarProps = {
   navigationItems: Array<{ label: string; path: string; }>;
