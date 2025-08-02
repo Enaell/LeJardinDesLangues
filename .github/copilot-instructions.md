@@ -81,7 +81,7 @@ When provided with a code block and an instructions file, follow these steps:
   ```typescript
   export const MyComponent = (props: MyComponentProps) => {
     // logique du composant
-    return <div>...</div>;
+    return <Container>...</Container>;
   };
   ```
 - **Éviter** : Les déclarations `function` et `export default`
@@ -102,17 +102,32 @@ When provided with a code block and an instructions file, follow these steps:
 - **Éviter** : `export default` sauf pour les cas spécifiques (routes, configuration)
 - **Organiser** : Regrouper les exports dans des fichiers `index.ts`
 
-### Styles et CSS
-- **Préférer** : Tailwind CSS pour les styles responsive et layouts
-- **Éviter** : La prop `sx` de Material-UI quand possible
-- **Utiliser Tailwind pour** :
+## Styles et CSS
+
+### Approche hybride Material-UI + Tailwind
+- **Utiliser Tailwind CSS pour** :
   - Responsive design : `hidden md:flex`, `flex md:hidden`
   - Layouts et spacing : `flex`, `flex-col`, `min-h-screen`, `ml-2`
   - Couleurs et backgrounds : `bg-gray-100`, `text-inherit`
+- **Utiliser Material-UI pour** :
+  - Composants complexes : `Autocomplete`, `DataGrid`, `DatePicker`
+  - États interactifs : focus, hover, disabled
+- **Éviter** : La prop `sx` de Material-UI quand Tailwind peut faire l'équivalent
 - **Utiliser `sx` uniquement pour** :
   - Styles dynamiques complexes liés au thème Material-UI
   - Intégrations spécifiques avec le système de thème MUI
-- **Sémantique HTML** : Privilégier les balises sémantiques (`<main>`, `<footer>`, `<nav>`) plutôt que `<Box component="...">`
+
+### Hiérarchie des composants
+- **1. Composants Core** (`@core/components`) : Toujours en priorité
+  - Composants UI de base : `Button`, `Input`, `Card`, `Container`
+  - Composants layout : `Header`, `Sidebar`, `Layout`, `AppBar`
+  - Composants formulaires : `FormTextField`, `FormSelect`, `FormCheckbox`
+- **2. Composants Material-UI** : Pour les fonctionnalités complexes
+  - Composants avancés : `Autocomplete`, `DataGrid`, `DatePicker`
+  - Composants spécialisés : `Stepper`, `Timeline`, `SpeedDial`
+- **3. Balises HTML natives** : Uniquement si aucune alternative composant n'existe
+  - Éviter : `<div>`, `<span>`, `<button>`, `<input>`, `<form>`
+  - Préférer : Composants équivalents du système de design
 
 ---
 
