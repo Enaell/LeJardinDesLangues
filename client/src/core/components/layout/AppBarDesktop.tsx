@@ -1,11 +1,14 @@
 import { Link } from '@tanstack/react-router';
 import { Button } from '@mui/material';
+import { useTranslation } from '@core/hooks';
+import type { NavigationItem } from '@core/routes.config';
 
 type AppBarDesktopProps = {
-  navigationItems: Array<{ label: string; path: string; }>;
+  navigationItems: NavigationItem[];
 };
 
 export const AppBarDesktop = ({ navigationItems }: AppBarDesktopProps) => {
+  const { t } = useTranslation();
   const [_homeItem, ...restNavigationItems] = navigationItems;
 
   return (
@@ -18,7 +21,7 @@ export const AppBarDesktop = ({ navigationItems }: AppBarDesktopProps) => {
           color="inherit"
           className="ml-2"
         >
-          {item.label}
+          {t(item.translationKey)}
         </Button>
       ))}
     </div>

@@ -1,12 +1,90 @@
 {
-  "welcome": "Bienvenue sur Le Jardin des Langues",
+  "app": {
+    "title": "Le Jardin des Langues",
+    "welcome": "Bienvenue sur Le Jardin des Langues",
+    "subtitle": "Votre application pour apprendre les langues de manière interactive",
+    "proTip": "Commencez par explorer le dictionnaire pour découvrir de nouveaux mots, puis créez vos premières cartes mémoire pour les mémoriser !"
+  },
   "navigation": {
     "home": "Accueil",
     "dictionary": "Dictionnaire",
-    "flashcards": "Cartes mémoire",
+    "flashcards": "Cartes Mémoire",
     "exercises": "Exercices",
     "community": "Communauté",
     "profile": "Profil"
+  },
+  "features": {
+    "dictionary": {
+      "title": "Dictionnaire",
+      "description": "Explorez et recherchez des mots dans différentes langues"
+    },
+    "flashcards": {
+      "title": "Cartes Mémoire",
+      "description": "Créez et étudiez vos propres cartes mémoire"
+    },
+    "exercises": {
+      "title": "Exercices",
+      "description": "Pratiquez avec des exercices interactifs"
+    },
+    "community": {
+      "title": "Communauté",
+      "description": "Partagez et découvrez du contenu avec d'autres apprenants"
+    },
+    "profile": {
+      "title": "Profil",
+      "description": "Gérez votre profil et vos préférences"
+    },
+    "discover": "Découvrir"
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "emailOrUsername": "Email ou nom d'utilisateur",
+      "emailOrUsernamePlaceholder": "votre.email@exemple.com",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Votre mot de passe",
+      "submitButton": "Se connecter",
+      "submitButtonLoading": "Connexion...",
+      "googleButton": "Continuer avec Google",
+      "googleButtonLoading": "Redirection...",
+      "dividerText": "ou",
+      "noAccount": "Pas encore de compte ?",
+      "createAccount": "Créer un compte"
+    },
+    "register": {
+      "title": "Inscription",
+      "username": "Nom d'utilisateur",
+      "usernamePlaceholder": "johndoe",
+      "email": "Email",
+      "emailPlaceholder": "john.doe@exemple.com",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "MonMotDePasse123!",
+      "fullName": "Nom complet",
+      "fullNamePlaceholder": "John Doe",
+      "nativeLanguage": "Langue native",
+      "targetLanguage": "Langue à apprendre",
+      "submitButton": "S'inscrire",
+      "submitButtonLoading": "Inscription...",
+      "hasAccount": "Déjà un compte ?",
+      "signIn": "Se connecter"
+    },
+    "validation": {
+      "required": "Ce champ est requis",
+      "passwordRequired": "Le mot de passe est requis",
+      "usernameMinLength": "Le nom d'utilisateur doit contenir au moins 3 caractères",
+      "usernameMaxLength": "Le nom d'utilisateur ne peut pas dépasser 50 caractères",
+      "usernameInvalidChars": "Le nom d'utilisateur ne peut contenir que des lettres, chiffres, tirets et underscores",
+      "emailInvalid": "L'adresse email n'est pas valide",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+      "passwordComplexity": "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre",
+      "nameRequired": "Le nom est requis",
+      "nameMaxLength": "Le nom ne peut pas dépasser 100 caractères"
+    }
+  },
+  "languages": {
+    "fr": "Français",
+    "en": "Anglais",
+    "zh": "Chinois"
   },
   "dictionary": {
     "search": "Rechercher un mot...",
@@ -42,6 +120,9 @@
     "cancel": "Annuler",
     "save": "Sauvegarder",
     "delete": "Supprimer",
-    "edit": "Modifier"
+    "edit": "Modifier",
+    "close": "Fermer",
+    "open": "Ouvrir",
+    "menu": "Menu"
   }
 }

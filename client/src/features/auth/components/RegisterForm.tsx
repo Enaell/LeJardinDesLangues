@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from '@mui/material';
 import { Form, FormTextField, FormPasswordField, FormSelect, FormSubmitButton } from '@core/components/forms';
 import { useRegister } from '../hooks';
+import { useTranslation } from '@core/hooks';
 import type { RegisterFormData } from '../types/forms';
 
 type RegisterFormProps = {
@@ -9,6 +10,7 @@ type RegisterFormProps = {
 };
 
 export const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) => {
+  const { t } = useTranslation();
   const registerMutation = useRegister();
 
   const handleSubmit = async ({ value }: { value: RegisterFormData; }) => {
@@ -30,13 +32,13 @@ export const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
 
   const validateUsername = (value: string) => {
     if (value.length < 3) {
-      return 'Le nom d\'utilisateur doit contenir au moins 3 caractères';
+      return t('auth.validation.usernameMinLength');
     }
     if (value.length > 50) {
-      return 'Le nom d\'utilisateur ne peut pas dépasser 50 caractères';
+      return t('auth.validation.usernameMaxLength');
     }
     if (!/^[a-zA-Z0-9_-]+$/.test(value)) {
-      return 'Le nom d\'utilisateur ne peut contenir que des lettres, chiffres, tirets et underscores';
+      return t('auth.validation.usernameInvalidChars');
     }
     return undefined;
   };
@@ -44,30 +46,36 @@ export const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
   const validateEmail = (value: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) {
-      return 'L\'adresse email n\'est pas valide';
+      return t('auth.validation.emailInvalid');
     }
     return undefined;
   };
 
   const validatePassword = (value: string) => {
     if (value.length < 8) {
-      return 'Le mot de passe doit contenir au moins 8 caractères';
+      return t('auth.validation.passwordMinLength');
     }
     if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value)) {
-      return 'Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre';
+      return t('auth.validation.passwordComplexity');
     }
     return undefined;
   };
 
   const validateName = (value: string) => {
     if (value.length === 0) {
-      return 'Le nom est requis';
+      return t('auth.validation.nameRequired');
     }
     if (value.length > 100) {
-      return 'Le nom ne peut pas dépasser 100 caractères';
+      return t('auth.validation.nameMaxLength');
     }
     return undefined;
   };
+
+  const languageOptions = [
+    { value: 'fr', label: t('languages.fr') },
+    { value: 'en', label: t('languages.en') },
+    { value: 'zh', label: t('languages.zh') },
+  ];
 
   return (
     <Box className="space-y-4 max-w-md mx-auto">
@@ -85,10 +93,10 @@ export const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
       >
         <FormTextField
           name="username"
-          label="Nom d'utilisateur"
+          label={t('auth.register.username')}
           type="text"
           fullWidth
-          placeholder="johndoe"
+          placeholder={t('auth.register.usernamePlaceholder')}
           validators={{
             onChange: ({ value }: { value: string; }) => validateUsername(value),
             onBlur: ({ value }: { value: string; }) => validateUsername(value),
@@ -97,10 +105,10 @@ export const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
 
         <FormTextField
           name="email"
-          label="Email"
+          label={t('auth.register.email')}
           type="email"
           fullWidth
-          placeholder="john.doe@exemple.com"
+          placeholder={t('auth.register.emailPlaceholder')}
           validators={{
             onChange: ({ value }: { value: string; }) => validateEmail(value),
             onBlur: ({ value }: { value: string; }) => validateEmail(value),
@@ -109,9 +117,9 @@ export const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
 
         <FormPasswordField
           name="password"
-          label="Mot de passe"
+          label={t('auth.register.password')}
           fullWidth
-          placeholder="MonMotDePasse123!"
+          placeholder={t('auth.register.passwordPlaceholder')}
           validators={{
             onChange: ({ value }: { value: string; }) => validatePassword(value),
             onBlur: ({ value }: { value: string; }) => validatePassword(value),
@@ -120,10 +128,10 @@ export const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
 
         <FormTextField
           name="name"
-          label="Nom complet"
+          label={t('auth.register.fullName')}
           type="text"
           fullWidth
-          placeholder="John Doe"
+          placeholder={t('auth.register.fullNamePlaceholder')}
           validators={{
             onChange: ({ value }: { value: string; }) => validateName(value),
             onBlur: ({ value }: { value: string; }) => validateName(value),
@@ -133,24 +141,14 @@ export const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
         <Box className="grid grid-cols-2 gap-4">
           <FormSelect
             name="nativeLanguage"
-            label="Langue native"
-            options={[
-              { value: 'fr', label: 'Français' },
-              { value: 'en', label: 'Anglais' },
-              { value: 'zh', label: 'Chinois' },
-              { value: 'es', label: 'Espagnol' },
-            ]}
+            label={t('auth.register.nativeLanguage')}
+            options={languageOptions}
           />
 
           <FormSelect
             name="targetLanguage"
-            label="Langue à apprendre"
-            options={[
-              { value: 'zh', label: 'Chinois' },
-              { value: 'fr', label: 'Français' },
-              { value: 'en', label: 'Anglais' },
-              { value: 'es', label: 'Espagnol' },
-            ]}
+            label={t('auth.register.targetLanguage')}
+            options={languageOptions}
           />
         </Box>
 
@@ -165,21 +163,21 @@ export const RegisterForm = ({ onSuccess, onSwitchToLogin }: RegisterFormProps) 
           fullWidth
           className="bg-indigo-600 hover:bg-indigo-700"
         >
-          {registerMutation.isPending ? 'Inscription...' : 'S\'inscrire'}
+          {registerMutation.isPending ? t('auth.register.submitButtonLoading') : t('auth.register.submitButton')}
         </FormSubmitButton>
       </Form>
 
       {onSwitchToLogin && (
         <Box className="text-center mt-4">
           <Typography variant="body2" className="text-gray-600">
-            Déjà un compte ?{' '}
+            {t('auth.register.hasAccount')}{' '}
             <Button
               onClick={onSwitchToLogin}
               variant="text"
               size="small"
               className="text-indigo-600 hover:text-indigo-500 font-medium p-0 min-w-0"
             >
-              Se connecter
+              {t('auth.register.signIn')}
             </Button>
           </Typography>
         </Box>

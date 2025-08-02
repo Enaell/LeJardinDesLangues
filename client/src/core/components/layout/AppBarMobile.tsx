@@ -2,12 +2,15 @@ import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useTranslation } from '@core/hooks';
+import type { NavigationItem } from '@core/routes.config';
 
 type AppBarMobileProps = {
-  navigationItems: Array<{ label: string; path: string; }>;
+  navigationItems: NavigationItem[];
 };
 
 export const AppBarMobile = ({ navigationItems }: AppBarMobileProps) => {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -25,7 +28,7 @@ export const AppBarMobile = ({ navigationItems }: AppBarMobileProps) => {
         size="large"
         edge="start"
         color="inherit"
-        aria-label="menu"
+        aria-label={t('common.menu')}
         onClick={handleMenuClick}
       >
         <MenuIcon />
@@ -42,7 +45,7 @@ export const AppBarMobile = ({ navigationItems }: AppBarMobileProps) => {
             to={item.path}
             onClick={handleMenuClose}
           >
-            {item.label}
+            {item.icon} {t(item.translationKey)}
           </MenuItem>
         ))}
       </Menu>
