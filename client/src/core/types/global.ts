@@ -1,8 +1,10 @@
+import { User } from "@/features/auth";
+
 // Types pour les langues supportées
 export type Language = 'fr' | 'zh' | 'en';
 
 // Types pour le dictionnaire
-export interface DictionaryEntry {
+export type DictionaryEntry = {
   id: string;
   french: string;
   chinese: string;
@@ -11,18 +13,18 @@ export interface DictionaryEntry {
   category?: string;
   difficulty?: 'beginner' | 'intermediate' | 'advanced';
   examples?: Example[];
-}
+};
 
-export interface Example {
+export type Example = {
   id: string;
   french: string;
   chinese: string;
   english?: string;
   audio?: string;
-}
+};
 
 // Types pour les flashcards
-export interface Flashcard {
+export type Flashcard = {
   id: string;
   front: string;
   back: string;
@@ -32,21 +34,15 @@ export interface Flashcard {
   lastReviewed?: Date;
   nextReview?: Date;
   correctStreak?: number;
-}
+};
 
 // Types pour les utilisateurs
-export interface User {
-  id: string;
-  username: string;
-  email: string;
-  preferredLanguage: Language;
-  level: 'beginner' | 'intermediate' | 'advanced';
-  createdAt: Date;
-  lastLogin?: Date;
-}
+export type UserExtended = User & {
+  level?: 'beginner' | 'intermediate' | 'advanced';
+};
 
 // Types pour les exercices
-export interface Exercise {
+export type Exercise = {
   id: string;
   title: string;
   description: string;
@@ -54,28 +50,28 @@ export interface Exercise {
   language: Language;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   questions: Question[];
-}
+};
 
-export interface Question {
+export type Question = {
   id: string;
   text: string;
   options?: string[];
   correctAnswer: string;
   explanation?: string;
   audio?: string;
-}
+};
 
 // Types pour l'API
-export interface ApiResponse<T> {
+export type ApiResponse<T> = {
   data: T;
   success: boolean;
   message?: string;
-}
+};
 
-export interface PaginatedResponse<T> {
+export type PaginatedResponse<T> = {
   data: T[];
   total: number;
   page: number;
   limit: number;
   hasMore: boolean;
-}
+};

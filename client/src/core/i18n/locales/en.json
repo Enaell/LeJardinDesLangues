@@ -79,6 +79,12 @@
       "passwordComplexity": "Password must contain at least one lowercase, one uppercase and one digit",
       "nameRequired": "Name is required",
       "nameMaxLength": "Name cannot exceed 100 characters"
+    },
+    "status": {
+      "notConnected": "Not connected",
+      "logout": "Sign out",
+      "loggingOut": "Signing out...",
+      "accessDenied": "Access denied"
     }
   },
   "languages": {

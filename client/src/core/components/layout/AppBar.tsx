@@ -3,14 +3,13 @@ import {
   AppBar as MuiAppBar,
   Toolbar,
   Typography,
-  Box
 } from '@mui/material';
 import { AppBarDesktop } from './AppBarDesktop';
 import { AppBarMobile } from './AppBarMobile';
 import { AuthButtons } from '@features/auth/components/AuthButtons';
-import { LanguageSelector } from '@core/components/ui';
 import { useTranslation } from '@core/hooks';
 import type { NavigationItem } from '@core/routes.config';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 type AppBarProps = {
   navigationItems: NavigationItem[];
@@ -18,6 +17,8 @@ type AppBarProps = {
 
 export const AppBar = ({ navigationItems }: AppBarProps) => {
   const { t } = useTranslation();
+
+  const { user, isAuthenticated, isUnauthenticated, isLoading } = useAuth();
 
   return (
     <>
@@ -33,15 +34,17 @@ export const AppBar = ({ navigationItems }: AppBarProps) => {
             🌸 {t('app.title')}
           </Typography>
 
-          {true && <>
+          {isAuthenticated && <>
             <AppBarDesktop navigationItems={navigationItems} />
             <AppBarMobile navigationItems={navigationItems} />
           </>}
 
-          <Box className="flex items-center gap-2">
-            <LanguageSelector />
-            <AuthButtons />
-          </Box>
+          <AuthButtons
+            user={user}
+            isLoading={isLoading}
+            isAuthenticated={isAuthenticated}
+            isUnauthenticated={isUnauthenticated}
+          />
         </Toolbar>
       </MuiAppBar>
 

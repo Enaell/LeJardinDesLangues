@@ -3,6 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useTranslation } from '@core/hooks';
+import { FlexRow } from '@core/components';
 import type { NavigationItem } from '@core/routes.config';
 
 type AppBarMobileProps = {
@@ -23,7 +24,7 @@ export const AppBarMobile = ({ navigationItems }: AppBarMobileProps) => {
   };
 
   return (
-    <div className="flex md:hidden">
+    <FlexRow className="md:hidden">
       <IconButton
         size="large"
         edge="start"
@@ -49,6 +50,6 @@ export const AppBarMobile = ({ navigationItems }: AppBarMobileProps) => {
           </MenuItem>
         ))}
       </Menu>
-    </div>
+    </FlexRow>
   );
 };

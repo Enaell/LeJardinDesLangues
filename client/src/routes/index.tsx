@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import { PopoverMenu, ProTip, ThemeShowcase } from '@core/components/ui';
+import { LanguageSelector, PopoverMenu, ProTip, ThemeShowcase } from '@core/components/ui';
 import { useTranslation } from '@core/hooks';
 
 type FeatureColor = "primary" | "secondary" | "success" | "info" | "warning" | "inherit" | "error";
@@ -108,7 +108,7 @@ export const HomePage = () => {
         <ProTip>
           {t('app.proTip')}
         </ProTip>
-
+        <LanguageSelector />
         {/* Démonstration du thème - À supprimer en production */}
         <div className="mt-8 pt-8 border-t border-gray-200">
           <ThemeShowcase />

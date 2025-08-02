@@ -79,6 +79,12 @@
       "passwordComplexity": "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre",
       "nameRequired": "Le nom est requis",
       "nameMaxLength": "Le nom ne peut pas dépasser 100 caractères"
+    },
+    "status": {
+      "notConnected": "Non connecté",
+      "logout": "Se déconnecter",
+      "loggingOut": "Déconnexion...",
+      "accessDenied": "Accès non autorisé"
     }
   },
   "languages": {

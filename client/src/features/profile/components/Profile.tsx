@@ -1,7 +1,7 @@
-import type { User } from '../../auth/types/user';
+import { UserExtended } from '@/core';
 
 export type ProfileProps = {
-  user: User;
+  user: UserExtended;
 };
 
 export const Profile = ({ user }: ProfileProps) => {

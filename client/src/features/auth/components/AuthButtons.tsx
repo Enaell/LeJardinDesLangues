@@ -1,12 +1,25 @@
-import { Button, Avatar, Menu, MenuItem, Divider } from '@mui/material';
+import { Button, Avatar, Menu, MenuItem, Divider, CircularProgress } from '@mui/material';
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { useAuth, useAuthModal, useLogout } from '../hooks';
+import { useAuthModal, useLogout } from '../hooks';
 import { AuthModal } from './AuthModal';
+import { FlexRow } from '@/core';
+import { useTranslation } from '@core/hooks';
+import { User } from '../types';
 
-export const AuthButtons = () => {
-  const { user, isAuthenticated, isUnauthenticated, isLoading } = useAuth();
+export const AuthButtons = ({
+  user,
+  isLoading,
+  isAuthenticated,
+  isUnauthenticated
+}: {
+  user?: User,
+  isLoading: boolean,
+  isAuthenticated: boolean,
+  isUnauthenticated: boolean;
+}) => {
   const { isOpen, activeTab, openModal, closeModal, switchTab } = useAuthModal();
+  const { t } = useTranslation();
 
   const logout = useLogout();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -26,16 +39,16 @@ export const AuthButtons = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center space-x-2">
-        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
-      </div>
+      <FlexRow alignItems="center" spacing={2}>
+        <CircularProgress />
+      </FlexRow>
     );
   }
 
   if (isUnauthenticated) {
     return (
       <>
-        <div className="flex items-center space-x-2">
+        <FlexRow alignItems="center" spacing={2}>
           <Button
             color="inherit"
             variant="outlined"
@@ -43,7 +56,7 @@ export const AuthButtons = () => {
             onClick={() => openModal('login')}
             className="text-white border-white hover:bg-white hover:text-primary-600"
           >
-            Connexion
+            {t('auth.login.title')}
           </Button>
           <Button
             color="inherit"
@@ -52,9 +65,9 @@ export const AuthButtons = () => {
             onClick={() => openModal('register')}
             className="bg-white text-primary-600 hover:bg-gray-100"
           >
-            Inscription
+            {t('auth.register.title')}
           </Button>
-        </div>
+        </FlexRow>
         <AuthModal
           isOpen={isOpen}
           activeTab={activeTab}
@@ -67,7 +80,7 @@ export const AuthButtons = () => {
 
   if (isAuthenticated && user) {
     return (
-      <div className="flex items-center">
+      <FlexRow alignItems='center'>
         <Button
           onClick={handleMenuClick}
           color="inherit"
@@ -97,17 +110,17 @@ export const AuthButtons = () => {
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
           <MenuItem component={Link} to="/profile" onClick={handleMenuClose}>
-            Mon Profil
+            {t('navigation.profile')}
           </MenuItem>
           <Divider />
           <MenuItem
             onClick={handleLogout}
             disabled={logout.isPending}
           >
-            {logout.isPending ? 'Déconnexion...' : 'Se déconnecter'}
+            {logout.isPending ? t('auth.status.loggingOut') : t('auth.status.logout')}
           </MenuItem>
         </Menu>
-      </div>
+      </FlexRow>
     );
   }
 
