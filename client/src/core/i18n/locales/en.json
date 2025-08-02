@@ -1,5 +1,10 @@
 {
-  "welcome": "Welcome to Le Jardin des Langues",
+  "app": {
+    "title": "Le Jardin des Langues",
+    "welcome": "Welcome to Le Jardin des Langues",
+    "subtitle": "Your interactive language learning application",
+    "proTip": "Start by exploring the dictionary to discover new words, then create your first flashcards to memorize them!"
+  },
   "navigation": {
     "home": "Home",
     "dictionary": "Dictionary",
@@ -7,6 +12,85 @@
     "exercises": "Exercises",
     "community": "Community",
     "profile": "Profile"
+  },
+  "features": {
+    "dictionary": {
+      "title": "Dictionary",
+      "description": "Explore and search for words in different languages"
+    },
+    "flashcards": {
+      "title": "Flashcards",
+      "description": "Create and study your own flashcards"
+    },
+    "exercises": {
+      "title": "Exercises",
+      "description": "Practice with interactive exercises"
+    },
+    "community": {
+      "title": "Community",
+      "description": "Share and discover content with other learners"
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "Manage your profile and preferences"
+    },
+    "discover": "Discover"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "emailOrUsername": "Email or username",
+      "emailOrUsernamePlaceholder": "your.email@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Your password",
+      "submitButton": "Sign in",
+      "submitButtonLoading": "Signing in...",
+      "googleButton": "Continue with Google",
+      "googleButtonLoading": "Redirecting...",
+      "dividerText": "or",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create account"
+    },
+    "register": {
+      "title": "Sign up",
+      "username": "Username",
+      "usernamePlaceholder": "johndoe",
+      "email": "Email",
+      "emailPlaceholder": "john.doe@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "MyPassword123!",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "John Doe",
+      "nativeLanguage": "Native language",
+      "targetLanguage": "Language to learn",
+      "submitButton": "Sign up",
+      "submitButtonLoading": "Signing up...",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "validation": {
+      "required": "This field is required",
+      "passwordRequired": "Password is required",
+      "usernameMinLength": "Username must contain at least 3 characters",
+      "usernameMaxLength": "Username cannot exceed 50 characters",
+      "usernameInvalidChars": "Username can only contain letters, numbers, hyphens and underscores",
+      "emailInvalid": "Email address is not valid",
+      "passwordMinLength": "Password must contain at least 8 characters",
+      "passwordComplexity": "Password must contain at least one lowercase, one uppercase and one digit",
+      "nameRequired": "Name is required",
+      "nameMaxLength": "Name cannot exceed 100 characters"
+    },
+    "status": {
+      "notConnected": "Not connected",
+      "logout": "Sign out",
+      "loggingOut": "Signing out...",
+      "accessDenied": "Access denied"
+    }
+  },
+  "languages": {
+    "fr": "French",
+    "en": "English",
+    "zh": "Chinese"
   },
   "dictionary": {
     "search": "Search for a word...",
@@ -42,6 +126,9 @@
     "cancel": "Cancel",
     "save": "Save",
     "delete": "Delete",
-    "edit": "Edit"
+    "edit": "Edit",
+    "close": "Close",
+    "open": "Open",
+    "menu": "Menu"
   }
 }

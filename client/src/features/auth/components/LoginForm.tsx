@@ -1,6 +1,7 @@
 import { Box, Button, Divider, Typography } from '@mui/material';
 import { Form, FormTextField, FormPasswordField, FormSubmitButton } from '@core/components/forms';
 import { useLogin, useGoogleAuth } from '../hooks';
+import { useTranslation } from '@core/hooks';
 import type { LoginFormData } from '../types/forms';
 
 type LoginFormProps = {
@@ -9,6 +10,7 @@ type LoginFormProps = {
 };
 
 export const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => {
+  const { t } = useTranslation();
   const loginMutation = useLogin();
   const googleAuth = useGoogleAuth();
 
@@ -37,24 +39,24 @@ export const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => 
       >
         <FormTextField
           name="emailOrUsername"
-          label="Email ou nom d'utilisateur"
+          label={t('auth.login.emailOrUsername')}
           type="text"
           fullWidth
-          placeholder="votre.email@exemple.com"
+          placeholder={t('auth.login.emailOrUsernamePlaceholder')}
           validators={{
             onChange: ({ value }: { value: string; }) =>
-              !value ? 'Ce champ est requis' : undefined,
+              !value ? t('auth.validation.required') : undefined,
           }}
         />
 
         <FormPasswordField
           name="password"
-          label="Mot de passe"
+          label={t('auth.login.password')}
           fullWidth
-          placeholder="Votre mot de passe"
+          placeholder={t('auth.login.passwordPlaceholder')}
           validators={{
             onChange: ({ value }: { value: string; }) =>
-              !value ? 'Le mot de passe est requis' : undefined,
+              !value ? t('auth.validation.passwordRequired') : undefined,
           }}
         />
 
@@ -69,13 +71,13 @@ export const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => 
           fullWidth
           className="bg-indigo-600 hover:bg-indigo-700"
         >
-          {loginMutation.isPending ? 'Connexion...' : 'Se connecter'}
+          {loginMutation.isPending ? t('auth.login.submitButtonLoading') : t('auth.login.submitButton')}
         </FormSubmitButton>
       </Form>
 
       <Divider className="my-4">
         <Typography variant="body2" className="text-gray-500">
-          ou
+          {t('auth.login.dividerText')}
         </Typography>
       </Divider>
 
@@ -87,20 +89,20 @@ export const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => 
         fullWidth
         className="border-gray-300 text-gray-700 hover:bg-gray-50"
       >
-        {googleAuth.isPending ? 'Redirection...' : 'Continuer avec Google'}
+        {googleAuth.isPending ? t('auth.login.googleButtonLoading') : t('auth.login.googleButton')}
       </Button>
 
       {onSwitchToRegister && (
         <Box className="text-center mt-4">
           <Typography variant="body2" className="text-gray-600">
-            Pas encore de compte ?{' '}
+            {t('auth.login.noAccount')}{' '}
             <Button
               onClick={onSwitchToRegister}
               variant="text"
               size="small"
               className="text-indigo-600 hover:text-indigo-500 font-medium p-0 min-w-0"
             >
-              Créer un compte
+              {t('auth.login.createAccount')}
             </Button>
           </Typography>
         </Box>

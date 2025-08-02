@@ -7,17 +7,17 @@
 export const colors = {
   // Vert principal - inspiré des feuilles fraîches
   primary: {
-    50: '#f0f9f0',
-    100: '#dcf2dc',
-    200: '#bae5ba',
-    300: '#8fd48f',
-    400: '#5fb85f',
-    500: '#4a9d4a', // Couleur principale
-    600: '#3d8b3d',
-    700: '#327032',
-    800: '#2a5a2a',
-    900: '#244a24',
-    950: '#0f2a0f',
+    50: '#f2f8f2',
+    100: '#e0f0e0',
+    200: '#c2e0c2',
+    300: '#97c997',
+    400: '#6fa96f',
+    500: '#3d8b3d', // Couleur principale
+    600: '#327032',
+    700: '#295c29',
+    800: '#204820',
+    900: '#183618',
+    950: '#0d210d',
   },
 
   // Couleur secondaire - Vert sauge pour contraste doux
@@ -122,7 +122,7 @@ export const colors = {
     default: '#fefefe',
     paper: '#ffffff',
     disabled: '#f5f5f5',
-    primary: '#4a9d4a',
+    primary: '#3d8b3d',
     secondary: '#6b7f6b'
   },
 

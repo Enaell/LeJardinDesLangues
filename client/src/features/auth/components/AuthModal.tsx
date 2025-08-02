@@ -12,6 +12,7 @@ import { LoginForm } from './LoginForm';
 import { RegisterForm } from './RegisterForm';
 import type { AuthModalTab } from '../hooks/useAuthModal';
 import { useCallback } from 'react';
+import { useTranslation } from '@core/hooks';
 
 type AuthModalProps = {
   isOpen: boolean;
@@ -25,6 +26,7 @@ export const AuthModal = ({
   onClose,
   onTabChange
 }: AuthModalProps) => {
+  const { t } = useTranslation();
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     const tab = newValue === 0 ? 'login' : 'register';
@@ -59,8 +61,8 @@ export const AuthModal = ({
             variant="fullWidth"
             indicatorColor="primary"
           >
-            <Tab label="Connexion" />
-            <Tab label="Inscription" />
+            <Tab label={t('auth.login.title')} />
+            <Tab label={t('auth.register.title')} />
           </Tabs>
         </Box>
         <IconButton

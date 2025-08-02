@@ -1,12 +1,96 @@
 {
-  "welcome": "欢迎来到语言花园",
+  "app": {
+    "title": "语言花园",
+    "welcome": "欢迎来到语言花园",
+    "subtitle": "您的互动语言学习应用程序",
+    "proTip": "首先探索词典发现新单词，然后创建您的第一套单词卡来记忆它们！"
+  },
   "navigation": {
-    "home": "主页",
+    "home": "首页",
     "dictionary": "词典",
-    "flashcards": "记忆卡",
+    "flashcards": "单词卡",
     "exercises": "练习",
     "community": "社区",
     "profile": "个人资料"
+  },
+  "features": {
+    "dictionary": {
+      "title": "词典",
+      "description": "探索和搜索不同语言的单词"
+    },
+    "flashcards": {
+      "title": "单词卡",
+      "description": "创建和学习您自己的单词卡"
+    },
+    "exercises": {
+      "title": "练习",
+      "description": "通过互动练习进行实践"
+    },
+    "community": {
+      "title": "社区",
+      "description": "与其他学习者分享和发现内容"
+    },
+    "profile": {
+      "title": "个人资料",
+      "description": "管理您的个人资料和偏好设置"
+    },
+    "discover": "发现"
+  },
+  "auth": {
+    "login": {
+      "title": "登录",
+      "emailOrUsername": "邮箱或用户名",
+      "emailOrUsernamePlaceholder": "your.email@example.com",
+      "password": "密码",
+      "passwordPlaceholder": "您的密码",
+      "submitButton": "登录",
+      "submitButtonLoading": "登录中...",
+      "googleButton": "使用Google登录",
+      "googleButtonLoading": "跳转中...",
+      "dividerText": "或",
+      "noAccount": "还没有账户？",
+      "createAccount": "创建账户"
+    },
+    "register": {
+      "title": "注册",
+      "username": "用户名",
+      "usernamePlaceholder": "johndoe",
+      "email": "邮箱",
+      "emailPlaceholder": "john.doe@example.com",
+      "password": "密码",
+      "passwordPlaceholder": "MyPassword123!",
+      "fullName": "全名",
+      "fullNamePlaceholder": "张三",
+      "nativeLanguage": "母语",
+      "targetLanguage": "学习语言",
+      "submitButton": "注册",
+      "submitButtonLoading": "注册中...",
+      "hasAccount": "已有账户？",
+      "signIn": "登录"
+    },
+    "validation": {
+      "required": "此字段为必填项",
+      "passwordRequired": "密码为必填项",
+      "usernameMinLength": "用户名至少需要3个字符",
+      "usernameMaxLength": "用户名不能超过50个字符",
+      "usernameInvalidChars": "用户名只能包含字母、数字、连字符和下划线",
+      "emailInvalid": "邮箱地址无效",
+      "passwordMinLength": "密码至少需要8个字符",
+      "passwordComplexity": "密码必须包含至少一个小写字母、一个大写字母和一个数字",
+      "nameRequired": "姓名为必填项",
+      "nameMaxLength": "姓名不能超过100个字符"
+    },
+    "status": {
+      "notConnected": "未连接",
+      "logout": "退出登录",
+      "loggingOut": "退出中...",
+      "accessDenied": "拒绝访问"
+    }
+  },
+  "languages": {
+    "fr": "法语",
+    "en": "英语",
+    "zh": "中文"
   },
   "dictionary": {
     "search": "搜索单词...",
@@ -28,7 +112,7 @@
   "exercises": {
     "availableExercises": "可用练习",
     "difficulty": "难度",
-    "beginner": "初级",
+    "beginner": "初学者",
     "intermediate": "中级",
     "advanced": "高级",
     "start": "开始",
@@ -42,6 +126,9 @@
     "cancel": "取消",
     "save": "保存",
     "delete": "删除",
-    "edit": "编辑"
+    "edit": "编辑",
+    "close": "关闭",
+    "open": "打开",
+    "menu": "菜单"
   }
 }

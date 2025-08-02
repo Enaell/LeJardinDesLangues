@@ -1,4 +1,6 @@
 import React from 'react';
+import { Box } from '@mui/material';
+import { FlexRow } from '@core/components';
 
 type ProTipProps = {
   children: React.ReactNode;
@@ -7,15 +9,15 @@ type ProTipProps = {
 
 export const ProTip = ({ children, className = '' }: ProTipProps) => {
   return (
-    <div className={`bg-blue-50 border-l-4 border-blue-400 p-4 ${className}`}>
-      <div className="flex">
-        <div className="flex-shrink-0">
+    <Box className={`bg-blue-50 border-l-4 border-blue-400 p-4 ${className}`}>
+      <FlexRow>
+        <Box className="flex-shrink-0">
           <span className="text-blue-400">💡</span>
-        </div>
-        <div className="ml-3">
+        </Box>
+        <Box className="ml-3">
           <p className="text-sm text-blue-700">{children}</p>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </FlexRow>
+    </Box>
   );
 };

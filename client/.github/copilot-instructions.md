@@ -131,7 +131,12 @@ Chaque feature est autonome et contient :
   import { Layout } from '@core/components/layout';
   import { useAuth } from '@features/auth/hooks/useAuth';
   import { Button } from '@core/components/ui';
+  import { useTranslation, useTheme } from '@core/hooks';
   ```
+
+### Hooks Core disponibles
+- **useTranslation** : Hook i18n personnalisé avec `t`, `changeLanguage`, `currentLanguage`, `isReady`
+- **useTheme** : Hook pour accéder au thème Material-UI
 
 ### Alias de chemin configurés
 | Alias | Chemin | Usage |
@@ -165,6 +170,7 @@ Chaque feature est autonome et contient :
   - Composants UI de base : `Button`, `Input`, `Card`, `Container`
   - Composants layout : `Header`, `Sidebar`, `Layout`, `AppBar`
   - Composants formulaires : `FormTextField`, `FormSelect`, `FormCheckbox`
+  - Composants i18n : `LanguageSelector`
 - **2. Composants Material-UI** : Pour les fonctionnalités complexes
   - Composants avancés : `Autocomplete`, `DataGrid`, `DatePicker`
   - Composants spécialisés : `Stepper`, `Timeline`, `SpeedDial`
@@ -176,14 +182,19 @@ Chaque feature est autonome et contient :
 ```typescript
 // ✅ Bon : Utilisation de composants Core
 import { Container, Button, Card } from '@core/components/ui';
+import { useTranslation } from '@core/hooks';
 
-export const GoodExample = () => (
-  <Container>
-    <Card>
-      <Button variant="primary">Action</Button>
-    </Card>
-  </Container>
-);
+export const GoodExample = () => {
+  const { t } = useTranslation();
+  
+  return (
+    <Container>
+      <Card>
+        <Button variant="primary">{t('common.save')}</Button>
+      </Card>
+    </Container>
+  );
+};
 
 // ❌ Mauvais : Utilisation de balises HTML natives
 export const BadExample = () => (
@@ -193,6 +204,7 @@ export const BadExample = () => (
     </div>
   </div>
 );
+```
 
 ### Thème et couleurs
 - **Couleur primaire** : `#4a9d4a` (Vert Jardin)
@@ -315,23 +327,67 @@ export const LoginForm = () => {
 
 ## 🌍 Internationalisation (i18n)
 
-### Configuration react-i18next
-- **Fichiers de traduction** organisés par langue et feature
-- **Chargement dynamique** des traductions
-- **Sélecteur de langue** dans l'interface
-- **Hooks** : `useTranslation`, `useI18n`
+### Configuration complète avec react-i18next
+- **Hook personnalisé** `useTranslation` dans `@core/hooks`
+- **Initialisation automatique** dans `main.tsx`
+- **Support multilingue** : français (défaut), anglais, chinois
+- **Sélecteur de langue** intégré dans l'AppBar
+- **Changement en temps réel** de toute l'interface
 
-### Organisation des traductions
+### Structure des traductions
 ```
-src/core/i18n/locales/
-├── fr/
-│   ├── common.json
-│   ├── auth.json
-│   ├── dictionary.json
-│   └── ...
-├── en/
-└── zh/
+src/core/i18n/
+├── config.ts              # Configuration react-i18next
+└── locales/
+    ├── fr.json            # Français (langue par défaut)
+    ├── en.json            # Anglais
+    └── zh.json            # Chinois simplifié
 ```
+
+
+### Hook useTranslation personnalisé
+```typescript
+import { useTranslation } from '@core/hooks';
+
+export const MonComposant = () => {
+  const { t, changeLanguage, currentLanguage, isReady } = useTranslation();
+  ... // logique du composant
+};
+```
+
+### Bonnes pratiques i18n
+- **Clés hiérarchiques** : `auth.login.title` plutôt que `loginTitle`
+- **Groupement par features** : auth, navigation, features, common
+- **Séparation des contextes** : labels, placeholders, validation
+- **Support des paramètres** : `t('welcome', { name: 'Jean' })`
+- **Pluralisation** : `itemCount` / `itemCount_plural`
+
+### Ajout de traductions
+```typescript
+// Pour un nouveau composant
+const { t } = useTranslation();
+
+// Texte simple
+<Typography>{t('features.dictionary.title')}</Typography>
+
+// Avec paramètres
+<Typography>{t('welcome', { name: user.name })}</Typography>
+
+// Messages d'erreur conditionnels
+{error && <Alert>{t('auth.validation.emailInvalid')}</Alert>}
+
+// Listes traduites
+options={languages.map(lang => ({ 
+  value: lang.code, 
+  label: t(`languages.${lang.code}`)
+}))}
+```
+
+### Extension pour nouvelles langues
+1. Créer le fichier JSON dans `locales/`
+2. L'ajouter dans `config.ts` (resources)
+3. Mettre à jour le `LanguageSelector`
+4. Traduire toutes les clés existantes
 
 ---
 

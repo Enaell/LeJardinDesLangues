@@ -8,59 +8,61 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import { PopoverMenu, ProTip, ThemeShowcase } from '@core/components/ui';
+import { LanguageSelector, PopoverMenu, ProTip, ThemeShowcase } from '@core/components/ui';
+import { useTranslation } from '@core/hooks';
 
 type FeatureColor = "primary" | "secondary" | "success" | "info" | "warning" | "inherit" | "error";
 
-const features: {
-  title: string;
-  description: string;
-  path: string;
-  color: FeatureColor;
-}[] = [
-    {
-      title: 'Dictionnaire',
-      description: 'Explorez et recherchez des mots dans différentes langues',
-      path: '/dictionary',
-      color: 'primary',
-    },
-    {
-      title: 'Cartes Mémoire',
-      description: 'Créez et étudiez vos propres cartes mémoire',
-      path: '/flashcards',
-      color: 'secondary',
-    },
-    {
-      title: 'Exercices',
-      description: 'Pratiquez avec des exercices interactifs',
-      path: '/exercises',
-      color: 'success',
-    },
-    {
-      title: 'Communauté',
-      description: 'Partagez et découvrez du contenu avec d\'autres apprenants',
-      path: '/community',
-      color: 'info',
-    },
-    {
-      title: 'Profil',
-      description: 'Gérez votre profil et vos préférences',
-      path: '/profile',
-      color: 'warning',
-    },
-  ];
-
 export const HomePage = () => {
+  const { t } = useTranslation();
+
+  const features: {
+    titleKey: string;
+    descriptionKey: string;
+    path: string;
+    color: FeatureColor;
+  }[] = [
+      {
+        titleKey: 'features.dictionary.title',
+        descriptionKey: 'features.dictionary.description',
+        path: '/dictionary',
+        color: 'primary',
+      },
+      {
+        titleKey: 'features.flashcards.title',
+        descriptionKey: 'features.flashcards.description',
+        path: '/flashcards',
+        color: 'secondary',
+      },
+      {
+        titleKey: 'features.exercises.title',
+        descriptionKey: 'features.exercises.description',
+        path: '/exercises',
+        color: 'success',
+      },
+      {
+        titleKey: 'features.community.title',
+        descriptionKey: 'features.community.description',
+        path: '/community',
+        color: 'info',
+      },
+      {
+        titleKey: 'features.profile.title',
+        descriptionKey: 'features.profile.description',
+        path: '/profile',
+        color: 'warning',
+      },
+    ];
 
   return (
     <Container maxWidth="lg">
       <div className="py-8">
         <Typography variant="h2" component="h1" align="center" gutterBottom>
-          Le Jardin des Langues
+          {t('app.title')}
         </Typography>
 
         <Typography variant="h5" align="center" color="text.secondary" sx={{ mb: 4 }}>
-          Votre application pour apprendre les langues de manière interactive
+          {t('app.subtitle')}
         </Typography>
 
         <div className="flex justify-center mb-8">
@@ -81,10 +83,10 @@ export const HomePage = () => {
               <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Typography variant="h6" component="h2" gutterBottom>
-                    {feature.title}
+                    {t(feature.titleKey)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {feature.description}
+                    {t(feature.descriptionKey)}
                   </Typography>
                 </CardContent>
                 <CardActions>
@@ -95,7 +97,7 @@ export const HomePage = () => {
                     variant="outlined"
                     size="small"
                   >
-                    Découvrir
+                    {t('features.discover')}
                   </Button>
                 </CardActions>
               </Card>
@@ -104,10 +106,9 @@ export const HomePage = () => {
         </Grid>
 
         <ProTip>
-          Commencez par explorer le dictionnaire pour découvrir de nouveaux mots,
-          puis créez vos premières cartes mémoire pour les mémoriser !
+          {t('app.proTip')}
         </ProTip>
-
+        <LanguageSelector />
         {/* Démonstration du thème - À supprimer en production */}
         <div className="mt-8 pt-8 border-t border-gray-200">
           <ThemeShowcase />

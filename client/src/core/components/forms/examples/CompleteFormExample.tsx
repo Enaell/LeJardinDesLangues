@@ -32,7 +32,7 @@ const ConditionalFields = () => {
   const value = useFieldValue<string>('userType');
   console.log('ConditionalFields userType value:', value);
 
-  
+
 
   return (
     <>
@@ -145,7 +145,6 @@ export const CompleteFormExample = () => {
           { value: 'fr', label: 'Français' },
           { value: 'zh', label: 'Chinois' },
           { value: 'en', label: 'Anglais' },
-          { value: 'es', label: 'Espagnol' },
         ]}
         fullWidth
       />

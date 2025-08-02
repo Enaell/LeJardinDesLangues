@@ -1,15 +1,8 @@
 import React from 'react';
 import { AppBar } from './AppBar';
 import { Footer } from './Footer';
-
-const navigationItems = [
-  { label: 'Accueil', path: '/' },
-  { label: 'Dictionnaire', path: '/dictionary' },
-  { label: 'Cartes Mémoire', path: '/flashcards' },
-  { label: 'Exercices', path: '/exercises' },
-  { label: 'Communauté', path: '/community' },
-  { label: 'Profil', path: '/profile' },
-];
+import { NAVIGATION_ITEMS } from '@core/routes.config';
+import { FlexColumn } from '@core/components';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -18,14 +11,14 @@ type LayoutProps = {
 export const Layout = ({ children }: LayoutProps) => {
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <AppBar navigationItems={navigationItems} />
+    <FlexColumn className="min-h-screen">
+      <AppBar navigationItems={NAVIGATION_ITEMS} />
 
       <main className="flex-grow">
         {children}
       </main>
 
       <Footer />
-    </div>
+    </FlexColumn>
   );
 };
