@@ -14,7 +14,7 @@ export const queryClient = new QueryClient({
       retry: (failureCount, error) => {
         // Ne pas réessayer pour les erreurs d'authentification
         if (error && typeof error === 'object' && 'statusCode' in error) {
-          const statusCode = (error as any).statusCode;
+          const statusCode = error.statusCode;
           if (statusCode === 401 || statusCode === 403) {
             return false;
           }

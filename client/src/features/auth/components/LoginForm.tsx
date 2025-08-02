@@ -1,74 +1,110 @@
-import { useLoginForm, useGoogleAuth } from '../hooks';
+import { Box, Button, Divider, Typography } from '@mui/material';
+import { Form, FormTextField, FormPasswordField, FormSubmitButton } from '@core/components/forms';
+import { useLogin, useGoogleAuth } from '../hooks';
+import type { LoginFormData } from '../types/forms';
 
-export const LoginForm = () => {
-  const {
-    formData,
-    updateField,
-    handleSubmit,
-    isFormValid,
-    isLoading,
-    isError,
-    error,
-  } = useLoginForm();
+type LoginFormProps = {
+  onSuccess?: () => void;
+  onSwitchToRegister?: () => void;
+};
 
+export const LoginForm = ({ onSuccess, onSwitchToRegister }: LoginFormProps) => {
+  const loginMutation = useLogin();
   const googleAuth = useGoogleAuth();
 
+  const handleSubmit = async ({ value }: { value: LoginFormData; }) => {
+    try {
+      await loginMutation.mutateAsync({
+        emailOrUsername: value.emailOrUsername,
+        password: value.password,
+      });
+      onSuccess?.();
+    } catch (error) {
+      // L'erreur est déjà gérée par React Query
+      console.error('Erreur de connexion:', error);
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
-      <div>
-        <label htmlFor="emailOrUsername" className="block text-sm font-medium text-gray-700">
-          Email ou nom d'utilisateur
-        </label>
-        <input
-          id="emailOrUsername"
+    <Box className="space-y-4 max-w-md mx-auto">
+      <Form<LoginFormData>
+        defaultValues={{
+          emailOrUsername: '',
+          password: '',
+        }}
+        onFormSubmit={handleSubmit}
+        className="space-y-4"
+      >
+        <FormTextField
+          name="emailOrUsername"
+          label="Email ou nom d'utilisateur"
           type="text"
-          value={formData.emailOrUsername}
-          onChange={(e) => updateField('emailOrUsername', e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          fullWidth
           placeholder="votre.email@exemple.com"
-          required
+          validators={{
+            onChange: ({ value }: { value: string; }) =>
+              !value ? 'Ce champ est requis' : undefined,
+          }}
         />
-      </div>
 
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-          Mot de passe
-        </label>
-        <input
-          id="password"
-          type="password"
-          value={formData.password}
-          onChange={(e) => updateField('password', e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        <FormPasswordField
+          name="password"
+          label="Mot de passe"
+          fullWidth
           placeholder="Votre mot de passe"
-          required
+          validators={{
+            onChange: ({ value }: { value: string; }) =>
+              !value ? 'Le mot de passe est requis' : undefined,
+          }}
         />
-      </div>
 
-      {isError && error && (
-        <div className="text-red-600 text-sm">
-          {error.message}
-        </div>
+        {loginMutation.isError && loginMutation.error && (
+          <Box className="text-red-600 text-sm">
+            {loginMutation.error.message}
+          </Box>
+        )}
+
+        <FormSubmitButton
+          variant="contained"
+          fullWidth
+          className="bg-indigo-600 hover:bg-indigo-700"
+        >
+          {loginMutation.isPending ? 'Connexion...' : 'Se connecter'}
+        </FormSubmitButton>
+      </Form>
+
+      <Divider className="my-4">
+        <Typography variant="body2" className="text-gray-500">
+          ou
+        </Typography>
+      </Divider>
+
+      <Button
+        type="button"
+        onClick={() => googleAuth.mutate()}
+        disabled={googleAuth.isPending}
+        variant="outlined"
+        fullWidth
+        className="border-gray-300 text-gray-700 hover:bg-gray-50"
+      >
+        {googleAuth.isPending ? 'Redirection...' : 'Continuer avec Google'}
+      </Button>
+
+      {onSwitchToRegister && (
+        <Box className="text-center mt-4">
+          <Typography variant="body2" className="text-gray-600">
+            Pas encore de compte ?{' '}
+            <Button
+              onClick={onSwitchToRegister}
+              variant="text"
+              size="small"
+              className="text-indigo-600 hover:text-indigo-500 font-medium p-0 min-w-0"
+            >
+              Créer un compte
+            </Button>
+          </Typography>
+        </Box>
       )}
-
-      <div className="space-y-3">
-        <button
-          type="submit"
-          disabled={!isFormValid || isLoading}
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isLoading ? 'Connexion...' : 'Se connecter'}
-        </button>
-
-        <button
-          type="button"
-          onClick={() => googleAuth.mutate()}
-          disabled={googleAuth.isPending}
-          className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {googleAuth.isPending ? 'Redirection...' : 'Continuer avec Google'}
-        </button>
-      </div>
-    </form>
+    </Box>
   );
 };

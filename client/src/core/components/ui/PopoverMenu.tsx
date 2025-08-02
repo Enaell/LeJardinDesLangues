@@ -12,7 +12,7 @@ export const PopoverMenu = () => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <Button
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
@@ -38,6 +38,6 @@ export const PopoverMenu = () => {
           Large Item
         </MenuItem>
       </Menu>
-    </React.Fragment>
+    </>
   );
 };

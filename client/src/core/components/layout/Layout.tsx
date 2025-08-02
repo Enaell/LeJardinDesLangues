@@ -1,119 +1,31 @@
 import React from 'react';
-import { Link } from '@tanstack/react-router';
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Box,
-  Container,
-  IconButton,
-  Menu,
-  MenuItem
-} from '@mui/material';
-import { Copyright } from '../ui/Copiright';
+import { AppBar } from './AppBar';
+import { Footer } from './Footer';
+
+const navigationItems = [
+  { label: 'Accueil', path: '/' },
+  { label: 'Dictionnaire', path: '/dictionary' },
+  { label: 'Cartes Mémoire', path: '/flashcards' },
+  { label: 'Exercices', path: '/exercises' },
+  { label: 'Communauté', path: '/community' },
+  { label: 'Profil', path: '/profile' },
+];
 
 type LayoutProps = {
   children: React.ReactNode;
 };
 
 export const Layout = ({ children }: LayoutProps) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const navigationItems = [
-    { label: 'Accueil', path: '/' },
-    { label: 'Dictionnaire', path: '/dictionary' },
-    { label: 'Cartes Mémoire', path: '/flashcards' },
-    { label: 'Exercices', path: '/exercises' },
-    { label: 'Communauté', path: '/community' },
-    { label: 'Profil', path: '/profile' },
-  ];
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography
-            variant="h6"
-            component={Link}
-            to="/"
-            sx={{
-              flexGrow: 1,
-              textDecoration: 'none',
-              color: 'inherit',
-              fontWeight: 'bold'
-            }}
-          >
-            🌸 Le Jardin des Langues
-          </Typography>
+    <div className="flex flex-col min-h-screen">
+      <AppBar navigationItems={navigationItems} />
 
-          {/* Navigation desktop */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {navigationItems.slice(1).map((item) => (
-              <Button
-                key={item.path}
-                component={Link}
-                to={item.path}
-                color="inherit"
-                sx={{ ml: 1 }}
-              >
-                {item.label}
-              </Button>
-            ))}
-          </Box>
-
-          {/* Navigation mobile */}
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={handleMenuClick}
-            >
-              ☰
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleMenuClose}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-            >
-              {navigationItems.map((item) => (
-                <MenuItem
-                  key={item.path}
-                  component={Link}
-                  to={item.path}
-                  onClick={handleMenuClose}
-                >
-                  {item.label}
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-        </Toolbar>
-      </AppBar>
-
-      <Box component="main" sx={{ flexGrow: 1 }}>
+      <main className="flex-grow">
         {children}
-      </Box>
+      </main>
 
-      <Box component="footer" sx={{ py: 3, px: 2, mt: 'auto', backgroundColor: 'grey.100' }}>
-        <Container maxWidth="sm">
-          <Copyright />
-        </Container>
-      </Box>
-    </Box>
+      <Footer />
+    </div>
   );
 };

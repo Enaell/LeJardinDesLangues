@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRegister, useLogin } from './useAuth';
 import type { RegisterRequest, LoginRequest } from '../types';
 
 // Hook pour gérer le formulaire d'inscription
-export const useRegisterForm = () => {
+export const useRegisterForm = (onSuccess?: () => void) => {
   const [formData, setFormData] = useState<RegisterRequest>({
     username: '',
     email: '',
@@ -14,6 +14,13 @@ export const useRegisterForm = () => {
   });
 
   const registerMutation = useRegister();
+
+  // Surveiller le succès de la mutation
+  useEffect(() => {
+    if (registerMutation.isSuccess && onSuccess) {
+      onSuccess();
+    }
+  }, [registerMutation.isSuccess, onSuccess]);
 
   const updateField = (field: keyof RegisterRequest, value: string) => {
     setFormData(prev => ({
@@ -63,13 +70,20 @@ export const useRegisterForm = () => {
 };
 
 // Hook pour gérer le formulaire de connexion
-export const useLoginForm = () => {
+export const useLoginForm = (onSuccess?: () => void) => {
   const [formData, setFormData] = useState<LoginRequest>({
     emailOrUsername: '',
     password: '',
   });
 
   const loginMutation = useLogin();
+
+  // Surveiller le succès de la mutation
+  useEffect(() => {
+    if (loginMutation.isSuccess && onSuccess) {
+      onSuccess();
+    }
+  }, [loginMutation.isSuccess, onSuccess]);
 
   const updateField = (field: keyof LoginRequest, value: string) => {
     setFormData(prev => ({

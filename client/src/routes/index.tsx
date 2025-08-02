@@ -8,40 +8,47 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import { PopoverMenu, ProTip } from '../core/components/ui';
+import { PopoverMenu, ProTip, ThemeShowcase } from '@core/components/ui';
 
-const features = [
-  {
-    title: 'Dictionnaire',
-    description: 'Explorez et recherchez des mots dans différentes langues',
-    path: '/dictionary',
-    color: 'primary',
-  },
-  {
-    title: 'Cartes Mémoire',
-    description: 'Créez et étudiez vos propres cartes mémoire',
-    path: '/flashcards',
-    color: 'secondary',
-  },
-  {
-    title: 'Exercices',
-    description: 'Pratiquez avec des exercices interactifs',
-    path: '/exercises',
-    color: 'success',
-  },
-  {
-    title: 'Communauté',
-    description: 'Partagez et découvrez du contenu avec d\'autres apprenants',
-    path: '/community',
-    color: 'info',
-  },
-  {
-    title: 'Profil',
-    description: 'Gérez votre profil et vos préférences',
-    path: '/profile',
-    color: 'warning',
-  },
-];
+type FeatureColor = "primary" | "secondary" | "success" | "info" | "warning" | "inherit" | "error";
+
+const features: {
+  title: string;
+  description: string;
+  path: string;
+  color: FeatureColor;
+}[] = [
+    {
+      title: 'Dictionnaire',
+      description: 'Explorez et recherchez des mots dans différentes langues',
+      path: '/dictionary',
+      color: 'primary',
+    },
+    {
+      title: 'Cartes Mémoire',
+      description: 'Créez et étudiez vos propres cartes mémoire',
+      path: '/flashcards',
+      color: 'secondary',
+    },
+    {
+      title: 'Exercices',
+      description: 'Pratiquez avec des exercices interactifs',
+      path: '/exercises',
+      color: 'success',
+    },
+    {
+      title: 'Communauté',
+      description: 'Partagez et découvrez du contenu avec d\'autres apprenants',
+      path: '/community',
+      color: 'info',
+    },
+    {
+      title: 'Profil',
+      description: 'Gérez votre profil et vos préférences',
+      path: '/profile',
+      color: 'warning',
+    },
+  ];
 
 export const HomePage = () => {
 
@@ -84,7 +91,7 @@ export const HomePage = () => {
                   <Button
                     component={Link}
                     to={feature.path}
-                    color={feature.color as any}
+                    color={feature.color}
                     variant="outlined"
                     size="small"
                   >
@@ -100,6 +107,11 @@ export const HomePage = () => {
           Commencez par explorer le dictionnaire pour découvrir de nouveaux mots,
           puis créez vos premières cartes mémoire pour les mémoriser !
         </ProTip>
+
+        {/* Démonstration du thème - À supprimer en production */}
+        <div className="mt-8 pt-8 border-t border-gray-200">
+          <ThemeShowcase />
+        </div>
       </div>
     </Container>
   );

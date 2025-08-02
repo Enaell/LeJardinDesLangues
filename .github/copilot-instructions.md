@@ -81,7 +81,7 @@ When provided with a code block and an instructions file, follow these steps:
   ```typescript
   export const MyComponent = (props: MyComponentProps) => {
     // logique du composant
-    return <div>...</div>;
+    return <Container>...</Container>;
   };
   ```
 - **Éviter** : Les déclarations `function` et `export default`
@@ -101,6 +101,33 @@ When provided with a code block and an instructions file, follow these steps:
 - **Préférer** : Les exports nommés plutôt que les exports par défaut
 - **Éviter** : `export default` sauf pour les cas spécifiques (routes, configuration)
 - **Organiser** : Regrouper les exports dans des fichiers `index.ts`
+
+## Styles et CSS
+
+### Approche hybride Material-UI + Tailwind
+- **Utiliser Tailwind CSS pour** :
+  - Responsive design : `hidden md:flex`, `flex md:hidden`
+  - Layouts et spacing : `flex`, `flex-col`, `min-h-screen`, `ml-2`
+  - Couleurs et backgrounds : `bg-gray-100`, `text-inherit`
+- **Utiliser Material-UI pour** :
+  - Composants complexes : `Autocomplete`, `DataGrid`, `DatePicker`
+  - États interactifs : focus, hover, disabled
+- **Éviter** : La prop `sx` de Material-UI quand Tailwind peut faire l'équivalent
+- **Utiliser `sx` uniquement pour** :
+  - Styles dynamiques complexes liés au thème Material-UI
+  - Intégrations spécifiques avec le système de thème MUI
+
+### Hiérarchie des composants
+- **1. Composants Core** (`@core/components`) : Toujours en priorité
+  - Composants UI de base : `Button`, `Input`, `Card`, `Container`
+  - Composants layout : `Header`, `Sidebar`, `Layout`, `AppBar`
+  - Composants formulaires : `FormTextField`, `FormSelect`, `FormCheckbox`
+- **2. Composants Material-UI** : Pour les fonctionnalités complexes
+  - Composants avancés : `Autocomplete`, `DataGrid`, `DatePicker`
+  - Composants spécialisés : `Stepper`, `Timeline`, `SpeedDial`
+- **3. Balises HTML natives** : Uniquement si aucune alternative composant n'existe
+  - Éviter : `<div>`, `<span>`, `<button>`, `<input>`, `<form>`
+  - Préférer : Composants équivalents du système de design
 
 ---
 
@@ -274,3 +301,17 @@ Chaque feature contient :
 - Structurer les routes de manière modulaire.
 - Utiliser les hooks pour accéder aux paramètres de route et aux données préchargées.
 - Tester les routes pour garantir une navigation fluide.
+
+---
+
+## 📝 Gestion des formulaires avec TanStack Form
+
+### Référence
+Pour l'implémentation des formulaires avec TanStack Form, consulter le guide dédié : 
+**[Guide TanStack Form](./prompts/tanstack-form-guidelines.md)**
+
+### Principes clés
+- **Composants wrapper** : Utiliser des wrappers dans `core/components/forms/` pour encapsuler la logique TanStack Form + Material-UI
+- **Éviter les render props** : Ne pas utiliser `form.Field` directement dans les formulaires  
+- **Type-safety** : Typage complet des formulaires avec TypeScript
+- **Intégration** : Compatible avec TanStack Router et React Query

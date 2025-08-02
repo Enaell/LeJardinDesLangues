@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
+import { resolve } from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -13,4 +14,14 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+      '@core': resolve(__dirname, './src/core'),
+      '@features': resolve(__dirname, './src/features'),
+      '@routes': resolve(__dirname, './src/routes'),
+      '@store': resolve(__dirname, './src/store'),
+    },
+  },
+  server: { watch: { usePolling: true } }
 });
