@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import { authApi, tokenUtils } from '../services/authApi';
 import type {
   AuthResponse,
@@ -88,6 +89,7 @@ export const useProfile = (enabled: boolean = true) => {
 // Hook pour la déconnexion
 export const useLogout = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation<void, AuthError, void>({
     mutationFn: async () => {
@@ -95,11 +97,11 @@ export const useLogout = () => {
       tokenUtils.removeToken();
     },
     onSuccess: () => {
-      // Nettoyer tout le cache
-      queryClient.clear();
-
-      // Ou plus spécifiquement, supprimer les données d'auth
+      // Supprimer uniquement les données d'authentification du cache
       queryClient.removeQueries({ queryKey: authKeys.all });
+
+      // Rediriger vers la page d'accueil
+      router.navigate({ to: '/' });
     },
     onError: (error) => {
       console.error('Erreur lors de la déconnexion:', error);

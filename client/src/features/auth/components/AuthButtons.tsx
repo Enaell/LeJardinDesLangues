@@ -37,6 +37,14 @@ export const AuthButtons = ({
     handleMenuClose();
   };
 
+  const openLoginModal = () => {
+    openModal('login');
+  };
+
+  const openRegisterModal = () => {
+    openModal('register');
+  };
+
   if (isLoading) {
     return (
       <FlexRow alignItems="center" spacing={2}>
@@ -53,8 +61,7 @@ export const AuthButtons = ({
             color="inherit"
             variant="outlined"
             size="small"
-            onClick={() => openModal('login')}
-            className="text-white border-white hover:bg-white hover:text-primary-600"
+            onClick={openLoginModal}
           >
             {t('auth.login.title')}
           </Button>
@@ -62,8 +69,7 @@ export const AuthButtons = ({
             color="inherit"
             variant="contained"
             size="small"
-            onClick={() => openModal('register')}
-            className="bg-white text-primary-600 hover:bg-gray-100"
+            onClick={openRegisterModal}
           >
             {t('auth.register.title')}
           </Button>

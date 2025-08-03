@@ -34,17 +34,14 @@ export const AppBar = ({ navigationItems }: AppBarProps) => {
             🌸 {t('app.title')}
           </Typography>
 
-          {isAuthenticated && <>
-            <AppBarDesktop navigationItems={navigationItems} />
-            <AppBarMobile navigationItems={navigationItems} />
-          </>}
-
+          {isAuthenticated && <AppBarDesktop navigationItems={navigationItems} />}
           <AuthButtons
             user={user}
             isLoading={isLoading}
             isAuthenticated={isAuthenticated}
             isUnauthenticated={isUnauthenticated}
           />
+          {isAuthenticated && <AppBarMobile navigationItems={navigationItems} />}
         </Toolbar>
       </MuiAppBar>
 
