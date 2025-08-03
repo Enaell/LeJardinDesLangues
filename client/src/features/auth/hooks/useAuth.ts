@@ -26,11 +26,15 @@ export const useRegister = () => {
       // Sauvegarder le token
       tokenUtils.saveToken(data.accessToken);
 
-      // Mettre en cache les données utilisateur
+      // Mettre en cache les données utilisateur (évite un refetch inutile)
       queryClient.setQueryData(authKeys.profile(), data.user);
 
-      // Invalider les requêtes liées à l'auth pour forcer la mise à jour
-      queryClient.invalidateQueries({ queryKey: authKeys.all });
+      // Invalider uniquement les autres queries auth (pas le profile qu'on vient de mettre à jour)
+      queryClient.invalidateQueries({
+        queryKey: authKeys.all,
+        // Exclure la query profile qu'on vient de mettre à jour
+        predicate: (query) => !query.queryKey.includes('profile')
+      });
     },
     onError: (error) => {
       console.error('Erreur lors de l\'inscription:', error);
@@ -48,11 +52,15 @@ export const useLogin = () => {
       // Sauvegarder le token
       tokenUtils.saveToken(data.accessToken);
 
-      // Mettre en cache les données utilisateur
+      // Mettre en cache les données utilisateur (évite un refetch inutile)
       queryClient.setQueryData(authKeys.profile(), data.user);
 
-      // Invalider les requêtes liées à l'auth pour forcer la mise à jour
-      queryClient.invalidateQueries({ queryKey: authKeys.all });
+      // Invalider uniquement les autres queries auth (pas le profile qu'on vient de mettre à jour)
+      queryClient.invalidateQueries({
+        queryKey: authKeys.all,
+        // Exclure la query profile qu'on vient de mettre à jour
+        predicate: (query) => !query.queryKey.includes('profile')
+      });
     },
     onError: (error) => {
       console.error('Erreur lors de la connexion:', error);
@@ -129,9 +137,29 @@ export const useAuth = () => {
 
 // Hook pour la redirection Google OAuth
 export const useGoogleAuth = () => {
-  return useMutation<void, AuthError, void>({
-    mutationFn: async () => {
-      authApi.googleAuth();
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation<AuthResponse, AuthError, void>({
+    mutationFn: () => authApi.googleAuth(),
+    onSuccess: (data) => {
+      // Sauvegarder le token
+      tokenUtils.saveToken(data.accessToken);
+
+      // Mettre en cache les données utilisateur (évite un refetch inutile)
+      queryClient.setQueryData(authKeys.profile(), data.user);
+
+      // Invalider uniquement les autres queries auth (pas le profile qu'on vient de mettre à jour)
+      queryClient.invalidateQueries({
+        queryKey: authKeys.all,
+        // Exclure la query profile qu'on vient de mettre à jour
+        predicate: (query) => !query.queryKey.includes('profile')
+      });
+
+      // Rediriger vers la page de profil ou la page d'accueil
+      router.navigate({ to: '/profile' }).catch(() => {
+        router.navigate({ to: '/' });
+      });
     },
     onError: (error) => {
       console.error('Erreur lors de l\'authentification Google:', error);

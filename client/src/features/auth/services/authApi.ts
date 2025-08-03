@@ -74,9 +74,47 @@ export const authApi = {
     return response.json();
   },
 
-  // Authentification Google (redirection)
-  googleAuth: (): void => {
-    window.location.href = createApiUrl('/auth/google');
+  // Authentification Google (popup)
+  googleAuth: (): Promise<AuthResponse> => {
+    return new Promise((resolve, reject) => {
+      const popup = window.open(
+        createApiUrl('/auth/google'),
+        'googleAuth',
+        'width=500,height=600,scrollbars=yes,resizable=yes'
+      );
+
+      if (!popup) {
+        reject(new Error('Impossible d\'ouvrir la popup. Vérifiez que les popups ne sont pas bloquées.'));
+        return;
+      }
+
+      // Écouter les messages de la popup
+      const handleMessage = (event: MessageEvent) => {
+        // Vérifier l'origine pour la sécurité
+        if (event.origin !== API_BASE_URL) return;
+
+        if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
+          window.removeEventListener('message', handleMessage);
+          popup.close();
+          resolve(event.data.payload);
+        } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
+          window.removeEventListener('message', handleMessage);
+          popup.close();
+          reject(new Error(event.data.error || 'Erreur lors de l\'authentification Google'));
+        }
+      };
+
+      window.addEventListener('message', handleMessage);
+
+      // Vérifier si la popup a été fermée manuellement
+      const checkClosed = setInterval(() => {
+        if (popup.closed) {
+          clearInterval(checkClosed);
+          window.removeEventListener('message', handleMessage);
+          reject(new Error('Authentification annulée par l\'utilisateur'));
+        }
+      }, 1000);
+    });
   },
 
   // Vérifier la validité d'un token

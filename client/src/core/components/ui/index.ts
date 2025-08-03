@@ -5,3 +5,5 @@ export { ThemeShowcase } from './ThemeShowcase';
 export { LanguageSelector } from './LanguageSelector';
 export { FlexRow } from './FlexRow';
 export { FlexColumn } from './FlexColumn';
+export { CachedAvatar } from './CachedAvatar';
+export { SimpleAvatar } from './SimpleAvatar';
