@@ -1,10 +1,10 @@
-import { Controller, Post, Body, Get, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Req, Res } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService, AuthResponse } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 @ApiTags('Authentification')
 @Controller('auth')
@@ -51,9 +51,65 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   @ApiOperation({ summary: 'Callback Google OAuth' })
-  async googleAuthCallback(@Req() req: Request): Promise<AuthResponse> {
-    // L'utilisateur est attaché à req.user par la stratégie Google
-    return req.user as AuthResponse;
+  async googleAuthCallback(@Req() req: Request, @Res() res: Response) {
+    try {
+      // L'utilisateur est attaché à req.user par la stratégie Google
+      const authResponse = req.user as AuthResponse;
+
+      // Créer une page HTML qui envoie les données à la fenêtre parent et se ferme
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Authentification réussie</title>
+        </head>
+        <body>
+          <script>
+            try {
+              window.opener.postMessage({
+                type: 'GOOGLE_AUTH_SUCCESS',
+                payload: ${JSON.stringify(authResponse)}
+              }, '${process.env.FRONTEND_URL || 'http://localhost:5173'}');
+              window.close();
+            } catch (error) {
+              console.error('Erreur lors de la communication avec la fenêtre parent:', error);
+              document.body.innerHTML = '<p>Authentification réussie. Vous pouvez fermer cette fenêtre.</p>';
+            }
+          </script>
+          <p>Authentification en cours...</p>
+        </body>
+        </html>
+      `;
+
+      res.send(html);
+    } catch (error) {
+      // En cas d'erreur, envoyer un message d'erreur à la popup
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Erreur d'authentification</title>
+        </head>
+        <body>
+          <script>
+            try {
+              window.opener.postMessage({
+                type: 'GOOGLE_AUTH_ERROR',
+                error: 'Erreur lors de l\'authentification'
+              }, '${process.env.FRONTEND_URL || 'http://localhost:5173'}');
+              window.close();
+            } catch (error) {
+              console.error('Erreur lors de la communication avec la fenêtre parent:', error);
+              document.body.innerHTML = '<p>Erreur lors de l\\'authentification. Vous pouvez fermer cette fenêtre.</p>';
+            }
+          </script>
+          <p>Erreur lors de l'authentification...</p>
+        </body>
+        </html>
+      `;
+
+      res.send(html);
+    }
   }
 
   @Get('profile')

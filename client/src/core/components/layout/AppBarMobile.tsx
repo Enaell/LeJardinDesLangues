@@ -24,7 +24,7 @@ export const AppBarMobile = ({ navigationItems }: AppBarMobileProps) => {
   };
 
   return (
-    <FlexRow className="md:hidden">
+    <FlexRow className="flex md:hidden">
       <IconButton
         size="large"
         edge="start"

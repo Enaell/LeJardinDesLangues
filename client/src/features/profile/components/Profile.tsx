@@ -1,4 +1,5 @@
 import { UserExtended } from '@/core';
+import { CachedAvatar } from '@core/components';
 
 export type ProfileProps = {
   user: UserExtended;
@@ -8,17 +9,12 @@ export const Profile = ({ user }: ProfileProps) => {
   return (
     <div className="bg-white rounded-lg shadow p-6 max-w-xl mx-auto">
       <div className="flex items-center mb-4">
-        {user.avatarUrl ? (
-          <img
-            src={user.avatarUrl}
-            alt={user.username}
-            className="w-16 h-16 rounded-full mr-4 border"
-          />
-        ) : (
-          <div className="w-16 h-16 rounded-full bg-gray-200 mr-4 flex items-center justify-center text-2xl text-gray-500">
-            {user.name?.[0] || user.username?.[0]}
-          </div>
-        )}
+        <CachedAvatar
+          src={user.avatarUrl}
+          alt={user.username}
+          fallbackText={user.name?.[0] || user.username?.[0]}
+          sx={{ width: 64, height: 64, mr: 2, border: 1, borderColor: 'grey.300' }}
+        />
         <div>
           <h2 className="text-xl font-semibold text-gray-800">{user.name || user.username}</h2>
           <p className="text-gray-500">{user.email}</p>

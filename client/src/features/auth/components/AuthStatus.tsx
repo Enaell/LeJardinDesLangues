@@ -1,6 +1,6 @@
 import { useAuth, useLogout } from '../hooks';
 import { useTranslation } from '@core/hooks';
-import { FlexRow, FlexColumn } from '@/core';
+import { FlexRow, FlexColumn, CachedAvatar } from '@/core';
 import { Box } from '@mui/material';
 
 export const AuthStatus = () => {
@@ -33,19 +33,12 @@ export const AuthStatus = () => {
     return (
       <FlexRow alignItems="center" spacing={4}>
         <FlexRow alignItems="center" spacing={2}>
-          {user.avatarUrl ? (
-            <img
-              src={user.avatarUrl}
-              alt={user.name}
-              className="h-8 w-8 rounded-full"
-            />
-          ) : (
-            <FlexRow className="h-8 w-8 rounded-full bg-indigo-100" alignItems="center" justifyContent="center">
-              <span className="text-sm font-medium text-indigo-600">
-                {user.name.charAt(0).toUpperCase()}
-              </span>
-            </FlexRow>
-          )}
+          <CachedAvatar
+            src={user.avatarUrl}
+            alt={user.name}
+            fallbackText={user.name.charAt(0).toUpperCase()}
+            sx={{ width: 32, height: 32 }}
+          />
           <FlexColumn>
             <p className="text-sm font-medium text-gray-900">{user.name}</p>
             <p className="text-xs text-gray-500">@{user.username}</p>

@@ -1,9 +1,9 @@
-import { Button, Avatar, Menu, MenuItem, Divider, CircularProgress } from '@mui/material';
+import { Button, Menu, MenuItem, Divider, CircularProgress } from '@mui/material';
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { useAuthModal, useLogout } from '../hooks';
 import { AuthModal } from './AuthModal';
-import { FlexRow } from '@/core';
+import { FlexRow, CachedAvatar } from '@/core';
 import { useTranslation } from '@core/hooks';
 import { User } from '../types';
 
@@ -37,6 +37,14 @@ export const AuthButtons = ({
     handleMenuClose();
   };
 
+  const openLoginModal = () => {
+    openModal('login');
+  };
+
+  const openRegisterModal = () => {
+    openModal('register');
+  };
+
   if (isLoading) {
     return (
       <FlexRow alignItems="center" spacing={2}>
@@ -53,8 +61,7 @@ export const AuthButtons = ({
             color="inherit"
             variant="outlined"
             size="small"
-            onClick={() => openModal('login')}
-            className="text-white border-white hover:bg-white hover:text-primary-600"
+            onClick={openLoginModal}
           >
             {t('auth.login.title')}
           </Button>
@@ -62,8 +69,7 @@ export const AuthButtons = ({
             color="inherit"
             variant="contained"
             size="small"
-            onClick={() => openModal('register')}
-            className="bg-white text-primary-600 hover:bg-gray-100"
+            onClick={openRegisterModal}
           >
             {t('auth.register.title')}
           </Button>
@@ -85,17 +91,12 @@ export const AuthButtons = ({
           onClick={handleMenuClick}
           color="inherit"
           startIcon={
-            user.avatarUrl ? (
-              <Avatar
-                src={user.avatarUrl}
-                alt={user.name}
-                sx={{ width: 32, height: 32 }}
-              />
-            ) : (
-              <Avatar sx={{ width: 32, height: 32, bgcolor: 'white', color: 'primary.main' }}>
-                {user.name.charAt(0).toUpperCase()}
-              </Avatar>
-            )
+            <CachedAvatar
+              src={user.avatarUrl}
+              alt={user.name}
+              fallbackText={user.name.charAt(0).toUpperCase()}
+              sx={{ width: 32, height: 32 }}
+            />
           }
           className="text-white"
         >

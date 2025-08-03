@@ -138,7 +138,10 @@ export const createAppTheme = (): Theme => {
             },
           },
           contained: {
+            backgroundColor: colors.primary[600],
+            color: colors.text.primaryContrast,
             '&:hover': {
+              backgroundColor: colors.primary[700],
               boxShadow: '0 4px 12px rgba(74, 157, 74, 0.32)',
             },
           },
