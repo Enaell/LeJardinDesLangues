@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
-import { authApi, tokenUtils } from '../services/authApi';
+import { useNotify, useTranslation } from '@core/hooks';
+import { useAuthApi } from '../services/useAuthApi';
+import { tokenUtils } from '../services/utils';
 import type {
   AuthResponse,
   RegisterRequest,
@@ -19,6 +21,9 @@ export const authKeys = {
 // Hook pour l'inscription
 export const useRegister = () => {
   const queryClient = useQueryClient();
+  const { notifySuccess, notifyApiError } = useNotify();
+  const { t } = useTranslation();
+  const authApi = useAuthApi();
 
   return useMutation<AuthResponse, AuthError, RegisterRequest>({
     mutationFn: authApi.register,
@@ -35,9 +40,14 @@ export const useRegister = () => {
         // Exclure la query profile qu'on vient de mettre à jour
         predicate: (query) => !query.queryKey.includes('profile')
       });
+
+      // Notification de succès
+      notifySuccess(t('auth.success.registrationSuccess'));
     },
     onError: (error) => {
       console.error('Erreur lors de l\'inscription:', error);
+      // Afficher la notification d'erreur
+      notifyApiError(error);
     },
   });
 };
@@ -45,6 +55,9 @@ export const useRegister = () => {
 // Hook pour la connexion
 export const useLogin = () => {
   const queryClient = useQueryClient();
+  const { notifySuccess, notifyApiError } = useNotify();
+  const { t } = useTranslation();
+  const authApi = useAuthApi();
 
   return useMutation<AuthResponse, AuthError, LoginRequest>({
     mutationFn: authApi.login,
@@ -61,9 +74,14 @@ export const useLogin = () => {
         // Exclure la query profile qu'on vient de mettre à jour
         predicate: (query) => !query.queryKey.includes('profile')
       });
+
+      // Notification de succès
+      notifySuccess(t('auth.success.loginSuccess'));
     },
     onError: (error) => {
       console.error('Erreur lors de la connexion:', error);
+      // Afficher la notification d'erreur
+      notifyApiError(error);
     },
   });
 };
@@ -71,6 +89,7 @@ export const useLogin = () => {
 // Hook pour obtenir le profil utilisateur
 export const useProfile = (enabled: boolean = true) => {
   const token = tokenUtils.getToken();
+  const authApi = useAuthApi();
 
   return useQuery<User, AuthError>({
     queryKey: authKeys.profile(),
@@ -139,6 +158,7 @@ export const useAuth = () => {
 export const useGoogleAuth = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const authApi = useAuthApi();
 
   return useMutation<AuthResponse, AuthError, void>({
     mutationFn: () => authApi.googleAuth(),
@@ -180,7 +200,14 @@ export const prefetchUserProfile = async (queryClient: QueryClient, token?: stri
 
   await queryClient.prefetchQuery({
     queryKey: authKeys.profile(),
-    queryFn: () => authApi.getProfile(authToken),
+    queryFn: async () => {
+      // Pour le prefetch, on utilise directement fetch car on ne peut pas utiliser le hook ici
+      const response = await fetch(`/api/v1/auth/profile`, {
+        headers: { Authorization: `Bearer ${authToken}` }
+      });
+      if (!response.ok) throw new Error('Failed to fetch profile');
+      return response.json();
+    },
     staleTime: 5 * 60 * 1000,
   });
 };

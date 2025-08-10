@@ -1,2 +1,3 @@
 // Auth services exports
-export * from './authApi';
+export * from './utils';
+export * from './useAuthApi';

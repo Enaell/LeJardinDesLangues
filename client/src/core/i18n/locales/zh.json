@@ -85,6 +85,10 @@
       "logout": "退出登录",
       "loggingOut": "退出中...",
       "accessDenied": "拒绝访问"
+    },
+    "success": {
+      "registrationSuccess": "注册成功！欢迎您！",
+      "loginSuccess": "登录成功！欢迎回来！"
     }
   },
   "languages": {

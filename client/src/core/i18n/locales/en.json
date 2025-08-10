@@ -85,6 +85,10 @@
       "logout": "Sign out",
       "loggingOut": "Signing out...",
       "accessDenied": "Access denied"
+    },
+    "success": {
+      "registrationSuccess": "Registration successful! Welcome!",
+      "loginSuccess": "Login successful! Welcome back!"
     }
   },
   "languages": {

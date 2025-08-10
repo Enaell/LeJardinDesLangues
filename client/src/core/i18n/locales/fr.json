@@ -85,6 +85,10 @@
       "logout": "Se déconnecter",
       "loggingOut": "Déconnexion...",
       "accessDenied": "Accès non autorisé"
+    },
+    "success": {
+      "registrationSuccess": "Inscription réussie ! Bienvenue !",
+      "loginSuccess": "Connexion réussie ! Bon retour parmi nous !"
     }
   },
   "languages": {
