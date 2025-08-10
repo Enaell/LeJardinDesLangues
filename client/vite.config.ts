@@ -23,5 +23,7 @@ export default defineConfig({
       '@store': resolve(__dirname, './src/store'),
     },
   },
-  server: { watch: { usePolling: true } }
+  server: {
+    watch: { usePolling: true },
+  }
 });

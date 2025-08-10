@@ -85,6 +85,10 @@
       "logout": "Sign out",
       "loggingOut": "Signing out...",
       "accessDenied": "Access denied"
+    },
+    "success": {
+      "registrationSuccess": "Registration successful! Welcome!",
+      "loginSuccess": "Login successful! Welcome back!"
     }
   },
   "languages": {
@@ -130,5 +134,17 @@
     "close": "Close",
     "open": "Open",
     "menu": "Menu"
+  },
+  "errors": {
+    "unexpected": "An unexpected error occurred",
+    "api": {
+      "generic": "An error occurred while communicating with the server",
+      "badRequest": "The submitted data is incorrect",
+      "unauthorized": "You must log in to access this resource",
+      "forbidden": "You don't have the necessary permissions",
+      "notFound": "The requested resource was not found",
+      "serverError": "Internal server error",
+      "network": "Network connection error"
+    }
   }
 }

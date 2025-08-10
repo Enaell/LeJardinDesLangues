@@ -85,6 +85,10 @@
       "logout": "退出登录",
       "loggingOut": "退出中...",
       "accessDenied": "拒绝访问"
+    },
+    "success": {
+      "registrationSuccess": "注册成功！欢迎您！",
+      "loginSuccess": "登录成功！欢迎回来！"
     }
   },
   "languages": {
@@ -130,5 +134,17 @@
     "close": "关闭",
     "open": "打开",
     "menu": "菜单"
+  },
+  "errors": {
+    "unexpected": "发生了意外错误",
+    "api": {
+      "generic": "与服务器通信时发生错误",
+      "badRequest": "提交的数据不正确",
+      "unauthorized": "您必须登录才能访问此资源",
+      "forbidden": "您没有必要的权限",
+      "notFound": "未找到请求的资源",
+      "serverError": "服务器内部错误",
+      "network": "网络连接错误"
+    }
   }
 }

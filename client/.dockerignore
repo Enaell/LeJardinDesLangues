@@ -25,6 +25,7 @@ logs/
 # Fichiers temporaires
 tmp/
 temp/
+.tanstack/
 
 # Fichiers OS
 .DS_Store

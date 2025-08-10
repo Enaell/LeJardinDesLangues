@@ -1,86 +1,104 @@
-import { ApiResponse, PaginatedResponse, DictionaryEntry, Flashcard, Exercise } from '../types';
+import { useCallback } from 'react';
+import { useNotify } from '@core/hooks';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-class ApiService {
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const url = `${API_BASE_URL}${endpoint}`;
+const API_BASE_PREFIX = '/api/v1';
+console.log('API_BASE_URL:', API_BASE_URL);
+// Type d'erreur API pour une meilleure gestion
+export type ApiError = {
+  message: string;
+  statusCode: number;
+  timestamp?: string;
+  path?: string;
+};
+
+// Helper pour créer une URL complète
+export const createApiUrl = (endpoint: string): string => {
+  return `${API_BASE_URL}${API_BASE_PREFIX}${endpoint}`;
+};
+
+// Helper pour gérer les erreurs d'API
+export const handleApiError = async (response: Response) => {
+  if (!response.ok) {
+    let errorData: ApiError;
+
+    try {
+      // Essayer de parser la réponse d'erreur du serveur
+      errorData = await response.json();
+    } catch {
+      // Si le parsing échoue, créer une erreur générique
+      errorData = {
+        message: `HTTP Error ${response.status}: ${response.statusText}`,
+        statusCode: response.status,
+      };
+    }
+
+    // Lancer une erreur avec les données structurées
+    const error = new Error(errorData.message) as Error & ApiError;
+    error.statusCode = errorData.statusCode;
+    error.timestamp = errorData.timestamp;
+    error.path = errorData.path;
+
+    throw error;
+  }
+  return response;
+};
+
+// Helper pour les requêtes avec authentification
+export const createAuthenticatedRequest = (token?: string): RequestInit => ({
+  headers: {
+    'Content-Type': 'application/json',
+    ...(token && { Authorization: `Bearer ${token}` }),
+  },
+});
+
+// Hook de base pour les appels API - utilisé par les hooks spécialisés
+export const useApi = () => {
+  const { notifyApiError } = useNotify();
+
+  const request = useCallback(async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
+    const url = createApiUrl(endpoint);
 
     const config: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,
       },
+      credentials: 'include', // Important pour les cookies de session
       ...options,
     };
 
     try {
       const response = await fetch(url, config);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
+      await handleApiError(response);
       return await response.json();
     } catch (error) {
-      console.error('API request failed:', error);
+      // Gérer les erreurs réseau et autres erreurs non-HTTP
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        const networkError = new Error('Erreur de connexion réseau') as Error & { name: string; };
+        networkError.name = 'NetworkError';
+        throw networkError;
+      }
+
+      // Re-lancer l'erreur si elle est déjà formatée
       throw error;
     }
-  }
+  }, []);
 
-  // Dictionary API
-  async searchDictionary(query: string, language: 'fr' | 'zh' = 'fr'): Promise<ApiResponse<DictionaryEntry[]>> {
-    return this.request(`/dictionary/search?q=${encodeURIComponent(query)}&lang=${language}`);
-  }
+  const requestWithErrorHandling = useCallback(async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
+    try {
+      return await request<T>(endpoint, options);
+    } catch (error) {
+      notifyApiError(error);
+      throw error;
+    }
+  }, [request, notifyApiError]);
 
-  async getDictionaryEntry(id: string): Promise<ApiResponse<DictionaryEntry>> {
-    return this.request(`/dictionary/${id}`);
-  }
-
-  // Flashcards API
-  async getFlashcards(userId: string): Promise<ApiResponse<Flashcard[]>> {
-    return this.request(`/users/${userId}/flashcards`);
-  }
-
-  async createFlashcard(userId: string, flashcard: Omit<Flashcard, 'id'>): Promise<ApiResponse<Flashcard>> {
-    return this.request(`/users/${userId}/flashcards`, {
-      method: 'POST',
-      body: JSON.stringify(flashcard),
-    });
-  }
-
-  async updateFlashcard(userId: string, flashcardId: string, updates: Partial<Flashcard>): Promise<ApiResponse<Flashcard>> {
-    return this.request(`/users/${userId}/flashcards/${flashcardId}`, {
-      method: 'PATCH',
-      body: JSON.stringify(updates),
-    });
-  }
-
-  async deleteFlashcard(userId: string, flashcardId: string): Promise<ApiResponse<void>> {
-    return this.request(`/users/${userId}/flashcards/${flashcardId}`, {
-      method: 'DELETE',
-    });
-  }
-
-  // Exercises API
-  async getExercises(filters?: { difficulty?: string; type?: string; }): Promise<PaginatedResponse<Exercise>> {
-    const params = new URLSearchParams();
-    if (filters?.difficulty) params.append('difficulty', filters.difficulty);
-    if (filters?.type) params.append('type', filters.type);
-
-    return this.request(`/exercises?${params.toString()}`);
-  }
-
-  async getExercise(id: string): Promise<ApiResponse<Exercise>> {
-    return this.request(`/exercises/${id}`);
-  }
-
-  async submitExerciseResult(exerciseId: string, userId: string, answers: Record<string, string>): Promise<ApiResponse<{ score: number; correct: number; total: number; }>> {
-    return this.request(`/exercises/${exerciseId}/submit`, {
-      method: 'POST',
-      body: JSON.stringify({ userId, answers }),
-    });
-  }
-}
-
-export const apiService = new ApiService();
+  return {
+    // Méthode de base sans gestion d'erreur automatique
+    request,
+    // Méthode avec gestion d'erreur automatique (notifications)
+    requestWithErrorHandling,
+  };
+};
