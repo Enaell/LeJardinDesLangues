@@ -23,8 +23,8 @@ RUN npm install -g prisma
 # Copie du code source
 COPY . .
 
-# Rendre le script exécutable
-RUN chmod +x start-dev.sh
+# Conversion des fins de ligne Windows vers Unix et rendre le script exécutable
+RUN sed -i 's/\r$//' start-dev.sh && chmod +x start-dev.sh
 
 # Génération des clients Prisma
 RUN npx prisma generate
