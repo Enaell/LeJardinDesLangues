@@ -23,17 +23,12 @@ RUN npm install -g prisma
 # Copie du code source
 COPY . .
 
-# Conversion des fins de ligne Windows vers Unix et rendre le script exécutable
-RUN sed -i 's/\r$//' start-dev.sh && chmod +x start-dev.sh
-
-# Génération des clients Prisma
-RUN npx prisma generate
-
 # Exposition du port
 EXPOSE 3000
 
 # Script de démarrage pour le développement
-CMD ["./start-dev.sh"]
+# Génération Prisma au démarrage car le volume monté écrase le build
+CMD ["sh", "-c", "rm -rf /app/dist && npx prisma generate && npx nest start --watch --preserveWatchOutput"]
 
 # Stage de production
 FROM base AS production
