@@ -100,8 +100,8 @@ export const useProfile = (enabled: boolean = true) => {
       return authApi.getProfile(token);
     },
     enabled: enabled && !!token,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes (anciennement cacheTime)
+    staleTime: 60 * 60 * 1000, // 60 minutes
+    gcTime: 60 * 60 * 1000, // 60 minutes (anciennement cacheTime)
     retry: (failureCount, error) => {
       // Ne pas réessayer si le token est invalide (401)
       if (error && 'statusCode' in error && error.statusCode === 401) {
