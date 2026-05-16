@@ -2,8 +2,8 @@ import { User } from "./user";
 
 export type AuthResponse = {
   user: User;
-  accessToken: string;
 };
+
 
 export type RegisterRequest = {
   username: string;

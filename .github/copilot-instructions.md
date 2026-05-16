@@ -50,9 +50,9 @@ When provided with a code block and an instructions file, follow these steps:
 ## 🧱 Stack technique
 
 ### Frontend Web
-- **Framework** : React + TypeScript.
+- **Framework** : React + TypeScript 6.
 - **UI** : Material-UI couplé avec Tailwind CSS pour une personnalisation avancée.
-- **Build Tool** : Vite pour un développement rapide.
+- **Build Tool** : Vite 8 (Rolldown + Oxc) pour un développement rapide.
 - **Runtime** : Node.js 22.
 
 ### Frontend Mobile
@@ -60,7 +60,7 @@ When provided with a code block and an instructions file, follow these steps:
 
 ### Backend
 - **Serveur** : Node.js 22 avec NestJS.
-- **ORM** : Prisma pour une gestion simplifiée de la base de données.
+- **ORM** : Prisma 7 — client généré localement (`src/generated/prisma`), driver adapter `@prisma/adapter-pg` pour PostgreSQL.
 
 ### Base de données
 - **Type** : PostgreSQL 16.
@@ -163,7 +163,7 @@ When provided with a code block and an instructions file, follow these steps:
   - Utilisation du token pour accéder aux API sécurisées.
 - **Outils** :
   - **@nestjs/jwt** pour la génération et la validation des tokens.
-  - **bcrypt** pour le hashage des mots de passe.
+  - **argon2** pour le hashage des mots de passe (Argon2id).
 
 ### 2. Authentification par OAuth 2.0
 - **Utilisation** : Pour les utilisateurs qui préfèrent se connecter via des fournisseurs tiers (Google, Facebook, etc.).
@@ -176,8 +176,8 @@ When provided with a code block and an instructions file, follow these steps:
   - **@nestjs/passport** pour l'intégration avec NestJS.
 
 ### Unification des sessions
-- Génération d’un token JWT unique après authentification réussie (JWT ou OAuth).
-- Stockage sécurisé des tokens (ex. : cookies httpOnly).
+- Paire de tokens après authentification : **access token** (15 min, httpOnly cookie) + **refresh token** (7 jours, httpOnly cookie).
+- Cookie non-httpOnly `is_authenticated` lisible par le JS pour détecter l'état de connexion sans exposer le token.
 
 ### Sécurité
 - **Scopes OAuth** : Limiter les permissions demandées aux fournisseurs tiers (ex. : email, profil de base).
@@ -256,10 +256,6 @@ Chaque feature contient :
 
 ## 🌍 Internationalisation (i18n)
 
-### Backend
-- Utilisation de **nestjs-i18n** pour gérer les traductions côté serveur.
-- Organisation des fichiers de traduction par langue (ex. : `en.json`, `fr.json`, `zh.json`).
-- Middleware pour détecter automatiquement la langue préférée de l'utilisateur.
 
 ### Frontend
 - Utilisation de **react-i18next** pour gérer les traductions côté client.

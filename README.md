@@ -212,20 +212,24 @@ Le hot reload est activé par défaut en mode développement :
 ## 📚 Technologies utilisées
 
 ### Frontend
-- **React 18** avec **TypeScript**
-- **Vite** pour le build et le développement
-- **Material-UI** + **Tailwind CSS** pour l'interface
-- **React Query (TanStack Query)** pour la gestion des APIs
+- **React 19** avec **TypeScript**
+- **Vite 7** pour le build et le développement
+- **Material-UI 7** + **Tailwind CSS 4** pour l'interface
+- **TanStack Query 5** pour la gestion des APIs
 - **TanStack Router** pour le routage
+- **TanStack Form** pour les formulaires
 - **react-i18next** pour l'internationalisation
+- **Vitest** + **Testing Library** pour les tests unitaires
 - **Cypress** pour les tests E2E
 
 ### Backend
-- **Node.js 22** avec **NestJS**
-- **Prisma** comme ORM
+- **Node.js 22** avec **NestJS 11**
+- **Prisma 6** comme ORM (IDs en `cuid()`)
 - **PostgreSQL 16** comme base de données
-- **JWT** + **OAuth 2.0** pour l'authentification
-- **Jest** pour les tests
+- **Redis** pour le cache (production)
+- **JWT** (httpOnly cookies) + **OAuth 2.0** pour l'authentification
+- **Argon2id** pour le hashage des mots de passe
+- **Jest 29** pour les tests
 - **Swagger** pour la documentation API
 
 ### DevOps

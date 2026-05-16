@@ -45,13 +45,9 @@ export const handleApiError = async (response: Response) => {
   return response;
 };
 
-// Helper pour les requêtes avec authentification
-export const createAuthenticatedRequest = (token?: string): RequestInit => ({
-  headers: {
-    'Content-Type': 'application/json',
-    ...(token && { Authorization: `Bearer ${token}` }),
-  },
-});
+// Helper pour les requêtes avec authentification (conservé pour compatibilité)
+// Avec les cookies httpOnly, ce helper n'est plus nécessaire pour l'auth standard.
+export const createAuthenticatedRequest = (): RequestInit => ({});
 
 // Hook de base pour les appels API - utilisé par les hooks spécialisés
 export const useApi = () => {

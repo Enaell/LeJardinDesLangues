@@ -26,7 +26,6 @@ src/
 │   ├── exercises/    # Exercices
 │   └── community/    # Communauté
 ├── common/           # Utilitaires communs
-├── i18n/            # Internationalisation
 ├── app.module.ts    # Module principal
 └── main.ts          # Point d'entrée
 ```

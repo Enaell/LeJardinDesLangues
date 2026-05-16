@@ -27,8 +27,9 @@ COPY . .
 EXPOSE 3000
 
 # Script de démarrage pour le développement
-# Génération Prisma au démarrage car le volume monté écrase le build
-CMD ["sh", "-c", "rm -rf /app/dist && npx prisma generate && npx nest start --watch --preserveWatchOutput"]
+# prisma db push : synchronise le schéma avec la DB (sans fichiers de migration)
+# prisma db seed : insère les données de test (upsert = idempotent, sans doublons)
+CMD ["sh", "-c", "rm -rf /app/dist && npx prisma generate && npx prisma db push && npx prisma db seed && npx nest start --watch --preserveWatchOutput"]
 
 # Stage de production
 FROM base AS production
@@ -63,6 +64,8 @@ USER nestjs
 EXPOSE 3000
 
 # Commande de démarrage
+# En production : migrate deploy (applique migrations versionées) puis démarre l'app
+# Le seed n'est PAS lancé en prod automatiquement (données réelles, pas de test data)
 CMD ["npm", "run", "start:prod"]
 
 # Stage de test

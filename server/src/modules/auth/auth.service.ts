@@ -1,28 +1,41 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ConflictException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import * as argon2 from 'argon2';
+import { Role } from '@/generated/prisma/client';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { OAuthUserDto } from './dto/oauth-user.dto';
-import * as bcryptjs from 'bcryptjs';
 
 export type JwtPayload = {
-  sub: number;
+  sub: string;
   email: string;
   username: string;
-  role: string;
+  role: Role;
+};
+
+export type UserResponse = {
+  id: string;
+  username: string;
+  email: string;
+  name: string;
+  role: Role;
+  avatarUrl?: string;
 };
 
 export type AuthResponse = {
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    name: string;
-    role: string;
-    avatarUrl?: string;
-  };
+  user: UserResponse;
+};
+
+export type TokenPair = {
   accessToken: string;
+  refreshToken: string;
 };
 
 @Injectable()
@@ -30,54 +43,87 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) { }
 
+  private buildUserResponse(user: {
+    id: string;
+    username: string;
+    email: string;
+    name: string;
+    role: Role;
+    avatarUrl?: string | null;
+  }): UserResponse {
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      avatarUrl: user.avatarUrl ?? undefined,
+    };
+  }
+
+  private generateAccessToken(payload: JwtPayload): string {
+    return this.jwtService.sign(payload, {
+      secret: this.configService.get<string>('JWT_SECRET'),
+      expiresIn: this.configService.get<string>('JWT_EXPIRES_IN') || '15m',
+    });
+  }
+
+  private generateRefreshToken(payload: JwtPayload): string {
+    return this.jwtService.sign(payload, {
+      secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+      expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
+    });
+  }
+
+  async generateTokenPair(payload: JwtPayload): Promise<TokenPair> {
+    const accessToken = this.generateAccessToken(payload);
+    const refreshToken = this.generateRefreshToken(payload);
+
+    const refreshTokenHash = await argon2.hash(refreshToken, {
+      type: argon2.argon2id,
+    });
+
+    const refreshExpiresIn =
+      this.configService.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d';
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + this.parseDaysFromExpiry(refreshExpiresIn));
+
+    await this.usersService.saveRefreshToken(payload.sub, refreshTokenHash, expiresAt);
+
+    return { accessToken, refreshToken };
+  }
+
+  private parseDaysFromExpiry(expiry: string): number {
+    const match = expiry.match(/^(\d+)d$/);
+    return match ? parseInt(match[1], 10) : 7;
+  }
+
   async register(registerDto: RegisterDto): Promise<AuthResponse> {
-    // Vérifier si l'email ou username existe déjà
     const existingUser = await this.usersService.findByEmailOrUsername(
       registerDto.email,
       registerDto.username,
     );
 
     if (existingUser) {
-      throw new ConflictException('Email ou nom d\'utilisateur déjà utilisé');
+      throw new ConflictException("Email ou nom d'utilisateur déjà utilisé");
     }
 
-    // Hasher le mot de passe
-    const saltRounds = 12;
-    const passwordHash = await bcryptjs.hash(registerDto.password, saltRounds);
+    const passwordHash = await argon2.hash(registerDto.password, {
+      type: argon2.argon2id,
+    });
 
-    // Créer l'utilisateur
     const user = await this.usersService.create({
       ...registerDto,
       passwordHash,
     });
 
-    // Générer le token JWT
-    const payload: JwtPayload = {
-      sub: user.id,
-      email: user.email,
-      username: user.username,
-      role: user.role,
-    };
-
-    const accessToken = this.jwtService.sign(payload);
-
-    return {
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        avatarUrl: user.avatarUrl,
-      },
-      accessToken,
-    };
+    return { user: this.buildUserResponse(user) };
   }
 
   async login(loginDto: LoginDto): Promise<AuthResponse> {
-    // Trouver l'utilisateur par email ou username
     const user = await this.usersService.findByEmailOrUsername(
       loginDto.emailOrUsername,
       loginDto.emailOrUsername,
@@ -87,20 +133,36 @@ export class AuthService {
       throw new UnauthorizedException('Identifiants invalides');
     }
 
-    // Vérifier le mot de passe
-    const isPasswordValid = await bcryptjs.compare(
-      loginDto.password,
-      user.passwordHash,
-    );
+    const isPasswordValid = await argon2.verify(user.passwordHash, loginDto.password);
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Identifiants invalides');
     }
 
-    // Mettre à jour la dernière connexion
     await this.usersService.updateLastLogin(user.id);
 
-    // Générer le token JWT
+    return { user: this.buildUserResponse(user) };
+  }
+
+  async refreshTokens(userId: string, refreshToken: string): Promise<TokenPair> {
+    const user = await this.usersService.findById(userId);
+
+    if (!user || !user.refreshTokenHash || !user.refreshTokenExpiresAt) {
+      throw new ForbiddenException('Accès refusé');
+    }
+
+    if (new Date() > user.refreshTokenExpiresAt) {
+      await this.usersService.clearRefreshToken(userId);
+      throw new ForbiddenException('Session expirée, veuillez vous reconnecter');
+    }
+
+    const isTokenValid = await argon2.verify(user.refreshTokenHash, refreshToken);
+    if (!isTokenValid) {
+      // Possible tentative de réutilisation — invalider immédiatement la session
+      await this.usersService.clearRefreshToken(userId);
+      throw new ForbiddenException('Token invalide');
+    }
+
     const payload: JwtPayload = {
       sub: user.id,
       email: user.email,
@@ -108,60 +170,28 @@ export class AuthService {
       role: user.role,
     };
 
-    const accessToken = this.jwtService.sign(payload);
+    return this.generateTokenPair(payload);
+  }
 
-    return {
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        avatarUrl: user.avatarUrl,
-      },
-      accessToken,
-    };
+  async logout(userId: string): Promise<void> {
+    await this.usersService.clearRefreshToken(userId);
   }
 
   async validateOAuthUser(oauthUserDto: OAuthUserDto): Promise<AuthResponse> {
-    // Chercher un utilisateur existant avec ce provider et cet ID
     let user = await this.usersService.findByOAuth(
       oauthUserDto.provider,
       oauthUserDto.providerId,
     );
 
     if (!user) {
-      // Créer un nouvel utilisateur OAuth
       user = await this.usersService.createOAuthUser(oauthUserDto);
     } else {
-      // Mettre à jour les informations de l'utilisateur existant
       user = await this.usersService.updateOAuthUser(user.id, oauthUserDto);
     }
 
-    // Mettre à jour la dernière connexion
     await this.usersService.updateLastLogin(user.id);
 
-    // Générer le token JWT
-    const payload: JwtPayload = {
-      sub: user.id,
-      email: user.email,
-      username: user.username,
-      role: user.role,
-    };
-
-    const accessToken = this.jwtService.sign(payload);
-
-    return {
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        avatarUrl: user.avatarUrl,
-      },
-      accessToken,
-    };
+    return { user: this.buildUserResponse(user) };
   }
 
   async validateUser(payload: JwtPayload) {

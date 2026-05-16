@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../core/prisma/prisma.service';
-import { User } from '@prisma/client';
+import { User } from '@/generated/prisma/client';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { OAuthUserDto } from '../auth/dto/oauth-user.dto';
 
@@ -51,7 +51,7 @@ export class UsersService {
     });
   }
 
-  async updateOAuthUser(userId: number, oauthUserDto: OAuthUserDto): Promise<User> {
+  async updateOAuthUser(userId: string, oauthUserDto: OAuthUserDto): Promise<User> {
     return this.prisma.user.update({
       where: { id: userId },
       data: {
@@ -61,7 +61,7 @@ export class UsersService {
     });
   }
 
-  async findById(id: number): Promise<User | null> {
+  async findById(id: string): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: { id },
     });
@@ -99,7 +99,7 @@ export class UsersService {
     });
   }
 
-  async updateLastLogin(userId: number): Promise<User> {
+  async updateLastLogin(userId: string): Promise<User> {
     return this.prisma.user.update({
       where: { id: userId },
       data: {
@@ -108,7 +108,31 @@ export class UsersService {
     });
   }
 
-  async updateProfile(userId: number, updateData: Partial<User>): Promise<User> {
+  async saveRefreshToken(
+    userId: string,
+    refreshTokenHash: string,
+    expiresAt: Date,
+  ): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        refreshTokenHash,
+        refreshTokenExpiresAt: expiresAt,
+      },
+    });
+  }
+
+  async clearRefreshToken(userId: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        refreshTokenHash: null,
+        refreshTokenExpiresAt: null,
+      },
+    });
+  }
+
+  async updateProfile(userId: string, updateData: Partial<User>): Promise<User> {
     const user = await this.findById(userId);
     if (!user) {
       throw new NotFoundException('Utilisateur non trouvé');
@@ -120,7 +144,7 @@ export class UsersService {
     });
   }
 
-  async deleteUser(userId: number): Promise<void> {
+  async deleteUser(userId: string): Promise<void> {
     const user = await this.findById(userId);
     if (!user) {
       throw new NotFoundException('Utilisateur non trouvé');

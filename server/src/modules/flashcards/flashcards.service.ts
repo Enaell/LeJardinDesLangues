@@ -5,7 +5,7 @@ import { PrismaService } from '../../core/prisma/prisma.service';
 export class FlashcardsService {
   constructor(private prisma: PrismaService) { }
 
-  async getUserFlashcards(userId: number) {
+  async getUserFlashcards(userId: string) {
     return {
       message: 'Flashcards service - getUserFlashcards',
       userId,

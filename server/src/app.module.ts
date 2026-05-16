@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { I18nModule, AcceptLanguageResolver, QueryResolver } from 'nestjs-i18n';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { CacheModule } from '@nestjs/cache-manager';
 import { PrismaModule } from './core/prisma/prisma.module';
+import { RedisModule } from './core/redis/redis.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { DictionaryModule } from './modules/dictionary/dictionary.module';
 import { FlashcardsModule } from './modules/flashcards/flashcards.module';
 import { ExercisesModule } from './modules/exercises/exercises.module';
 import { CommunityModule } from './modules/community/community.module';
-import * as path from 'path';
 
 @Module({
   imports: [
@@ -18,21 +19,37 @@ import * as path from 'path';
       envFilePath: '.env',
     }),
 
-    // Internationalisation
-    I18nModule.forRoot({
-      fallbackLanguage: 'fr',
-      loaderOptions: {
-        path: path.join(process.cwd(), 'src/i18n/'),
-        watch: true,
+    // Rate limiting
+    ThrottlerModule.forRoot([
+      {
+        name: 'short',
+        ttl: 1000,
+        limit: 10,
       },
-      resolvers: [
-        { use: QueryResolver, options: ['lang'] },
-        AcceptLanguageResolver,
-      ],
-    }),
+      {
+        name: 'long',
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
 
     // Modules core
     PrismaModule,
+    RedisModule,
+
+    // Cache (mémoire en dev, Redis en prod si REDIS_URL est défini)
+    CacheModule.registerAsync({
+      isGlobal: true,
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        const redisUrl = configService.get<string>('REDIS_URL');
+        if (redisUrl) {
+          const { createKeyv } = await import('@keyv/redis');
+          return { stores: [createKeyv(redisUrl)], ttl: 60_000 };
+        }
+        return { ttl: 60_000 };
+      },
+    }),
 
     // Modules fonctionnels
     AuthModule,

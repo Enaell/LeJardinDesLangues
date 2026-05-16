@@ -12,15 +12,9 @@ services:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      # Scripts d'initialisation - ordre d'exécution alphabétique
+      # Seul script d'init : crée les extensions PostgreSQL (uuid-ossp, pg_trgm, unaccent)
+      # Le schéma et les seeds sont gérés par Prisma au démarrage du serveur
       - ./server/prisma/init.sql:/docker-entrypoint-initdb.d/00_init.sql:ro
-      - ./postgres-database-project/scripts/setup.sql:/docker-entrypoint-initdb.d/01_setup.sql:ro
-      - ./postgres-database-project/src/migrations:/docker-entrypoint-initdb.d/02_migrations:ro
-      - ./postgres-database-project/src/functions:/docker-entrypoint-initdb.d/03_functions:ro
-      - ./postgres-database-project/src/views:/docker-entrypoint-initdb.d/04_views:ro
-      - ./postgres-database-project/src/triggers:/docker-entrypoint-initdb.d/05_triggers:ro
-      - ./postgres-database-project/src/seeds:/docker-entrypoint-initdb.d/06_seeds:ro
-      - ./postgres-database-project/init-complete.sql:/docker-entrypoint-initdb.d/99_init_complete.sql:ro
     networks:
       - lejardin_network
     healthcheck:
@@ -65,7 +59,9 @@ services:
       PORT: ${SERVER_PORT:-3000}
       DATABASE_URL: postgresql://${POSTGRES_USER:-lejardin}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-lejardin_db}
       JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
-      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1h}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-15m}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-your-super-secret-refresh-key-change-in-production}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN:-7d}
       CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
     ports:
       - "${SERVER_PORT:-3000}:3000"
@@ -133,10 +129,29 @@ services:
       - test
     command: npm run test
 
+  # Redis pour le cache et les sessions
+  redis:
+    image: redis:7-alpine
+    container_name: lejardin_redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - lejardin_network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 volumes:
   postgres_data:
     driver: local
   postgres_test_data:
+    driver: local
+  redis_data:
     driver: local
 
 networks:

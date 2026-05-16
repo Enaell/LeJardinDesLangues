@@ -49,10 +49,11 @@ Le backend expose une API REST consommée par :
 - **Redis** - Cache et sessions (production)
 
 ### Authentification & Sécurité
-- **JWT** - Tokens d'authentification stateless
+- **JWT** - Access token (15 min, httpOnly cookie) + Refresh token (7 jours, httpOnly cookie)
 - **Passport.js** - Middleware d'authentification
 - **OAuth 2.0** - Intégration Google, Facebook
-- **bcrypt** - Hashage sécurisé des mots de passe
+- **Argon2id** - Hashage sécurisé des mots de passe (via argon2)
+- **cookie-parser** - Lecture des cookies httpOnly côté serveur
 
 ### Documentation & Testing
 - **Swagger/OpenAPI** - Documentation API automatique
@@ -88,9 +89,6 @@ src/
 │   ├── enums/        # Énumérations partagées
 │   ├── interfaces/   # Interfaces communes
 │   └── utils/        # Fonctions utilitaires
-├── i18n/            # 🌍 Internationalisation
-│   ├── translations/ # Fichiers de traduction
-│   └── config/       # Configuration i18n
 ├── app.module.ts    # Module principal de l'application
 └── main.ts          # Point d'entrée et bootstrap
 ```
@@ -345,47 +343,6 @@ async createFlashcard(
 - **Rate limiting** pour prévenir les abus
 - **CORS** configuré pour les domaines autorisés
 - **Helmet** pour les headers de sécurité
-
----
-
-## 🌍 Internationalisation Backend
-
-### Configuration nestjs-i18n
-```typescript
-// Configuration dans app.module.ts
-I18nModule.forRoot({
-  fallbackLanguage: 'fr',
-  loaderOptions: {
-    path: path.join(__dirname, '/i18n/'),
-    watch: true,
-  },
-  resolvers: [
-    { use: QueryResolver, options: ['lang'] },
-    { use: HeaderResolver, options: ['x-custom-lang'] },
-    AcceptLanguageResolver,
-  ],
-}),
-```
-
-### Messages d'erreur localisés
-```typescript
-@Injectable()
-export class AuthService {
-  constructor(private readonly i18n: I18nService) {}
-
-  async validateUser(email: string, password: string): Promise<UserPayload> {
-    const user = await this.usersService.findByEmail(email);
-    
-    if (!user) {
-      throw new UnauthorizedException(
-        this.i18n.t('auth.INVALID_CREDENTIALS')
-      );
-    }
-    
-    // ... validation logic
-  }
-}
-```
 
 ---
 

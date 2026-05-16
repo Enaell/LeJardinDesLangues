@@ -2,14 +2,8 @@ import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tansta
 import { useRouter } from '@tanstack/react-router';
 import { useNotify, useTranslation } from '@core/hooks';
 import { useAuthApi } from '../services/useAuthApi';
-import { tokenUtils } from '../services/utils';
-import type {
-  AuthResponse,
-  RegisterRequest,
-  LoginRequest,
-  User,
-  AuthError
-} from '../types';
+import { isAuthenticatedCookie } from '../services/utils';
+import type { AuthResponse, RegisterRequest, LoginRequest, User, AuthError } from '../types';
 
 // Clés de requête pour le cache
 export const authKeys = {
@@ -28,25 +22,12 @@ export const useRegister = () => {
   return useMutation<AuthResponse, AuthError, RegisterRequest>({
     mutationFn: authApi.register,
     onSuccess: (data) => {
-      // Sauvegarder le token
-      tokenUtils.saveToken(data.accessToken);
-
-      // Mettre en cache les données utilisateur (évite un refetch inutile)
+      // Mettre en cache les données utilisateur (le cookie httpOnly est posé par le serveur)
       queryClient.setQueryData(authKeys.profile(), data.user);
-
-      // Invalider uniquement les autres queries auth (pas le profile qu'on vient de mettre à jour)
-      queryClient.invalidateQueries({
-        queryKey: authKeys.all,
-        // Exclure la query profile qu'on vient de mettre à jour
-        predicate: (query) => !query.queryKey.includes('profile')
-      });
-
-      // Notification de succès
       notifySuccess(t('auth.success.registrationSuccess'));
     },
     onError: (error) => {
-      console.error('Erreur lors de l\'inscription:', error);
-      // Afficher la notification d'erreur
+      console.error("Erreur lors de l'inscription:", error);
       notifyApiError(error);
     },
   });
@@ -62,48 +43,29 @@ export const useLogin = () => {
   return useMutation<AuthResponse, AuthError, LoginRequest>({
     mutationFn: authApi.login,
     onSuccess: (data) => {
-      // Sauvegarder le token
-      tokenUtils.saveToken(data.accessToken);
-
-      // Mettre en cache les données utilisateur (évite un refetch inutile)
+      // Mettre en cache les données utilisateur (le cookie httpOnly est posé par le serveur)
       queryClient.setQueryData(authKeys.profile(), data.user);
-
-      // Invalider uniquement les autres queries auth (pas le profile qu'on vient de mettre à jour)
-      queryClient.invalidateQueries({
-        queryKey: authKeys.all,
-        // Exclure la query profile qu'on vient de mettre à jour
-        predicate: (query) => !query.queryKey.includes('profile')
-      });
-
-      // Notification de succès
       notifySuccess(t('auth.success.loginSuccess'));
     },
     onError: (error) => {
       console.error('Erreur lors de la connexion:', error);
-      // Afficher la notification d'erreur
       notifyApiError(error);
     },
   });
 };
 
 // Hook pour obtenir le profil utilisateur
+// Le cookie is_authenticated (non-httpOnly) indique si une session est active sans exposer le token.
 export const useProfile = (enabled: boolean = true) => {
-  const token = tokenUtils.getToken();
   const authApi = useAuthApi();
 
   return useQuery<User, AuthError>({
     queryKey: authKeys.profile(),
-    queryFn: () => {
-      if (!token) {
-        throw new Error('Token d\'authentification manquant');
-      }
-      return authApi.getProfile(token);
-    },
-    enabled: enabled && !!token,
+    queryFn: () => authApi.getProfile(),
+    enabled: enabled && isAuthenticatedCookie(),
     staleTime: 60 * 60 * 1000, // 60 minutes
-    gcTime: 60 * 60 * 1000, // 60 minutes (anciennement cacheTime)
+    gcTime: 60 * 60 * 1000,
     retry: (failureCount, error) => {
-      // Ne pas réessayer si le token est invalide (401)
       if (error && 'statusCode' in error && error.statusCode === 401) {
         return false;
       }
@@ -117,32 +79,32 @@ export const useProfile = (enabled: boolean = true) => {
 export const useLogout = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const authApi = useAuthApi();
 
   return useMutation<void, AuthError, void>({
     mutationFn: async () => {
-      // Supprimer le token
-      tokenUtils.removeToken();
+      // Appel serveur pour invalider la session et effacer les cookies httpOnly
+      await authApi.logout();
     },
     onSuccess: () => {
-      // Supprimer uniquement les données d'authentification du cache
       queryClient.removeQueries({ queryKey: authKeys.all });
-
-      // Rediriger vers la page d'accueil
       router.navigate({ to: '/' });
     },
     onError: (error) => {
       console.error('Erreur lors de la déconnexion:', error);
+      // Nettoyer le cache même en cas d'erreur réseau
+      queryClient.removeQueries({ queryKey: authKeys.all });
+      router.navigate({ to: '/' });
     },
   });
 };
 
 // Hook pour vérifier l'état d'authentification
 export const useAuth = () => {
-  const token = tokenUtils.getToken();
-  const { data: user, isLoading, error, isError } = useProfile(!!token);
+  const { data: user, isLoading, error, isError } = useProfile();
 
-  const isAuthenticated = !!token && !!user && !isError;
-  const isUnauthenticated = !token || isError;
+  const isAuthenticated = !!user && !isError;
+  const isUnauthenticated = !isAuthenticatedCookie() || isError;
 
   return {
     user,
@@ -150,7 +112,6 @@ export const useAuth = () => {
     isUnauthenticated,
     isLoading,
     error,
-    token,
   };
 };
 
@@ -163,26 +124,14 @@ export const useGoogleAuth = () => {
   return useMutation<AuthResponse, AuthError, void>({
     mutationFn: () => authApi.googleAuth(),
     onSuccess: (data) => {
-      // Sauvegarder le token
-      tokenUtils.saveToken(data.accessToken);
-
-      // Mettre en cache les données utilisateur (évite un refetch inutile)
+      // Le cookie httpOnly est posé par le serveur dans la popup
       queryClient.setQueryData(authKeys.profile(), data.user);
-
-      // Invalider uniquement les autres queries auth (pas le profile qu'on vient de mettre à jour)
-      queryClient.invalidateQueries({
-        queryKey: authKeys.all,
-        // Exclure la query profile qu'on vient de mettre à jour
-        predicate: (query) => !query.queryKey.includes('profile')
-      });
-
-      // Rediriger vers la page de profil ou la page d'accueil
       router.navigate({ to: '/profile' }).catch(() => {
         router.navigate({ to: '/' });
       });
     },
     onError: (error) => {
-      console.error('Erreur lors de l\'authentification Google:', error);
+      console.error("Erreur lors de l'authentification Google:", error);
     },
   });
 };
@@ -193,17 +142,15 @@ export const invalidateAuthData = (queryClient: QueryClient) => {
 };
 
 // Utilitaire pour précharger les données utilisateur
-export const prefetchUserProfile = async (queryClient: QueryClient, token?: string) => {
-  const authToken = token || tokenUtils.getToken();
+export const prefetchUserProfile = async (queryClient: QueryClient) => {
+  if (!isAuthenticatedCookie()) return;
 
-  if (!authToken) return;
-
+  const apiBaseUrl = import.meta.env.VITE_API_URL || '';
   await queryClient.prefetchQuery({
     queryKey: authKeys.profile(),
     queryFn: async () => {
-      // Pour le prefetch, on utilise directement fetch car on ne peut pas utiliser le hook ici
-      const response = await fetch(`/api/v1/auth/profile`, {
-        headers: { Authorization: `Bearer ${authToken}` }
+      const response = await fetch(`${apiBaseUrl}/api/v1/auth/profile`, {
+        credentials: 'include',
       });
       if (!response.ok) throw new Error('Failed to fetch profile');
       return response.json();
