@@ -2,7 +2,7 @@ import { PrismaClient, Visibility, ValidationStatus, InteractionType, ShareType 
 import type { SeededUsers } from './users.seed';
 import type { SeededWords } from './words.seed';
 
-export type SeededFlashcards = { id: number; }[];
+export type SeededFlashcards = { id: string; }[];
 
 type FlashcardDef = {
   userKey: keyof SeededUsers;

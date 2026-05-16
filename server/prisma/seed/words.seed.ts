@@ -1,6 +1,6 @@
 import { PrismaClient } from '../../src/generated/prisma/client';
 
-export type SeededWords = Record<string, { id: number; }>;
+export type SeededWords = Record<string, { id: string; }>;
 
 type WordDef = {
   text: string;
@@ -101,7 +101,7 @@ const SENTENCE_DEFS: SentenceDef[] = [
 
 export const seedWords = async (
   prisma: PrismaClient,
-  adminUserId: number,
+  adminUserId: string,
 ): Promise<SeededWords> => {
   const words: SeededWords = {};
 

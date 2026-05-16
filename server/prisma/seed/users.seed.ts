@@ -2,12 +2,12 @@ import { PrismaClient, Role } from '../../src/generated/prisma/client';
 import * as argon2 from 'argon2';
 
 export type SeededUsers = {
-  adminUser: { id: number; };
-  johnDoe: { id: number; };
-  janeSmith: { id: number; };
-  aliceJones: { id: number; };
-  bobBrown: { id: number; };
-  googleUser: { id: number; };
+  adminUser: { id: string; };
+  johnDoe: { id: string; };
+  janeSmith: { id: string; };
+  aliceJones: { id: string; };
+  bobBrown: { id: string; };
+  googleUser: { id: string; };
 };
 
 export const seedUsers = async (prisma: PrismaClient): Promise<SeededUsers> => {
