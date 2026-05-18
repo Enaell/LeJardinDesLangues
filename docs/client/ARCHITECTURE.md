@@ -17,13 +17,16 @@ src/
 │   └── profile/       # Gestion du profil utilisateur
 ├── core/              # 🔧 Code partagé et fondations
 │   ├── components/    # Composants UI réutilisables
+│   │   ├── layout/    # Composants de mise en page (AppBar, Footer)
+│   │   └── notifications/ # Système toast
 │   ├── hooks/         # Hooks personnalisés partagés
-│   ├── services/      # Services et configuration API
+│   ├── services/      # Services et configuration API (queryClient)
 │   ├── utils/         # Fonctions utilitaires
 │   ├── types/         # Types TypeScript globaux
-│   └── i18n/          # Internationalisation
-├── pages/             # 📄 Pages principales de l'application
-├── routes/            # 🛣️ Configuration du routage
+│   └── i18n/          # Configuration et traductions
+├── components/ui/     # Composants shadcn/ui générés (ne pas modifier)
+├── lib/               # Utilitaires shadcn (cn())
+├── routes/            # 🛣️ Configuration du routage (TanStack Router)
 └── store/             # 📦 Gestion d'état globale
 ```
 
