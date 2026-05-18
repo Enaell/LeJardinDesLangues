@@ -1,105 +1,107 @@
-# Thème Material-UI - Le Jardin des Langues
+# Thème - Le Jardin des Langues
 
 ## Vue d'ensemble
 
-Le thème de "Le Jardin des Langues" s'inspire de la nature et de la croissance, utilisant le vert comme couleur principale pour évoquer l'apprentissage, l'épanouissement et la progression naturelle dans l'acquisition des langues.
+Le design de "Le Jardin des Langues" s'inspire de la nature et de la croissance. Le thème est géré via les **CSS variables shadcn/ui** définies dans `src/index.css`.
 
-## Palette de couleurs
+## Système de couleurs
 
-### Couleurs principales
+### shadcn/ui CSS Variables
 
-- **Primaire (Vert Jardin)** : `#4a9d4a` - Évoque la croissance et l'apprentissage
-- **Secondaire (Vert Sauge)** : `#6b7f6b` - Apporte une nuance douce et naturelle
-- **Accent (Orange Doux)** : `#ee7a44` - Pour les éléments interactifs et d'attention
+Le thème utilise les variables CSS standards de shadcn/ui avec une base `neutral`. Les variables sont définies dans `src/index.css` :
 
-### Couleurs sémantiques
-
-- **Succès** : `#22c55e` - Pour les réussites et validations
-- **Avertissement** : `#f59e0b` - Pour les alertes importantes
-- **Erreur** : `#ef4444` - Pour les erreurs et problèmes
-- **Information** : `#3b82f6` - Pour les informations générales
-
-## Philosophie du design
-
-### Inspiration naturelle
-- Bords arrondis (12px par défaut, 16px pour les cartes) pour un aspect organique
-- Ombres douces et subtiles pour créer de la profondeur
-- Palette de couleurs inspirée de la nature
-
-### Accessibilité
-- Ratios de contraste conformes aux standards WCAG
-- Tailles de police lisibles et hiérarchie claire
-- États focus et hover bien définis
-
-### Cohérence
-- System de spacing cohérent (8px de base)
-- Composants personnalisés pour Material-UI
-- Types TypeScript pour une utilisation sûre
-
-## Utilisation
-
-### Dans les composants React
-
-```tsx
-import { useTheme } from '../core/hooks/useTheme';
-import { colors } from '../core/theme/colors';
-
-const MyComponent = () => {
-  const theme = useTheme();
-  
-  return (
-    <Box sx={{ 
-      backgroundColor: theme.palette.primary.main,
-      color: colors.primary[100]
-    }}>
-      Contenu
-    </Box>
-  );
-};
-```
-
-### Avec Tailwind CSS
-
-Les couleurs personnalisées peuvent être étendues dans Tailwind si nécessaire :
-
-```typescript
-// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      colors: {
-        'jardin-primary': '#4a9d4a',
-        'jardin-secondary': '#6b7f6b',
-        'jardin-accent': '#ee7a44',
-      }
-    }
-  }
+```css
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --radius: 0.625rem;
 }
 ```
 
-## Composants personnalisés
+### Couleurs personnalisées (Tailwind)
 
-### Boutons
-- Texte non transformé en majuscules
-- Bords arrondis de 12px
-- Ombres subtiles au hover
+Les couleurs spécifiques au projet sont définies dans `tailwind.config.js` :
 
-### Cartes
-- Bords arrondis de 16px
-- Effet de survol avec ombre plus prononcée
-- Transition fluide
+- **Primaire (Vert Jardin)** : `#3d8b3d`
+- **Secondaire (Vert Sauge)** : `#6b7f6b`
 
-### Champs de saisie
-- Bords arrondis de 12px
-- États focus avec couleur primaire
-- Bordure de 2px en focus
+```js
+// tailwind.config.js
+colors: {
+  primary: { 500: '#3d8b3d', ... },
+  secondary: { 500: '#6b7f6b', ... },
+}
+```
 
-## Bonnes pratiques
+## Utilisation
 
-1. **Utilisez le hook `useTheme`** pour accéder au thème dans vos composants
-2. **Préférez Tailwind pour les layouts** et Material-UI `sx` pour les styles spécifiques au thème
-3. **Respectez la hiérarchie des couleurs** : primaire pour les actions principales, secondaire pour les actions secondaires, accent pour attirer l'attention
-4. **Testez l'accessibilité** en utilisant les outils de développement du navigateur
+### Composants shadcn/ui
+
+Les composants shadcn/ui utilisent automatiquement les CSS variables du thème :
+
+```tsx
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+
+const MyComponent = () => (
+  <Card>
+    <CardContent>
+      <Button variant="default">Action</Button>
+      <Badge variant="secondary">Label</Badge>
+    </CardContent>
+  </Card>
+);
+```
+
+### Classes utilitaires Tailwind
+
+Pour utiliser les couleurs du thème via Tailwind :
+
+```tsx
+// Via les variables CSS shadcn/ui (recommandé)
+<div className="bg-background text-foreground" />
+<div className="bg-primary text-primary-foreground" />
+<div className="bg-muted text-muted-foreground" />
+<div className="border-border" />
+
+// Via les couleurs Tailwind personnalisées
+<div className="text-primary-500 bg-secondary-100" />
+```
+
+## Mode sombre
+
+Le mode sombre est géré via la classe `.dark` sur l'élément `html` :
+
+```tsx
+// Basculer le mode sombre
+document.documentElement.classList.toggle('dark');
+```
+
+Les variables CSS `.dark` sont définies dans `src/index.css`.
+
+## Composants disponibles
+
+| Composant | Import | Description |
+|-----------|--------|-------------|
+| `Button` | `@/components/ui/button` | Bouton avec variants |
+| `Input` | `@/components/ui/input` | Champ de saisie |
+| `Card` | `@/components/ui/card` | Carte avec CardContent, CardHeader |
+| `Badge` | `@/components/ui/badge` | Badge/étiquette |
+| `Label` | `@/components/ui/label` | Label accessible |
+| `Separator` | `@/components/ui/separator` | Séparateur horizontal/vertical |
+| `Select` | `@/components/ui/select` | Liste déroulante |
+| `Checkbox` | `@/components/ui/checkbox` | Case à cocher |
+
+
 
 ## Évolutions futures
 

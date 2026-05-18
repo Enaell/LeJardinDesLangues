@@ -1,12 +1,6 @@
 import { Link } from '@tanstack/react-router';
-import {
-  AppBar as MuiAppBar,
-  Toolbar,
-  Typography,
-} from '@mui/material';
 import { AppBarDesktop } from './AppBarDesktop';
 import { AppBarMobile } from './AppBarMobile';
-import { AuthButtons } from '@features/auth/components/AuthButtons';
 import { useTranslation } from '@core/hooks';
 import type { NavigationItem } from '@core/routes.config';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -17,34 +11,21 @@ type AppBarProps = {
 
 export const AppBar = ({ navigationItems }: AppBarProps) => {
   const { t } = useTranslation();
-
-  const { user, isAuthenticated, isUnauthenticated, isLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   return (
-    <>
-      <MuiAppBar position="static">
-        <Toolbar>
-          <Typography
-            variant="h6"
-            component={Link}
-            to="/"
-            className="flex-grow font-bold text-inherit no-underline"
-            color='primary.contrastText'
-          >
-            🌸 {t('app.title')}
-          </Typography>
-
-          {isAuthenticated && <AppBarDesktop navigationItems={navigationItems} />}
-          <AuthButtons
-            user={user}
-            isLoading={isLoading}
-            isAuthenticated={isAuthenticated}
-            isUnauthenticated={isUnauthenticated}
-          />
+    <header className="border-b bg-background sticky top-0 z-50">
+      <div className="flex items-center h-14 px-4 max-w-screen-xl mx-auto">
+        <Link to="/" className="font-bold text-lg mr-6 flex-shrink-0">
+          🌸 {t('app.title')}
+        </Link>
+        {isAuthenticated && (
+          <AppBarDesktop navigationItems={navigationItems} />
+        )}
+        <div className="ml-auto">
           {isAuthenticated && <AppBarMobile navigationItems={navigationItems} />}
-        </Toolbar>
-      </MuiAppBar>
-
-    </>
+        </div>
+      </div>
+    </header>
   );
 };

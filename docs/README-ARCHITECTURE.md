@@ -64,19 +64,19 @@ features/example/
 Le dossier `core` contient tous les éléments partagés entre les features :
 
 ### 🎨 Components
-- **UI** : Composants de base (boutons, modales, etc.)
-- **Layout** : Composants de mise en page (header, footer, sidebar)
-- **Forms** : Composants de formulaires réutilisables
+- **`layout/`** : Composants de mise en page (`Layout`, `AppBar`, `Footer`) — Tailwind pur
+- **`notifications/`** : Système de notifications toast (`NotificationProvider`, `GlobalNotifications`, `useNotify`)
+- **`ui/`** : Composants shadcn/ui générés via `npx shadcn add` → `src/components/ui/`
 
 ### 🪝 Hooks
 Hooks personnalisés partagés :
-- `useLocalStorage` : Gestion du localStorage
-- `useDebounce` : Délai d'attente pour les saisies
-- `useMediaQuery` : Gestion du responsive
+- `useTranslation` : Raccourci i18n
+- `useImageCache` : Cache d'images
+- `useNotify` : Notifications toast
 
 ### ⚙️ Services
-- **API** : Configuration et client HTTP
-- **Storage** : Gestion du stockage local/session
+- **`queryClient.ts`** : Configuration React Query (`QueryClient` global)
+- Pas de client HTTP centralisé — chaque feature implémente ses propres appels `fetch` avec `credentials: 'include'`
 
 ### 🛠️ Utils
 Fonctions utilitaires :
@@ -111,9 +111,11 @@ import { LoginForm, useAuth } from '@/features/auth';
 
 ### Import du core
 ```typescript
-import { Button, useLocalStorage } from '@/core';
-// ou spécifiquement
-import { Button } from '@/core/components/ui';
+import { useNotify, useTranslation } from '@core/hooks';
+import { Layout } from '@core/components/layout';
+// Composants shadcn/ui
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 ```
 
 ### Import d'une page

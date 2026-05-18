@@ -1,7 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { Button } from '@mui/material';
 import { useTranslation } from '@core/hooks';
-import { FlexRow } from '@core/components';
 import type { NavigationItem } from '@core/routes.config';
 
 type AppBarDesktopProps = {
@@ -13,17 +11,16 @@ export const AppBarDesktop = ({ navigationItems }: AppBarDesktopProps) => {
   const [_homeItem, ...restNavigationItems] = navigationItems;
 
   return (
-    <FlexRow className="hidden md:flex" spacing={1}>
+    <nav className="hidden md:flex items-center gap-1 flex-grow">
       {restNavigationItems.map((item) => (
-        <Button
+        <Link
           key={item.path}
-          component={Link}
           to={item.path}
-          color="inherit"
+          className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
         >
           {t(item.translationKey)}
-        </Button>
+        </Link>
       ))}
-    </FlexRow>
+    </nav>
   );
 };

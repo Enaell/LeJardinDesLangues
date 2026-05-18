@@ -1,66 +1,76 @@
 import { useCallback } from 'react';
-import { useApi, createApiUrl } from '@core/services/api';
 import type { AuthResponse, RegisterRequest, LoginRequest, User } from '../types';
 
-// Hook spécialisé pour les API d'authentification
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
+const API_PREFIX = '/api/v1';
+
+const apiUrl = (endpoint: string) => `${API_BASE_URL}${API_PREFIX}${endpoint}`;
+
+const apiFetch = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
+  const response = await fetch(apiUrl(endpoint), {
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+    ...options,
+  });
+
+  if (!response.ok) {
+    let errorData: { message: string; statusCode: number; };
+    try {
+      errorData = await response.json();
+    } catch {
+      errorData = { message: `HTTP ${response.status}: ${response.statusText}`, statusCode: response.status };
+    }
+    const error = Object.assign(new Error(errorData.message), { statusCode: errorData.statusCode });
+    throw error;
+  }
+
+  if (response.status === 204) return undefined as T;
+  return response.json() as Promise<T>;
+};
+
+export const createApiUrl = apiUrl;
+
 export const useAuthApi = () => {
-  const { request } = useApi();
-
-  // Inscription d'un nouvel utilisateur
   const register = useCallback(
-    async (data: RegisterRequest): Promise<AuthResponse> => {
-      return await request('/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
-    },
-    [request],
+    (data: RegisterRequest): Promise<AuthResponse> =>
+      apiFetch('/auth/register', { method: 'POST', body: JSON.stringify(data) }),
+    [],
   );
 
-  // Connexion d'un utilisateur
   const login = useCallback(
-    async (data: LoginRequest): Promise<AuthResponse> => {
-      return await request('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
-    },
-    [request],
+    (data: LoginRequest): Promise<AuthResponse> =>
+      apiFetch('/auth/login', { method: 'POST', body: JSON.stringify(data) }),
+    [],
   );
 
-  // Obtenir le profil — les cookies httpOnly sont envoyés automatiquement
-  const getProfile = useCallback(async (): Promise<User> => {
-    return await request('/auth/profile', { method: 'GET' });
-  }, [request]);
+  const getProfile = useCallback(
+    (): Promise<User> => apiFetch('/auth/profile', { method: 'GET' }),
+    [],
+  );
 
-  // Déconnexion — invalide la session côté serveur et efface les cookies
-  const logout = useCallback(async (): Promise<void> => {
-    await request('/auth/logout', { method: 'POST' });
-  }, [request]);
+  const logout = useCallback(
+    (): Promise<void> => apiFetch('/auth/logout', { method: 'POST' }),
+    [],
+  );
 
-  // Authentification Google (popup)
   const googleAuth = useCallback((): Promise<AuthResponse> => {
     return new Promise((resolve, reject) => {
       const popup = window.open(
-        createApiUrl('/auth/google'),
+        apiUrl('/auth/google'),
         'googleAuth',
         'width=500,height=600,scrollbars=yes,resizable=yes',
       );
 
       if (!popup) {
-        reject(
-          new Error(
-            "Impossible d'ouvrir la popup. Vérifiez que les popups ne sont pas bloquées.",
-          ),
-        );
+        reject(new Error("Impossible d'ouvrir la popup. Vérifiez que les popups ne sont pas bloquées."));
         return;
       }
 
       const handleMessage = (event: MessageEvent) => {
-        // Vérifier l'origine pour la sécurité
-        const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-        if (event.origin !== apiBaseUrl) return;
-
+        if (event.origin !== API_BASE_URL) return;
         if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
           window.removeEventListener('message', handleMessage);
           clearInterval(checkClosed);
@@ -80,17 +90,12 @@ export const useAuthApi = () => {
         if (popup.closed) {
           clearInterval(checkClosed);
           window.removeEventListener('message', handleMessage);
-          reject(new Error('Authentification annulée par l\'utilisateur'));
+          reject(new Error("Authentification annulée par l'utilisateur"));
         }
       }, 1000);
     });
   }, []);
 
-  return {
-    register,
-    login,
-    getProfile,
-    logout,
-    googleAuth,
-  };
+  return { register, login, getProfile, logout, googleAuth };
 };
+

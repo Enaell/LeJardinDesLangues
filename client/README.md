@@ -1,6 +1,6 @@
 # Le Jardin des Langues - Client Frontend
 
-Application web frontend pour l'apprentissage des langues, développée avec React, TypeScript, Material-UI et Tailwind CSS.
+Application web frontend pour l'apprentissage des langues, développée avec React, TypeScript, shadcn/ui et Tailwind CSS.
 
 ## Comment utiliser
 
@@ -21,22 +21,27 @@ npm run dev
 ## Architecture technique
 
 Cette application utilise :
-- **React** avec **TypeScript** pour le framework frontend
-- **Material-UI** pour les composants d'interface utilisateur
-- **Tailwind CSS** pour le styling personnalisé
-- **Vite** comme outil de build et serveur de développement
+- **React 19** avec **TypeScript 6** pour le framework frontend
+- **shadcn/ui** (style `base-nova`) pour les composants d'interface utilisateur
+- **Tailwind CSS v4** pour le styling
+- **Vite 8** comme outil de build et serveur de développement
+- **TanStack Router** pour le routage
+- **TanStack Query** pour la gestion des données asynchrones
+- **TanStack Form** (vanilla) pour les formulaires
+- **react-i18next** pour l'internationalisation
 
 ### Architecture Feature-Oriented
 
-L'application suit une architecture orientée fonctionnalités pour une meilleure organisation et maintenabilité. Consultez [README-ARCHITECTURE.md](./README-ARCHITECTURE.md) pour plus de détails.
+L'application suit une architecture orientée fonctionnalités. Consultez [docs/README-ARCHITECTURE.md](../docs/README-ARCHITECTURE.md) pour plus de détails.
 
 ```
 src/
-├── features/     # Fonctionnalités métier (auth, dictionary, flashcards, etc.)
-├── core/         # Code partagé et composants réutilisables
-├── pages/        # Pages principales de l'application
-├── routes/       # Configuration du routage
-└── store/        # Gestion d'état globale
+├── features/       # Fonctionnalités métier (auth, dictionary, flashcards, etc.)
+├── core/           # Code partagé et composants réutilisables
+├── components/ui/  # Composants shadcn/ui
+├── lib/            # Utilitaires (cn())
+├── routes/         # Configuration du routage TanStack Router
+└── store/          # Gestion d'état globale
 ```
 
 ## Fonctionnalités

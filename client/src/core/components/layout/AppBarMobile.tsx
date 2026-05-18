@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { IconButton, Menu, MenuItem } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Menu } from 'lucide-react';
 import { useTranslation } from '@core/hooks';
-import { FlexRow } from '@core/components';
 import type { NavigationItem } from '@core/routes.config';
 
 type AppBarMobileProps = {
@@ -12,44 +10,31 @@ type AppBarMobileProps = {
 
 export const AppBarMobile = ({ navigationItems }: AppBarMobileProps) => {
   const { t } = useTranslation();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  const [open, setOpen] = useState(false);
 
   return (
-    <FlexRow className="flex md:hidden">
-      <IconButton
-        size="large"
-        edge="start"
-        color="inherit"
+    <div className="flex md:hidden relative">
+      <button
         aria-label={t('common.menu')}
-        onClick={handleMenuClick}
+        onClick={() => setOpen((v) => !v)}
+        className="p-2 rounded-md hover:bg-accent"
       >
-        <MenuIcon />
-      </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleMenuClose}
-      >
-        {navigationItems.map((item) => (
-          <MenuItem
-            key={item.path}
-            component={Link}
-            to={item.path}
-            onClick={handleMenuClose}
-          >
-            {item.icon} {t(item.translationKey)}
-          </MenuItem>
-        ))}
-      </Menu>
-    </FlexRow>
+        <Menu className="h-5 w-5" />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1 w-48 rounded-md border bg-popover shadow-md z-50">
+          {navigationItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent"
+            >
+              {item.icon} {t(item.translationKey)}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
