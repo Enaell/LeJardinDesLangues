@@ -38,7 +38,27 @@ Chaque module contient :
 - `*.controller.ts` — endpoints REST
 - `*.service.ts` — logique métier
 - `*.dto.ts` — Data Transfer Objects (validation)
+- `*.response.dto.ts` — DTOs de réponse typés pour Swagger + orval
 - `*.guard.ts` / `*.decorator.ts` — si nécessaire
+
+## Swagger / OpenAPI (OBLIGATOIRE)
+
+Chaque endpoint doit être annoté pour alimenter le générateur orval côté client :
+
+```typescript
+@ApiTags('NomDuTag')                       // égal au dossier généré dans core/api/
+@ApiBearerAuth('JWT-auth')                 // sur les routes protégées
+@ApiOperation({ summary: '...' })
+@ApiResponse({ status: 200, type: MyResponseDto })
+```
+
+Les IDs de paramètres URL sont des `string` (UUID/cuid) — ne pas utiliser `ParseIntPipe`.
+
+Après ajout/modification d'endpoints :
+```bash
+npm run generate:openapi   # génère openapi.json à la racine
+# puis depuis client/ : npm run generate:api
+```
 
 ## Authentification
 - **Access token** : JWT, 15 min, httpOnly cookie

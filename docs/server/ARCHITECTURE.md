@@ -13,6 +13,9 @@ server/
 │       ├── users.seed.ts
 │       ├── words.seed.ts
 │       └── flashcards.seed.ts
+├── scripts/
+│   └── generate-openapi.ts    # Génère openapi.json à la racine du projet
+├── tsconfig.scripts.json  # tsconfig étendu (rootDir: ".") pour les scripts hors src/
 └── src/
     ├── core/
     │   ├── prisma/            # PrismaModule + PrismaService
@@ -79,7 +82,41 @@ server/
 ### Enums
 `Role` · `Visibility` · `ValidationStatus` · `ShareType` · `InteractionType`
 
-## 🔧 Configuration globale (`main.ts`)
+## � OpenAPI / Swagger
+
+### Documentation interactive
+Swagger UI disponible sur `/api/docs` (hors production).
+
+### Décorateurs obligatoires
+Tout endpoint exposé dans l'API doit être annotaté pour la génération du spec :
+
+```typescript
+@ApiTags('Authentification')          // sur le controller
+@ApiBearerAuth('JWT-auth')            // sur les routes protégées
+@ApiOperation({ summary: '...' })     // sur chaque endpoint
+@ApiResponse({ status: 200, type: ResponseDto })  // sur chaque endpoint
+@ApiProperty()                        // sur chaque champ DTO
+```
+
+Les classes de réponse doivent être des **DTOs dédiés** (pas les entités Prisma) :
+```
+src/modules/<module>/dto/<module>.response.dto.ts
+```
+
+### Génération du spec
+
+```bash
+# Depuis le dossier server/ (requiert la DB démarrée)
+npm run generate:openapi
+# → Génère openapi.json à la racine du projet
+
+# Ou depuis la racine (génère aussi le client TypeScript)
+make generate-api
+```
+
+Le script utilise `ts-node` + `tsconfig.scripts.json` (pas `tsx` — esbuild ne supporte pas `emitDecoratorMetadata`).
+
+## �🔧 Configuration globale (`main.ts`)
 
 - **Helmet** : headers de sécurité HTTP
 - **CORS** : origine autorisée via `CORS_ORIGIN` (défaut : `http://localhost:5173`)

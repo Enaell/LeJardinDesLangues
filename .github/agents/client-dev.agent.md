@@ -59,14 +59,40 @@ src/
 │   ├── services/
 │   ├── types/
 │   └── index.ts      ← exports publics
-├── core/             ← hooks, services, utils partagés
-├── components/ui/    ← composants shadcn/ui générés
-├── routes/           ← fichiers de routes TanStack Router
+├── core/
+│   ├── api/          ← hooks + types générés par orval (NE PAS modifier manuellement)
+│   │   ├── authentification/authentification.ts
+│   │   ├── dictionnaire/dictionnaire.ts
+│   │   ├── flashcards/flashcards.ts
+│   │   ├── utilisateurs/utilisateurs.ts
+│   │   └── model/        ← AuthResponseDto, LoginDto, RegisterDto, UserResponseDto...
+│   ├── services/apiClient.ts  ← mutateur fetch (credentials, erreurs typées)
+│   └── hooks, utils, types, i18n
+├── components/ui/    ← shadcn/ui générés
+├── routes/           ← TanStack Router
 └── store/            ← état global
+```
+
+## Client API généré (orval)
+
+Préférer les hooks générés plutôt que des appels `fetch` manuels :
+
+```typescript
+import { usePostApiV1AuthLogin } from '@core/api/authentification/authentification';
+import type { LoginDto } from '@core/api/model';
+
+const mutation = usePostApiV1AuthLogin();
+mutation.mutate({ email, password } satisfies LoginDto);
+```
+
+Pour régénérer après un changement d'API :
+```bash
+make generate-api   # depuis la racine (requiert la DB)
 ```
 
 ## Contraintes
 - NE PAS modifier les fichiers hors de `client/`
+- NE PAS modifier `src/core/api/` manuellement — ces fichiers sont générés par orval
 - NE PAS ajouter de dépendances sans vérifier `client/package.json`
 - Toujours lire le fichier existant avant de le modifier
 - Respecter les imports existants et les alias de chemin

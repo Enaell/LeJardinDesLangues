@@ -1,0 +1,511 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Utilisateur cr\u00e9\u00e9 avec succ\u00e8s",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email ou nom d'utilisateur d\u00e9j\u00e0 utilis\u00e9"
+          }
+        },
+        "summary": "Inscription d'un nouvel utilisateur",
+        "tags": [
+          "Authentification"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Connexion r\u00e9ussie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Identifiants invalides"
+          }
+        },
+        "summary": "Connexion d'un utilisateur",
+        "tags": [
+          "Authentification"
+        ]
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Tokens renouvel\u00e9s"
+          },
+          "403": {
+            "description": "Refresh token invalide ou expir\u00e9"
+          }
+        },
+        "summary": "Renouveler les tokens via le refresh token",
+        "tags": [
+          "Authentification"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "D\u00e9connexion r\u00e9ussie"
+          }
+        },
+        "summary": "D\u00e9connexion et invalidation de la session",
+        "tags": [
+          "Authentification"
+        ]
+      }
+    },
+    "/api/v1/auth/google": {
+      "get": {
+        "operationId": "AuthController_googleAuth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Authentification avec Google",
+        "tags": [
+          "Authentification"
+        ]
+      }
+    },
+    "/api/v1/auth/google/callback": {
+      "get": {
+        "operationId": "AuthController_googleAuthCallback",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Callback Google OAuth",
+        "tags": [
+          "Authentification"
+        ]
+      }
+    },
+    "/api/v1/auth/profile": {
+      "get": {
+        "operationId": "AuthController_getProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Profil utilisateur r\u00e9cup\u00e9r\u00e9",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token invalide ou expir\u00e9"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir le profil de l'utilisateur connect\u00e9",
+        "tags": [
+          "Authentification"
+        ]
+      }
+    },
+    "/api/v1/users/profile": {
+      "get": {
+        "operationId": "UsersController_getMyProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Profil utilisateur r\u00e9cup\u00e9r\u00e9"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir son profil utilisateur",
+        "tags": [
+          "Utilisateurs"
+        ]
+      },
+      "put": {
+        "operationId": "UsersController_updateMyProfile",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profil mis \u00e0 jour avec succ\u00e8s"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Mettre \u00e0 jour son profil",
+        "tags": [
+          "Utilisateurs"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_deleteMyAccount",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Compte supprim\u00e9 avec succ\u00e8s"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Supprimer son compte",
+        "tags": [
+          "Utilisateurs"
+        ]
+      }
+    },
+    "/api/v1/users/{id}": {
+      "get": {
+        "operationId": "UsersController_getUserProfile",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profil utilisateur r\u00e9cup\u00e9r\u00e9"
+          },
+          "404": {
+            "description": "Utilisateur non trouv\u00e9"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir un profil utilisateur public",
+        "tags": [
+          "Utilisateurs"
+        ]
+      }
+    },
+    "/api/v1/dictionary/search": {
+      "get": {
+        "operationId": "DictionaryController_searchWords",
+        "parameters": [
+          {
+            "name": "q",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lang",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Rechercher des mots dans le dictionnaire",
+        "tags": [
+          "Dictionnaire"
+        ]
+      }
+    },
+    "/api/v1/flashcards": {
+      "get": {
+        "operationId": "FlashcardsController_getMyFlashcards",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Obtenir ses flashcards",
+        "tags": [
+          "Flashcards"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Le Jardin des Langues API",
+    "description": "API pour l'application d'apprentissage des langues",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "JWT-auth": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "description": "Enter JWT token"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "Nom d'utilisateur unique",
+            "example": "johndoe",
+            "minLength": 3,
+            "maxLength": 50
+          },
+          "email": {
+            "type": "string",
+            "description": "Adresse email valide",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Mot de passe s\u00e9curis\u00e9",
+            "example": "MonMotDePasse123!",
+            "minLength": 8
+          },
+          "name": {
+            "type": "string",
+            "description": "Nom complet de l'utilisateur",
+            "example": "John Doe",
+            "maxLength": 100
+          },
+          "nativeLanguage": {
+            "type": "string",
+            "description": "Code ISO 639-1 de la langue native",
+            "example": "fr"
+          },
+          "targetLanguage": {
+            "type": "string",
+            "description": "Code ISO 639-1 de la langue \u00e0 apprendre",
+            "example": "zh"
+          }
+        },
+        "required": [
+          "username",
+          "email",
+          "password",
+          "name",
+          "nativeLanguage",
+          "targetLanguage"
+        ]
+      },
+      "UserResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "clx1234567890"
+          },
+          "username": {
+            "type": "string",
+            "example": "johndoe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john.doe@example.com"
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "role": {
+            "type": "string",
+            "example": "USER",
+            "enum": [
+              "USER",
+              "ADMIN",
+              "MODERATOR"
+            ]
+          },
+          "avatarUrl": {
+            "type": "string",
+            "example": "https://example.com/avatar.jpg"
+          },
+          "nativeLanguage": {
+            "type": "string",
+            "example": "fr"
+          },
+          "targetLanguage": {
+            "type": "string",
+            "example": "zh"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2024-01-01T00:00:00.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2024-01-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "username",
+          "email",
+          "name",
+          "role",
+          "nativeLanguage",
+          "targetLanguage",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "AuthResponseDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserResponseDto"
+          }
+        },
+        "required": [
+          "user"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "emailOrUsername": {
+            "type": "string",
+            "description": "Email ou nom d'utilisateur",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Mot de passe",
+            "example": "MonMotDePasse123!"
+          }
+        },
+        "required": [
+          "emailOrUsername",
+          "password"
+        ]
+      },
+      "UpdateProfileDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nom complet de l'utilisateur",
+            "example": "John Doe"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "description": "URL de l'avatar",
+            "example": "https://example.com/avatar.jpg"
+          },
+          "nativeLanguage": {
+            "type": "string",
+            "description": "Code ISO 639-1 de la langue native",
+            "example": "fr"
+          },
+          "targetLanguage": {
+            "type": "string",
+            "description": "Code ISO 639-1 de la langue \u00e0 apprendre",
+            "example": "zh"
+          },
+          "timezone": {
+            "type": "string",
+            "description": "Fuseau horaire",
+            "example": "Europe/Paris"
+          },
+          "preferences": {
+            "type": "object",
+            "description": "Pr\u00e9f\u00e9rences utilisateur en JSON",
+            "example": "{\"theme\": \"dark\", \"notifications\": true}"
+          }
+        }
+      }
+    }
+  }
+}

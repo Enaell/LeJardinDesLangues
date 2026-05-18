@@ -59,10 +59,39 @@ const form = useForm({ defaultValues: { email: '' }, onSubmit: ... });
 ```
 src/
 ├── features/<feature>/{components,hooks,services,types,index.ts}
-├── core/{components/layout,components/notifications,hooks,services,utils,types,i18n}
+├── core/
+│   ├── api/          ← hooks + types générés (orval — ne pas modifier manuellement)
+│   │   ├── authentification/
+│   │   ├── dictionnaire/
+│   │   ├── flashcards/
+│   │   ├── utilisateurs/
+│   │   └── model/        ← types TypeScript (AuthResponseDto, LoginDto, etc.)
+│   ├── components/layout, components/notifications
+│   ├── hooks, services, utils, types, i18n
+│   └── services/apiClient.ts  ← mutateur fetch custom (credentials, erreurs typées)
 ├── components/ui/      ← shadcn/ui générés (ne pas modifier manuellement)
 ├── lib/utils.ts        ← cn() de shadcn
 └── routes/             ← TanStack Router (un fichier par route)
+```
+
+## Client API généré (orval)
+
+Préférer les hooks générés de `@core/api/` plutôt que des appels `fetch` manuels :
+
+```typescript
+// ✅ Utiliser les hooks générés
+import { usePostApiV1AuthLogin } from '@core/api/authentification/authentification';
+import type { LoginDto, AuthResponseDto } from '@core/api/model';
+
+const mutation = usePostApiV1AuthLogin();
+mutation.mutate({ email, password } satisfies LoginDto);
+
+// ❌ Éviter les appels fetch manuels dans les nouvelles features
+```
+
+Pour régénérer après un changement d'API serveur :
+```bash
+make generate-api   # depuis la racine du projet
 ```
 
 ## Exports

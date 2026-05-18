@@ -67,14 +67,14 @@ export class AuthService {
   private generateAccessToken(payload: JwtPayload): string {
     return this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_SECRET'),
-      expiresIn: this.configService.get<string>('JWT_EXPIRES_IN') || '15m',
+      expiresIn: (this.configService.get<string>('JWT_EXPIRES_IN') || '15m') as unknown as number,
     });
   }
 
   private generateRefreshToken(payload: JwtPayload): string {
     return this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-      expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d',
+      expiresIn: (this.configService.get<string>('JWT_REFRESH_EXPIRES_IN') || '7d') as unknown as number,
     });
   }
 

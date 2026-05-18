@@ -16,11 +16,20 @@ src/
 │   ├── community/     # Fonctionnalités sociales et communautaires
 │   └── profile/       # Gestion du profil utilisateur
 ├── core/              # 🔧 Code partagé et fondations
+│   ├── api/           # 🤖 Client API généré (orval — ne pas modifier manuellement)
+│   │   ├── authentification/
+│   │   ├── dictionnaire/
+│   │   ├── flashcards/
+│   │   ├── utilisateurs/
+│   │   ├── model/     # Types TypeScript générés depuis les DTOs NestJS
+│   │   └── index.ts
 │   ├── components/    # Composants UI réutilisables
 │   │   ├── layout/    # Composants de mise en page (AppBar, Footer)
 │   │   └── notifications/ # Système toast
 │   ├── hooks/         # Hooks personnalisés partagés
-│   ├── services/      # Services et configuration API (queryClient)
+│   ├── services/      # Services et configuration API
+│   │   ├── queryClient.ts  # QueryClient global TanStack Query
+│   │   └── apiClient.ts    # Mutateur fetch custom (utilisé par orval)
 │   ├── utils/         # Fonctions utilitaires
 │   ├── types/         # Types TypeScript globaux
 │   └── i18n/          # Configuration et traductions
@@ -78,8 +87,39 @@ Hooks personnalisés partagés :
 - `useNotify` : Notifications toast
 
 ### ⚙️ Services
-- **`queryClient.ts`** : Configuration React Query (`QueryClient` global)
-- Pas de client HTTP centralisé — chaque feature implémente ses propres appels `fetch` avec `credentials: 'include'`
+- **`queryClient.ts`** : Configuration TanStack Query (`QueryClient` global)
+- **`apiClient.ts`** : Mutateur fetch custom pour orval — gère `credentials: 'include'`, les erreurs typées et les réponses 204
+
+### 🤖 API généré (`core/api/`)
+Hooks TanStack Query et types TypeScript **auto-générés** depuis le spec OpenAPI du serveur via **orval**.
+
+> ⚠️ Ne pas modifier ces fichiers manuellement — les regénérer avec `npm run generate:api`
+
+| Dossier | Hooks générés |
+|---------|---------------|
+| `authentification/` | `usePostApiV1AuthRegister`, `usePostApiV1AuthLogin`, etc. |
+| `dictionnaire/` | `useGetApiV1DictionarySearch`, etc. |
+| `flashcards/` | `useGetApiV1Flashcards`, `usePostApiV1Flashcards`, etc. |
+| `utilisateurs/` | `useGetApiV1UsersMe`, `usePatchApiV1UsersMe`, etc. |
+| `model/` | `AuthResponseDto`, `LoginDto`, `RegisterDto`, `UserResponseDto`, etc. |
+
+#### Commande de régénération
+```bash
+# Depuis la racine du projet (requiert la DB)
+make generate-api
+
+# Ou étape par étape :
+cd server && npm run generate:openapi   # → openapi.json à la racine
+cd client && npm run generate:api       # → src/core/api/
+```
+
+#### Utilisation des hooks générés
+```typescript
+import { usePostApiV1AuthLogin } from '@core/api/authentification/authentification';
+
+const loginMutation = usePostApiV1AuthLogin();
+loginMutation.mutate({ email, password });
+```
 
 ### 🛠️ Utils
 Fonctions utilitaires :

@@ -77,6 +77,34 @@ export class CreateUserDto {
 npm run start:dev         # hot reload
 npx prisma generate       # après modification du schema
 npx prisma migrate dev    # nouvelle migration
+npm run generate:openapi  # génère openapi.json (requiert la DB)
 npm run test              # tests unitaires Jest
 npm run test:e2e          # tests e2e
+```
+
+## Swagger / OpenAPI (OBLIGATOIRE sur tout nouvel endpoint)
+
+Chaque controller doit être annoté pour alimenter la génération automatique du client TypeScript :
+
+```typescript
+@ApiTags('NomDuTag')                           // tag Swagger = dossier généré dans core/api/
+@Controller('resource')
+export class MyController {
+  @Post()
+  @ApiOperation({ summary: 'Description courte' })
+  @ApiResponse({ status: 201, type: MyResponseDto })
+  async create(@Body() dto: CreateDto): Promise<MyResponseDto> { ... }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')                   // sur les routes protégées
+  @ApiOperation({ summary: 'Description courte' })
+  @ApiResponse({ status: 200, type: MyResponseDto })
+  async findOne(@Param('id') id: string) { ... }  // IDs = string (UUID/cuid)
+}
+```
+
+Les types de réponse doivent être des **DTOs dédiés** avec `@ApiProperty` sur chaque champ :
+```
+src/modules/<module>/dto/<module>.response.dto.ts
 ```

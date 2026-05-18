@@ -89,6 +89,28 @@
 ### Jest — version alignée
 - `jest@^29.7.0` et `@types/jest@^29.5.0` (compatible avec `ts-jest@^29.1.0`)
 
+## 🔄 Pipeline OpenAPI / génération de client TypeScript (Mai 2026)
+
+### orval v8
+- **Package client** : `orval@^8` (devDependency dans `client/`)
+- **Rôle** : Génère des hooks TanStack Query + types TypeScript depuis le spec OpenAPI
+- **Config** : `client/orval.config.ts` — mode `tags-split`, mutateur custom `apiClient.ts`
+- **Commande** : `cd client && npm run generate:api`
+- **Sortie** : `client/src/core/api/` (hooks par tag Swagger) + `client/src/core/api/model/` (types)
+
+### @nestjs/swagger
+- **Package serveur** : `@nestjs/swagger` (déjà présent)
+- **Rôle** : Génère le spec OpenAPI 3.0 depuis les décorateurs NestJS
+- **Décorateurs clés** : `@ApiTags`, `@ApiOperation`, `@ApiResponse`, `@ApiProperty`, `@ApiBearerAuth`
+- **UI** : Swagger UI sur `/api/docs` (hors production)
+
+### ts-node + tsconfig-paths (génération serveur)
+- **Packages** : `ts-node@^10.9.2`, `tsconfig-paths@^4.2.0` (devDependencies server)
+- **Rôle** : Exécute `scripts/generate-openapi.ts` avec support `emitDecoratorMetadata` (requis par NestJS DI)
+- **Pourquoi pas `tsx`** : esbuild (utilisé par tsx) ne supporte pas `emitDecoratorMetadata` → injection de dépendances NestJS cassée
+- **Config dédiée** : `server/tsconfig.scripts.json` — étend `tsconfig.json` avec `rootDir: "."` pour les fichiers hors `src/`
+- **Commande** : `cd server && npm run generate:openapi`
+
 ## 🎯 Avantages pour Le Jardin des Langues
 
 ### Performance

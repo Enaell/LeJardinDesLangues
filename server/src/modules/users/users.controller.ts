@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Delete, Body, Param, UseGuards, Req, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Put, Delete, Body, Param, UseGuards, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
@@ -35,7 +35,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Obtenir un profil utilisateur public' })
   @ApiResponse({ status: 200, description: 'Profil utilisateur récupéré' })
   @ApiResponse({ status: 404, description: 'Utilisateur non trouvé' })
-  async getUserProfile(@Param('id', ParseIntPipe) id: number) {
+  async getUserProfile(@Param('id') id: string) {
     const user = await this.usersService.findById(id);
     if (!user) {
       throw new Error('Utilisateur non trouvé');

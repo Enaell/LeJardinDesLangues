@@ -13,6 +13,7 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService, AuthResponse, TokenPair } from './auth.service';
+import { AuthResponseDto } from './dto/auth.response.dto';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { Request, Response } from 'express';
@@ -70,7 +71,7 @@ export class AuthController {
 
   @Post('register')
   @ApiOperation({ summary: "Inscription d'un nouvel utilisateur" })
-  @ApiResponse({ status: 201, description: 'Utilisateur créé avec succès' })
+  @ApiResponse({ status: 201, description: 'Utilisateur créé avec succès', type: AuthResponseDto })
   @ApiResponse({ status: 409, description: "Email ou nom d'utilisateur déjà utilisé" })
   async register(
     @Body() registerDto: RegisterDto,
@@ -91,7 +92,7 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: "Connexion d'un utilisateur" })
-  @ApiResponse({ status: 200, description: 'Connexion réussie' })
+  @ApiResponse({ status: 200, description: 'Connexion réussie', type: AuthResponseDto })
   @ApiResponse({ status: 401, description: 'Identifiants invalides' })
   async login(
     @Body() loginDto: LoginDto,
@@ -217,7 +218,7 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: "Obtenir le profil de l'utilisateur connecté" })
-  @ApiResponse({ status: 200, description: 'Profil utilisateur récupéré' })
+  @ApiResponse({ status: 200, description: 'Profil utilisateur récupéré', type: AuthResponseDto })
   @ApiResponse({ status: 401, description: 'Token invalide ou expiré' })
   async getProfile(@Req() req: Request) {
     return req.user;

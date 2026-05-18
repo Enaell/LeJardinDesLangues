@@ -9,7 +9,7 @@ YELLOW=\033[1;33m
 RED=\033[0;31m
 NC=\033[0m # No Color
 
-.PHONY: help build up down restart logs clean test migrate seed setup
+.PHONY: help build up down restart logs clean test migrate seed setup generate-api
 
 # Commande par défaut
 help: ## Affiche l'aide
@@ -150,3 +150,10 @@ dev: setup up ## Configuration et démarrage rapide pour le développement
 prod: ## Démarre en mode production
 	@echo "$(GREEN)Démarrage en mode production...$(NC)"
 	NODE_ENV=production docker-compose -f $(COMPOSE_FILE) up -d --build
+
+generate-api: ## Génère le client TypeScript depuis le spec OpenAPI (requiert la DB)
+	@echo "$(GREEN)Étape 1/2 - Génération du spec OpenAPI (DB requise)...$(NC)"
+	cd server && npm run generate:openapi
+	@echo "$(GREEN)Étape 2/2 - Génération du client TypeScript...$(NC)"
+	cd client && npm run generate:api
+	@echo "$(GREEN)✅ Client API généré dans client/src/core/api/$(NC)"
