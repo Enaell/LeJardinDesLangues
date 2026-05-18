@@ -6,6 +6,7 @@
   },
   "include": [
     "**/*.ts",
-    "../src/generated/**/*.ts"
+    "../src/generated/**/*.ts",
+    "../prisma.config.ts"
   ]
 }
