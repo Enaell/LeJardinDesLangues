@@ -66,23 +66,26 @@ src/
 │   │   ├── flashcards/flashcards.ts
 │   │   ├── utilisateurs/utilisateurs.ts
 │   │   └── model/        ← AuthResponseDto, LoginDto, RegisterDto, UserResponseDto...
-│   ├── services/apiClient.ts  ← mutateur fetch (credentials, erreurs typées)
+│   ├── services/apiClient.ts  ← fetch custom (credentials, erreurs typées, intercepteur 401 → refresh)
 │   └── hooks, utils, types, i18n
 ├── components/ui/    ← shadcn/ui générés
-├── routes/           ← TanStack Router
-└── store/            ← état global
+└── routes/           ← TanStack Router
 ```
 
 ## Client API généré (orval)
 
-Préférer les hooks générés plutôt que des appels `fetch` manuels :
+Hiérarchie à respecter : hooks métier de la feature > hooks générés > jamais de `fetch` direct.
 
 ```typescript
-import { usePostApiV1AuthLogin } from '@core/api/authentification/authentification';
+// ✅ Recommandé — hook métier de la feature
+import { useLogin } from '@features/auth/hooks';
+
+// ✅ Acceptable — hook généré direct (pas de logique métier supplémentaire nécessaire)
+import { useAuthControllerLogin } from '@core/api/authentification/authentification';
 import type { LoginDto } from '@core/api/model';
 
-const mutation = usePostApiV1AuthLogin();
-mutation.mutate({ email, password } satisfies LoginDto);
+const mutation = useAuthControllerLogin();
+mutation.mutate({ emailOrUsername, password } satisfies LoginDto);
 ```
 
 Pour régénérer après un changement d'API :
@@ -102,6 +105,8 @@ make generate-api   # depuis la racine (requiert la DB)
 - **Conventions détaillées** : `.github/instructions/client.instructions.md`
 - **Architecture** : `docs/client/ARCHITECTURE.md`
 - **Thème** : `docs/client/THEME.md`
+- **Architecture API** : `client/docs/API_ARCHITECTURE.md`
+- **i18n** : `client/docs/I18N_GUIDE.md`
 - **Formulaires** : `.github/prompts/tanstack-form-guidelines.prompt.md`
 
 ## Approche

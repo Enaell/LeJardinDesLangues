@@ -35,8 +35,7 @@ src/
 │   └── i18n/          # Configuration et traductions
 ├── components/ui/     # Composants shadcn/ui générés (ne pas modifier)
 ├── lib/               # Utilitaires shadcn (cn())
-├── routes/            # 🛣️ Configuration du routage (TanStack Router)
-└── store/             # 📦 Gestion d'état globale
+└── routes/            # 🛣️ Configuration du routage (TanStack Router)
 ```
 
 ## 🎯 Features (Fonctionnalités)
@@ -88,7 +87,7 @@ Hooks personnalisés partagés :
 
 ### ⚙️ Services
 - **`queryClient.ts`** : Configuration TanStack Query (`QueryClient` global)
-- **`apiClient.ts`** : Mutateur fetch custom pour orval — gère `credentials: 'include'`, les erreurs typées et les réponses 204
+- **`apiClient.ts`** : Mutateur fetch custom pour orval — gère `credentials: 'include'`, les erreurs typées, les réponses 204, et un **intercepteur 401 → refresh automatique** (tente `POST /auth/refresh` avec le cookie httpOnly avant de propager l'erreur)
 
 ### 🤖 API généré (`core/api/`)
 Hooks TanStack Query et types TypeScript **auto-générés** depuis le spec OpenAPI du serveur via **orval**.
@@ -97,10 +96,10 @@ Hooks TanStack Query et types TypeScript **auto-générés** depuis le spec Open
 
 | Dossier | Hooks générés |
 |---------|---------------|
-| `authentification/` | `usePostApiV1AuthRegister`, `usePostApiV1AuthLogin`, etc. |
-| `dictionnaire/` | `useGetApiV1DictionarySearch`, etc. |
-| `flashcards/` | `useGetApiV1Flashcards`, `usePostApiV1Flashcards`, etc. |
-| `utilisateurs/` | `useGetApiV1UsersMe`, `usePatchApiV1UsersMe`, etc. |
+| `authentification/` | `useAuthControllerRegister`, `useAuthControllerLogin`, `useAuthControllerLogout`, `useAuthControllerRefresh`, etc. |
+| `dictionnaire/` | `useDictionnaireControllerSearch`, etc. |
+| `flashcards/` | `useFlashcardsControllerFindAll`, `useFlashcardsControllerCreate`, etc. |
+| `utilisateurs/` | `useUsersControllerGetMe`, `useUsersControllerUpdateMe`, etc. |
 | `model/` | `AuthResponseDto`, `LoginDto`, `RegisterDto`, `UserResponseDto`, etc. |
 
 #### Commande de régénération
@@ -115,11 +114,14 @@ cd client && npm run generate:api       # → src/core/api/
 
 #### Utilisation des hooks générés
 ```typescript
-import { usePostApiV1AuthLogin } from '@core/api/authentification/authentification';
+import { useAuthControllerLogin } from '@core/api/authentification/authentification';
+import type { LoginDto } from '@core/api/model';
 
-const loginMutation = usePostApiV1AuthLogin();
-loginMutation.mutate({ email, password });
+const loginMutation = useAuthControllerLogin();
+loginMutation.mutate({ emailOrUsername, password } satisfies LoginDto);
 ```
+
+> En pratique, les features wrappent ces hooks dans leurs propres hooks métier (`useLogin`, `useAuth`…) pour y ajouter la gestion du cache, les notifications et la navigation.
 
 ### 🛠️ Utils
 Fonctions utilitaires :
@@ -161,10 +163,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 ```
 
-### Import d'une page
-```typescript
-import HomePage from '@/pages/HomePage';
-```
 
 ## 🔄 Migration et évolution
 

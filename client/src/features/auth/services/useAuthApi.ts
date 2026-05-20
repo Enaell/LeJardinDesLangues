@@ -1,65 +1,54 @@
 import { useCallback } from 'react';
-import type { AuthResponse, RegisterRequest, LoginRequest, User } from '../types';
+import {
+  authControllerRegister,
+  authControllerLogin,
+  authControllerGetProfile,
+  authControllerLogout,
+  getAuthControllerGoogleAuthUrl,
+} from '@core/api/authentification/authentification';
+import type { AuthResponseDto, LoginDto, RegisterDto } from '@core/api/model';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
-const API_PREFIX = '/api/v1';
-
-const apiUrl = (endpoint: string) => `${API_BASE_URL}${API_PREFIX}${endpoint}`;
-
-const apiFetch = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
-  const response = await fetch(apiUrl(endpoint), {
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-    ...options,
-  });
-
-  if (!response.ok) {
-    let errorData: { message: string; statusCode: number; };
-    try {
-      errorData = await response.json();
-    } catch {
-      errorData = { message: `HTTP ${response.status}: ${response.statusText}`, statusCode: response.status };
-    }
-    const error = Object.assign(new Error(errorData.message), { statusCode: errorData.statusCode });
-    throw error;
-  }
-
-  if (response.status === 204) return undefined as T;
-  return response.json() as Promise<T>;
-};
-
-export const createApiUrl = apiUrl;
 
 export const useAuthApi = () => {
   const register = useCallback(
-    (data: RegisterRequest): Promise<AuthResponse> =>
-      apiFetch('/auth/register', { method: 'POST', body: JSON.stringify(data) }),
+    async (data: RegisterDto): Promise<AuthResponseDto> => {
+      const response = await authControllerRegister(data);
+      if (response.status === 201) return response.data;
+      throw new Error('Unexpected registration response');
+    },
     [],
   );
 
   const login = useCallback(
-    (data: LoginRequest): Promise<AuthResponse> =>
-      apiFetch('/auth/login', { method: 'POST', body: JSON.stringify(data) }),
+    async (data: LoginDto): Promise<AuthResponseDto> => {
+      const response = await authControllerLogin(data);
+      if (response.status === 200) return response.data;
+      throw new Error('Unexpected login response');
+    },
     [],
   );
 
   const getProfile = useCallback(
-    (): Promise<User> => apiFetch('/auth/profile', { method: 'GET' }),
+    async (): Promise<AuthResponseDto['user']> => {
+      const response = await authControllerGetProfile();
+      if (response.status === 200) return response.data;
+      throw new Error('Unauthorized');
+    },
     [],
   );
 
   const logout = useCallback(
-    (): Promise<void> => apiFetch('/auth/logout', { method: 'POST' }),
+    async (): Promise<void> => {
+      await authControllerLogout();
+    },
     [],
   );
 
-  const googleAuth = useCallback((): Promise<AuthResponse> => {
+  const googleAuth = useCallback((): Promise<AuthResponseDto> => {
     return new Promise((resolve, reject) => {
       const popup = window.open(
-        apiUrl('/auth/google'),
+        getAuthControllerGoogleAuthUrl(),
         'googleAuth',
         'width=500,height=600,scrollbars=yes,resizable=yes',
       );
@@ -75,7 +64,7 @@ export const useAuthApi = () => {
           window.removeEventListener('message', handleMessage);
           clearInterval(checkClosed);
           popup.close();
-          resolve(event.data.payload as AuthResponse);
+          resolve(event.data.payload as AuthResponseDto);
         } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
           window.removeEventListener('message', handleMessage);
           clearInterval(checkClosed);

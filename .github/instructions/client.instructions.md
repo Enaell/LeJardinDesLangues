@@ -19,7 +19,6 @@ applyTo: "client/src/**"
 | `@core` | `src/core/` |
 | `@features` | `src/features/` |
 | `@routes` | `src/routes/` |
-| `@store` | `src/store/` |
 
 ## Conventions de code
 
@@ -68,7 +67,7 @@ src/
 │   │   └── model/        ← types TypeScript (AuthResponseDto, LoginDto, etc.)
 │   ├── components/layout, components/notifications
 │   ├── hooks, services, utils, types, i18n
-│   └── services/apiClient.ts  ← mutateur fetch custom (credentials, erreurs typées)
+│   └── services/apiClient.ts  ← fetch custom (credentials, erreurs typées, intercepteur 401 → refresh)
 ├── components/ui/      ← shadcn/ui générés (ne pas modifier manuellement)
 ├── lib/utils.ts        ← cn() de shadcn
 └── routes/             ← TanStack Router (un fichier par route)
@@ -76,15 +75,18 @@ src/
 
 ## Client API généré (orval)
 
-Préférer les hooks générés de `@core/api/` plutôt que des appels `fetch` manuels :
+Préférer les hooks de `features/<feature>/hooks/` pour la logique métier. Les hooks générés de `@core/api/` servent de couche bas niveau :
 
 ```typescript
-// ✅ Utiliser les hooks générés
-import { usePostApiV1AuthLogin } from '@core/api/authentification/authentification';
-import type { LoginDto, AuthResponseDto } from '@core/api/model';
+// ✅ Utiliser les hooks métier de la feature (recommandé)
+import { useLogin } from '@features/auth/hooks';
 
-const mutation = usePostApiV1AuthLogin();
-mutation.mutate({ email, password } satisfies LoginDto);
+// ✅ Utiliser les hooks générés directement si pas de logique supplémentaire nécessaire
+import { useAuthControllerLogin } from '@core/api/authentification/authentification';
+import type { LoginDto } from '@core/api/model';
+
+const mutation = useAuthControllerLogin();
+mutation.mutate({ emailOrUsername, password } satisfies LoginDto);
 
 // ❌ Éviter les appels fetch manuels dans les nouvelles features
 ```

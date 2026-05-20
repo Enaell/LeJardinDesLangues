@@ -27,7 +27,8 @@ import type {
 import type {
   AuthResponseDto,
   LoginDto,
-  RegisterDto
+  RegisterDto,
+  UserResponseDto
 } from '../model';
 
 import { apiClient } from '../../services/apiClient';
@@ -670,7 +671,7 @@ export const useAuthControllerGoogleAuthCallback = <TError = ErrorType<unknown>,
       return useMutation(getAuthControllerGoogleAuthCallbackMutationOptions(options), queryClient);
     }
     export type authControllerGetProfileResponse200 = {
-  data: AuthResponseDto
+  data: UserResponseDto
   status: 200
 }
 

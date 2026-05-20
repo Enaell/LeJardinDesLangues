@@ -13,7 +13,7 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService, AuthResponse, TokenPair } from './auth.service';
-import { AuthResponseDto } from './dto/auth.response.dto';
+import { AuthResponseDto, UserResponseDto } from './dto/auth.response.dto';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { Request, Response } from 'express';
@@ -218,7 +218,7 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: "Obtenir le profil de l'utilisateur connecté" })
-  @ApiResponse({ status: 200, description: 'Profil utilisateur récupéré', type: AuthResponseDto })
+  @ApiResponse({ status: 200, description: 'Profil utilisateur récupéré', type: UserResponseDto })
   @ApiResponse({ status: 401, description: 'Token invalide ou expiré' })
   async getProfile(@Req() req: Request) {
     return req.user;
