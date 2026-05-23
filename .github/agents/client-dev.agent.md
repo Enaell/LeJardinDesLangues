@@ -39,9 +39,16 @@ export default function MyComponent() { ... }
 
 ### Styles
 - Tailwind pour layouts/spacing/responsive
-- shadcn/ui pour composants interactifs (`Button`, `Input`, `Card`, `Select`, `Checkbox`, `Badge`, `Label`)
+- shadcn/ui pour composants interactifs — tous dans `@core/components/ui/`
 - Pas de `sx` prop (pas de Material UI)
 - Balises sémantiques HTML pour les conteneurs (`<header>`, `<main>`, `<nav>`, `<section>`)
+- Titres : `className="font-heading"` (Playfair Display Variable)
+
+### Composants UI disponibles (`@core/components/ui/`)
+
+**Shadcn/base-ui :** `Button`, `Input`, `Card`+sous-composants, `Badge`, `Label`, `Separator`, `Select`, `Checkbox`, `Tabs`, `Progress`, `Switch`, `Avatar`, `Pagination`
+
+**Custom LinguaGarden :** `LevelBadge` (variantes: new/popular/beginner/intermediate/advanced), `StarRating` (0–5 étoiles, readonly ou interactif), `Stepper` (étapes numérotées), `SearchInput` (barre recherche + filtre), `FeatureCard` (image+titre+desc), `PersonCard` (avatar+rôle+socials), `TestimonialCard` (citation+auteur), `CtaBanner` (bannière CTA gradient), `Fab` (bouton action flottant)
 
 ### Alias de chemins
 ```
@@ -66,9 +73,13 @@ src/
 │   │   ├── flashcards/flashcards.ts
 │   │   ├── utilisateurs/utilisateurs.ts
 │   │   └── model/        ← AuthResponseDto, LoginDto, RegisterDto, UserResponseDto...
+│   ├── components/
+│   │   ├── layout/       ← Layout, AppBar, Footer
+│   │   ├── notifications/ ← GlobalNotifications, useNotify
+│   │   └── ui/           ← TOUS les composants UI (shadcn + custom LinguaGarden)
 │   ├── services/apiClient.ts  ← fetch custom (credentials, erreurs typées, intercepteur 401 → refresh)
 │   └── hooks, utils, types, i18n
-├── components/ui/    ← shadcn/ui générés
+├── lib/utils.ts      ← cn()
 └── routes/           ← TanStack Router
 ```
 

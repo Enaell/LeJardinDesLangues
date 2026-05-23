@@ -77,7 +77,7 @@ Le dossier `core` contient tous les éléments partagés entre les features :
 ### 🎨 Components
 - **`layout/`** : Composants de mise en page (`Layout`, `AppBar`, `Footer`) — Tailwind pur
 - **`notifications/`** : Système de notifications toast (`NotificationProvider`, `GlobalNotifications`, `useNotify`)
-- **`ui/`** : Composants shadcn/ui générés via `npx shadcn add` → `src/components/ui/`
+- **`ui/`** : Composants UI (shadcn/base-ui + custom) dans `src/core/components/ui/` — voir `docs/client/THEME.md` pour la liste complète
 
 ### 🪝 Hooks
 Hooks personnalisés partagés :
@@ -158,9 +158,13 @@ import { LoginForm, useAuth } from '@/features/auth';
 ```typescript
 import { useNotify, useTranslation } from '@core/hooks';
 import { Layout } from '@core/components/layout';
-// Composants shadcn/ui
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+// Composants UI (shadcn/ui + custom)
+import { Button } from '@core/components/ui/button';
+import { Input } from '@core/components/ui/input';
+import { LevelBadge } from '@core/components/ui/level-badge';
+import { StarRating } from '@core/components/ui/star-rating';
+import { Stepper } from '@core/components/ui/stepper';
+import { SearchInput } from '@core/components/ui/search-input';
 ```
 
 

@@ -35,11 +35,33 @@ interface MyComponentProps { ... }
 
 ### Imports UI
 ```typescript
-import { Button } from '@/components/ui/button';      // shadcn/ui
-import { Input } from '@/components/ui/input';
-import { Card, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';                     // utilitaire clsx
+// Composants UI (tous dans @core/components/ui/)
+import { Button } from '@core/components/ui/button';
+import { Input } from '@core/components/ui/input';
+import { Card, CardContent } from '@core/components/ui/card';
+import { Badge } from '@core/components/ui/badge';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@core/components/ui/tabs';
+import { Avatar, AvatarImage, AvatarFallback } from '@core/components/ui/avatar';
+import { Progress } from '@core/components/ui/progress';
+import { Switch } from '@core/components/ui/switch';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@core/components/ui/pagination';
+// Composants custom LinguaGarden
+import { LevelBadge } from '@core/components/ui/level-badge';
+import { StarRating } from '@core/components/ui/star-rating';
+import { Stepper } from '@core/components/ui/stepper';
+import { SearchInput } from '@core/components/ui/search-input';
+import { FeatureCard } from '@core/components/ui/feature-card';
+import { PersonCard } from '@core/components/ui/person-card';
+import { TestimonialCard } from '@core/components/ui/testimonial-card';
+import { CtaBanner } from '@core/components/ui/cta-banner';
+import { Fab } from '@core/components/ui/fab';
+import { cn } from '@/lib/utils'; // utilitaire clsx
 ```
+
+### Typographie
+- `font-heading` (Playfair Display Variable) pour les titres : `<h1 className="font-heading">...</h1>`
+- `font-sans` (Geist Variable) pour le texte UI/boutons (par défaut)
+- Ne pas importer les fonts manuellement — déjà configurées dans `index.css`
 
 ### Formulaires (TanStack Form)
 ```typescript
@@ -65,10 +87,12 @@ src/
 │   │   ├── flashcards/
 │   │   ├── utilisateurs/
 │   │   └── model/        ← types TypeScript (AuthResponseDto, LoginDto, etc.)
-│   ├── components/layout, components/notifications
+│   ├── components/
+│   │   ├── layout/       ← Layout, AppBar, Footer
+│   │   ├── notifications/ ← GlobalNotifications, useNotify
+│   │   └── ui/           ← TOUS les composants UI (shadcn + custom LinguaGarden)
 │   ├── hooks, services, utils, types, i18n
 │   └── services/apiClient.ts  ← fetch custom (credentials, erreurs typées, intercepteur 401 → refresh)
-├── components/ui/      ← shadcn/ui générés (ne pas modifier manuellement)
 ├── lib/utils.ts        ← cn() de shadcn
 └── routes/             ← TanStack Router (un fichier par route)
 ```
