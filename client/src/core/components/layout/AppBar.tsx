@@ -4,6 +4,7 @@ import { AppBarMobile } from './AppBarMobile';
 import { useTranslation } from '@core/hooks';
 import type { NavigationItem } from '@core/routes.config';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import logo from '@/assets/Logo2.png';
 
 type AppBarProps = {
   navigationItems: NavigationItem[];
@@ -16,8 +17,9 @@ export const AppBar = ({ navigationItems }: AppBarProps) => {
   return (
     <header className="border-b bg-background sticky top-0 z-50">
       <div className="flex items-center h-14 px-4 max-w-screen-xl mx-auto">
-        <Link to="/" className="font-bold text-lg mr-6 flex-shrink-0">
-          🌸 {t('app.title')}
+        <Link to="/" className="font-bold text-lg mr-6 flex-shrink-0 flex items-center gap-2">
+          <img src={logo} alt={t('app.title')} className="h-8 w-auto" />
+          {t('app.title')}
         </Link>
         {isAuthenticated && (
           <AppBarDesktop navigationItems={navigationItems} />
