@@ -79,6 +79,25 @@ Le dossier `core` contient tous les éléments partagés entre les features :
 - **`notifications/`** : Système de notifications toast (`NotificationProvider`, `GlobalNotifications`, `useNotify`)
 - **`ui/`** : Composants UI (shadcn/base-ui + custom) dans `src/core/components/ui/` — voir `docs/client/THEME.md` pour la liste complète
 
+### 📖 Storybook
+
+Chaque composant de `core/components/ui/` a une story dans `client/.storybook/stories/`.
+
+```
+client/
+└── .storybook/
+    ├── main.ts          ← config (glob: ./stories/**)
+    ├── preview.tsx      ← import index.css + backgrounds garden
+    └── stories/
+        ├── button.stories.tsx
+        ├── level-badge.stories.tsx
+        └── ...             ← 22 stories au total
+```
+
+Lancer : `cd client && npm run storybook`
+
+> Règle : tout nouveau composant ajouté dans `core/components/ui/` doit avoir sa story.
+
 ### 🪝 Hooks
 Hooks personnalisés partagés :
 - `useTranslation` : Raccourci i18n

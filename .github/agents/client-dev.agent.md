@@ -17,6 +17,7 @@ Tu travailles exclusivement dans le dossier `client/`.
 - TanStack Form (formulaires)
 - react-i18next (i18n)
 - Node.js 22
+- Storybook (visualisation et documentation des composants `core/components/ui/`)
 
 ## Conventions de code (OBLIGATOIRES)
 
@@ -83,6 +84,28 @@ src/
 └── routes/           ← TanStack Router
 ```
 
+## Storybook
+
+Les stories sont dans `client/.storybook/stories/` (une par composant de `core/components/ui/`).
+
+**Règle : après création ou modification d'un composant dans `core/components/ui/`, créer ou mettre à jour sa story dans `.storybook/stories/<nom>.stories.tsx`.**
+
+```typescript
+// Conventions stories
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { MonComposant } from '@core/components/ui/mon-composant'; // alias absolu
+
+const meta = {
+  title: 'Core/UI/MonComposant',
+  component: MonComposant,
+  tags: ['autodocs'],
+  parameters: { layout: 'centered' },
+} satisfies Meta<typeof MonComposant>;
+export default meta;
+```
+
+Commande : `npm run storybook` (depuis `client/`)
+
 ## Client API généré (orval)
 
 Hiérarchie à respecter : hooks métier de la feature > hooks générés > jamais de `fetch` direct.
@@ -125,3 +148,5 @@ make generate-api   # depuis la racine (requiert la DB)
 2. Vérifier les types et les composants déjà disponibles
 3. Implémenter en respectant les conventions ci-dessus
 4. Vérifier qu'il n'y a pas d'erreurs TypeScript
+5. Si un composant `core/components/ui/` a été créé ou modifié → créer/mettre à jour sa story Storybook
+6. Notifier **Doc Keeper** si : nouveau composant core, nouvelle convention, dépendance ajoutée/modifiée, changement d'architecture

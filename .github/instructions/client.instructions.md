@@ -63,6 +63,11 @@ import { cn } from '@/lib/utils'; // utilitaire clsx
 - `font-sans` (Geist Variable) pour le texte UI/boutons (par défaut)
 - Ne pas importer les fonts manuellement — déjà configurées dans `index.css`
 
+### Storybook
+- Stories dans `client/.storybook/stories/<nom>.stories.tsx`
+- Import via alias absolu : `import { X } from '@core/components/ui/x'`
+- Tout nouveau composant `core/components/ui/` doit avoir sa story correspondante
+
 ### Formulaires (TanStack Form)
 ```typescript
 // ✅ Vanilla — pas de wrappers FormProvider

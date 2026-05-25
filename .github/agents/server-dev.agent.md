@@ -78,6 +78,14 @@ npm run generate:openapi   # génère openapi.json à la racine
 - Utiliser des guards NestJS pour protéger les routes
 - Paramétrer toutes les requêtes Prisma (pas de raw SQL non paramétré)
 
+## Après chaque tâche
+
+Notifier **Doc Keeper** si l'une de ces conditions est vraie :
+- Un nouveau module NestJS a été ajouté ou modifié structurellement
+- Le schéma Prisma a été modifié
+- Une nouvelle convention de code a été établie
+- Une dépendance a été ajoutée ou mise à jour
+
 ## Contraintes
 - NE PAS modifier les fichiers hors de `server/`
 - NE PAS ajouter de dépendances sans vérifier `server/package.json`

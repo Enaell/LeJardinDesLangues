@@ -41,6 +41,7 @@ Tu maintiens la cohérence entre ce qui est développé et ce qui est documenté
 ### Après développement d'une feature
 - Un nouveau module NestJS est ajouté → mettre à jour `server-dev.agent.md` + `docs/server/ARCHITECTURE.md` (table des modules)
 - Un nouveau composant partagé est créé dans `core/` → mettre à jour `client-dev.agent.md` + `docs/client/ARCHITECTURE.md`
+- Un nouveau composant est ajouté dans `core/components/ui/` → vérifier que sa story Storybook existe dans `.storybook/stories/` + mettre à jour `docs/client/THEME.md` (table des composants)
 - Une nouvelle convention de code est établie → mettre à jour l'agent concerné + l'instruction auto-injectée concernée + `copilot-instructions.md`
 - Une dépendance est ajoutée/mise à jour → mettre à jour `docs/VERSIONS.md`
 

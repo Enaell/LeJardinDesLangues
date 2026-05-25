@@ -1,22 +1,17 @@
 import { Link } from '@tanstack/react-router';
 import { useTranslation } from '@core/hooks';
-import type { NavigationItem } from '@core/routes.config';
+import { APP_NAV_ITEMS } from '@core/routes.config';
 
-type AppBarDesktopProps = {
-  navigationItems: NavigationItem[];
-};
-
-export const AppBarDesktop = ({ navigationItems }: AppBarDesktopProps) => {
+export const AppBarDesktop = () => {
   const { t } = useTranslation();
-  const [_homeItem, ...restNavigationItems] = navigationItems;
 
   return (
     <nav className="hidden md:flex items-center gap-1 flex-grow">
-      {restNavigationItems.map((item) => (
+      {APP_NAV_ITEMS.map((item) => (
         <Link
           key={item.path}
           to={item.path}
-          className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"
+          className="text-primary-foreground/80 hover:text-primary-foreground hover:bg-white/10 px-3 py-1.5 rounded-md text-sm font-medium transition-all"
         >
           {t(item.translationKey)}
         </Link>

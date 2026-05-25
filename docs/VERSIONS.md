@@ -80,6 +80,14 @@
 - **RedisModule** : Module global NestJS exposant un client IoRedis (connexion lazy via `REDIS_URL`)
 - **CacheModule** : Configuré globalement — mémoire en dev, Redis en production si `REDIS_URL` est défini
 
+### Storybook 10
+- **Package** : `storybook@^10.4.1`, `@storybook/react-vite@^10.4.1`
+- **Addons** : `@storybook/addon-docs`, `@storybook/addon-a11y`, `@storybook/addon-vitest`, `@chromatic-com/storybook`, `@storybook/addon-mcp`
+- **Config** : `client/.storybook/main.ts` + `client/.storybook/preview.tsx`
+- **Stories** : `client/.storybook/stories/` (une story par composant `core/components/ui/`)
+- **Commandes** : `npm run storybook` (dev, port 6006), `npm run build-storybook` (build statique)
+- Hérite de la config Vite (aliases `@core`, `@features`, Tailwind CSS v4)
+
 ### Tests Frontend — Vitest
 - **Package** : `vitest`, `@vitest/coverage-v8`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`, `jsdom`
 - **Config** : `client/vitest.config.ts` avec jsdom, globals, alias de chemin
