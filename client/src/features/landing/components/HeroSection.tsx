@@ -2,9 +2,11 @@ import heroBackground from '@/assets/HeroBackground.png';
 import { useTranslation } from '@core/hooks';
 import { Button } from '@core/components/ui/button';
 import { Typography } from '@core/components/ui/typography';
+import { useAuthModalContext } from '@features/auth/components/AuthModalContext';
 
 export const HeroSection = () => {
   const { t } = useTranslation();
+  const { openModal } = useAuthModalContext();
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -22,7 +24,7 @@ export const HeroSection = () => {
           {t('landing.hero.subtitle')}
         </Typography>
         <div className="flex flex-col items-start gap-3">
-          <Button variant="inverted" size="lg" className="rounded-full px-8 text-base">
+          <Button variant="inverted" size="lg" className="rounded-full px-8 text-base" onClick={() => openModal('register')}>
             {t('landing.hero.cta')}
           </Button>
           <Typography variant="small" className="text-white/60 font-normal">

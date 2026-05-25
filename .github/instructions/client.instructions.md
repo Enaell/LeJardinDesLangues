@@ -41,6 +41,7 @@ import { Input } from '@core/components/ui/input';
 import { Card, CardContent } from '@core/components/ui/card';
 import { Badge } from '@core/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@core/components/ui/tabs';
+import { Dialog, DialogContent, DialogTitle, DialogClose } from '@core/components/ui/dialog';
 import { Avatar, AvatarImage, AvatarFallback } from '@core/components/ui/avatar';
 import { Progress } from '@core/components/ui/progress';
 import { Switch } from '@core/components/ui/switch';
@@ -56,6 +57,7 @@ import { TestimonialCard } from '@core/components/ui/testimonial-card';
 import { CtaBanner } from '@core/components/ui/cta-banner';
 import { Fab } from '@core/components/ui/fab';
 import { Typography } from '@core/components/ui/typography';
+import { LanguageSelector } from '@core/components/ui/language-selector';
 import { cn } from '@/lib/utils'; // utilitaire clsx
 ```
 

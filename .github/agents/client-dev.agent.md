@@ -48,9 +48,9 @@ export default function MyComponent() { ... }
 
 ### Composants UI disponibles (`@core/components/ui/`)
 
-**Shadcn/base-ui :** `Button`, `Input`, `Card`+sous-composants, `Badge`, `Label`, `Separator`, `Select`, `Checkbox`, `Tabs`, `Progress`, `Switch`, `Avatar`, `Pagination`
+**Shadcn/base-ui :** `Button`, `Input`, `Card`+sous-composants, `Badge`, `Label`, `Separator`, `Select`, `Checkbox`, `Tabs`, `Dialog`+sous-composants, `Progress`, `Switch`, `Avatar`, `Pagination`
 
-**Custom Jardin des Langues :** `Typography` (variants `h1`–`h6`, `p`, `lead`, `large`, `small`, `muted`, `blockquote`, `code` — prop `as` pour override sémantique), `LevelBadge` (variantes: new/popular/beginner/intermediate/advanced), `StarRating` (0–5 étoiles, readonly ou interactif), `Stepper` (étapes numérotées), `SearchInput` (barre recherche + filtre), `FeatureCard` (image+titre+desc), `PersonCard` (avatar+rôle+socials), `TestimonialCard` (citation+auteur), `CtaBanner` (bannière CTA gradient), `Fab` (bouton action flottant)
+**Custom Jardin des Langues :** `Typography` (variants `h1`–`h6`, `p`, `lead`, `large`, `small`, `muted`, `blockquote`, `code` — prop `as` pour override sémantique), `LevelBadge` (variantes: new/popular/beginner/intermediate/advanced), `StarRating` (0–5 étoiles, readonly ou interactif), `Stepper` (étapes numérotées), `SearchInput` (barre recherche + filtre), `FeatureCard` (image+titre+desc), `PersonCard` (avatar+rôle+socials), `TestimonialCard` (citation+auteur), `CtaBanner` (bannière CTA gradient), `Fab` (bouton action flottant), `LanguageSelector` (sélecteur langue du site, tailles `sm`/`default`)
 ### Règle absolue : toujours `@core/components/ui/` en premier
 
 > Ne jamais écrire un `<button>`, `<a>`, `<h1>`–`<h6>` ou `<p>` raw quand un composant `core/ui` existe.

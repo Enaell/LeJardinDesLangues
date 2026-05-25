@@ -86,6 +86,24 @@ Le dossier `core` contient tous les éléments partagés entre les features :
 - **`notifications/`** : Système de notifications toast (`NotificationProvider`, `GlobalNotifications`, `useNotify`)
 - **`ui/`** : Composants UI (shadcn/base-ui + custom) dans `src/core/components/ui/` — voir `docs/client/THEME.md` pour la liste complète
 
+### 🌐 Providers au niveau racine (`routes/__root.tsx`)
+
+Les providers qui doivent être accessibles sur toutes les routes sont placés dans `__root.tsx`, autour du `<Layout>` :
+
+| Provider | Source | Rôle |
+|----------|--------|------|
+| `AuthModalProvider` | `@features/auth/components/AuthModalContext` | Expose `openModal(tab?)` et `closeModal()` via `useAuthModalContext()` ; rend le composant `AuthModal` une seule fois pour toute l'app |
+
+**Pattern context + modale :** quand plusieurs composants distants dans l'arbre (ex. `HeroSection` et `AppBarLandingNav`) doivent déclencher la même modale, utiliser un context provider placé au niveau racine :
+
+```typescript
+// Ouvrir la modale depuis n'importe quel composant
+import { useAuthModalContext } from '@features/auth';
+const { openModal } = useAuthModalContext();
+<Button onClick={() => openModal('login')}>Se connecter</Button>
+<Button onClick={() => openModal('register')}>S'inscrire</Button>
+```
+
 ### 📖 Storybook
 
 Chaque composant de `core/components/ui/` a une story dans `client/.storybook/stories/`.
@@ -156,8 +174,9 @@ Fonctions utilitaires :
 - **Constants** : Constantes de l'application
 
 ### 🌍 i18n
-- **Config** : Configuration de l'internationalisation
+- **Config** : Configuration de l'internationalisation (`config.ts`)
 - **Locales** : Fichiers de traduction (fr, en, zh) — clés organisées par domaine : `app`, `navigation`, `landing`, `features`, `auth`, `common`, `errors`
+- **`languages.ts`** : Constante partagée `LANGUAGE_OPTIONS` (labels en langue native : Français, English, 中文) et type `LanguageCode = 'fr' | 'en' | 'zh'` — à utiliser partout où une liste de langues est nécessaire (sélecteurs de langue dans les formulaires, profil, switcher de langue UI)
 
 ### 🗺️ routes.config.ts
 

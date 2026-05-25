@@ -92,27 +92,50 @@ src/core/i18n/locales/
 
 ## Composants
 
-> Il n'existe pas de composant `LanguageSelector` générique dans `@core/components`. Pour changer de langue, utiliser directement `changeLanguage` exposé par `useTranslation` :
+### LanguageSelector
+
+Le composant `LanguageSelector` est disponible dans `@core/components/ui/language-selector` et ré-exporté via `@core`.
 
 ```typescript
-const { changeLanguage, currentLanguage } = useTranslation();
+import { LanguageSelector } from '@core/components/ui/language-selector';
 
-// Exemple avec les composants shadcn/ui
-import { Button } from '@/components/ui/button';
+// Taille par défaut (h-8)
+<LanguageSelector />
 
-const languages = ['fr', 'en', 'zh'];
+// Compact pour l'AppBar (h-7)
+<LanguageSelector size="sm" />
+```
+
+**Props :** `{ size?: 'sm' | 'default'; className?: string }`
+
+Utilise `LANGUAGE_OPTIONS` de `@core/i18n/languages` et `useTranslation` de `@core/hooks` en interne.
+
+### LANGUAGE_OPTIONS
+
+La liste des langues supportées est centralisée dans `@core/i18n/languages.ts`. Les labels utilisent le nom **en langue native** (endonyme) :
+
+```typescript
+import { LANGUAGE_OPTIONS, type LanguageCode } from '@core/i18n/languages';
+// [{ value: 'fr', label: 'Français' }, { value: 'en', label: 'English' }, { value: 'zh', label: '中文' }]
+```
+
+Toujours importer `LANGUAGE_OPTIONS` depuis `@core/i18n/languages` plutôt que de redéfinir un tableau local.
+
+```typescript
+import { LANGUAGE_OPTIONS } from '@core/i18n/languages';
+import { Button } from '@core/components/ui/button';
 
 export const LanguageSwitcher = () => {
   const { changeLanguage, currentLanguage } = useTranslation();
   return (
     <div className="flex gap-2">
-      {languages.map((lang) => (
+      {LANGUAGE_OPTIONS.map((lang) => (
         <Button
-          key={lang}
-          variant={currentLanguage === lang ? 'default' : 'outline'}
-          onClick={() => changeLanguage(lang)}
+          key={lang.value}
+          variant={currentLanguage === lang.value ? 'default' : 'outline'}
+          onClick={() => changeLanguage(lang.value)}
         >
-          {lang.toUpperCase()}
+          {lang.label}
         </Button>
       ))}
     </div>
