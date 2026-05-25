@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@core/components/ui/avatar"
 import { Card, CardContent } from "@core/components/ui/card";
 import { Separator } from "@core/components/ui/separator";
 import { StarRating } from "@core/components/ui/star-rating";
+import { Typography } from "@core/components/ui/typography";
 
 type TestimonialCardProps = {
   quote: string;
@@ -33,9 +34,9 @@ export const TestimonialCard = ({
         </span>
 
         {/* Quote text */}
-        <p className="text-sm italic text-foreground leading-relaxed -mt-3">
+        <Typography variant="p" className="text-sm italic -mt-3">
           {quote}
-        </p>
+        </Typography>
 
         {/* Rating */}
         {rating !== undefined && (
@@ -55,9 +56,9 @@ export const TestimonialCard = ({
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <span className="text-sm font-medium">{authorName}</span>
+            <Typography variant="small" as="span">{authorName}</Typography>
             {authorRole && (
-              <span className="text-xs text-muted-foreground">{authorRole}</span>
+              <Typography variant="muted" as="span" className="text-xs">{authorRole}</Typography>
             )}
           </div>
         </div>

@@ -1,5 +1,7 @@
 import heroBackground from '@/assets/HeroBackground.png';
 import { useTranslation } from '@core/hooks';
+import { Button } from '@core/components/ui/button';
+import { Typography } from '@core/components/ui/typography';
 
 export const HeroSection = () => {
   const { t } = useTranslation();
@@ -13,19 +15,19 @@ export const HeroSection = () => {
       />
       <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-transparent" />
       <div className="relative z-10 px-6 md:pl-[10%] md:pr-4 max-w-2xl">
-        <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
+        <Typography variant="h1" className="text-5xl md:text-6xl lg:text-7xl text-white mb-6">
           {t('landing.hero.title')}
-        </h1>
-        <p className="text-lg text-white/80 mb-8 max-w-md leading-relaxed">
+        </Typography>
+        <Typography variant="lead" className="text-white/80 mb-8 max-w-md">
           {t('landing.hero.subtitle')}
-        </p>
+        </Typography>
         <div className="flex flex-col items-start gap-3">
-          <button className="bg-white text-primary font-semibold px-8 py-3 rounded-full text-base hover:bg-white/90 transition-all duration-200 shadow-lg">
+          <Button variant="inverted" size="lg" className="rounded-full px-8 text-base">
             {t('landing.hero.cta')}
-          </button>
-          <p className="text-sm text-white/60">
+          </Button>
+          <Typography variant="small" className="text-white/60 font-normal">
             {t('landing.hero.ctaSubtext')}
-          </p>
+          </Typography>
         </div>
       </div>
     </section>

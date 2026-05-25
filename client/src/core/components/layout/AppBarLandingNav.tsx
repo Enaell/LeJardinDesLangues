@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import { useTranslation } from '@core/hooks';
 import { LANDING_NAV_ITEMS, ROUTES } from '@core/routes.config';
+import { Button, buttonVariants } from '@core/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export const AppBarLandingNav = () => {
   const { t } = useTranslation();
@@ -15,24 +17,25 @@ export const AppBarLandingNav = () => {
   return (
     <nav className="hidden md:flex items-center gap-1 flex-grow">
       {LANDING_NAV_ITEMS.map((item) => (
-        <button
+        <Button
           key={item.sectionId}
+          variant="ghost-white"
+          size="sm"
           onClick={() => handleScrollTo(item.sectionId)}
-          className="text-white/90 hover:text-white hover:bg-white/10 px-4 py-2 rounded-md text-sm font-medium transition-all"
         >
           {t(item.translationKey)}
-        </button>
+        </Button>
       ))}
       <div className="ml-auto flex items-center gap-2">
         <Link
           to={ROUTES.HOME}
-          className="text-white/90 hover:text-white hover:bg-white/10 px-4 py-2 rounded-md text-sm font-medium transition-all"
+          className={cn(buttonVariants({ variant: 'ghost-white', size: 'sm' }))}
         >
           {t('auth.login.submitButton')}
         </Link>
         <Link
           to={ROUTES.HOME}
-          className="bg-white text-primary hover:bg-white/90 rounded-full px-5 py-2 text-sm font-semibold transition-all"
+          className={cn(buttonVariants({ variant: 'inverted', size: 'sm' }), 'rounded-full px-5')}
         >
           {t('landing.cta')}
         </Link>

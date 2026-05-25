@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@core/components/ui/card";
+import { Typography } from "@core/components/ui/typography";
 
 type FeatureCardProps = {
   image?: string | React.ReactNode;
@@ -41,11 +42,9 @@ export const FeatureCard = ({
         </div>
       )}
       <CardContent className="flex flex-col items-center gap-2 px-6 py-4 text-center">
-        <h3 className="font-heading text-lg font-semibold leading-snug">
-          {title}
-        </h3>
+        <Typography variant="h5">{title}</Typography>
         {description && (
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <Typography variant="muted">{description}</Typography>
         )}
         {children}
       </CardContent>

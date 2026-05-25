@@ -1,7 +1,8 @@
 ---
 description: "Use when developing, creating, modifying or reviewing frontend/client React components, pages, routes, hooks, styles, UI, Vite config, TanStack Router, TanStack Query, TanStack Form, shadcn/ui, Tailwind, i18n, or any file under client/src/."
 name: "Client Dev"
-tools: [read, edit, search, execute, todo]
+tools: [read, edit, search, execute, todo, agent]
+agents: ["Doc Keeper"]
 argument-hint: "Describe the frontend feature or change to implement."
 ---
 
@@ -43,13 +44,62 @@ export default function MyComponent() { ... }
 - shadcn/ui pour composants interactifs — tous dans `@core/components/ui/`
 - Pas de `sx` prop (pas de Material UI)
 - Balises sémantiques HTML pour les conteneurs (`<header>`, `<main>`, `<nav>`, `<section>`)
-- Titres : `className="font-heading"` (Playfair Display Variable)
+- Titres & texte : composant `<Typography variant="...">` (voir règle ci-dessous) — jamais `<h1>`–`<h6>` ou `<p>` raw
 
 ### Composants UI disponibles (`@core/components/ui/`)
 
 **Shadcn/base-ui :** `Button`, `Input`, `Card`+sous-composants, `Badge`, `Label`, `Separator`, `Select`, `Checkbox`, `Tabs`, `Progress`, `Switch`, `Avatar`, `Pagination`
 
-**Custom LinguaGarden :** `LevelBadge` (variantes: new/popular/beginner/intermediate/advanced), `StarRating` (0–5 étoiles, readonly ou interactif), `Stepper` (étapes numérotées), `SearchInput` (barre recherche + filtre), `FeatureCard` (image+titre+desc), `PersonCard` (avatar+rôle+socials), `TestimonialCard` (citation+auteur), `CtaBanner` (bannière CTA gradient), `Fab` (bouton action flottant)
+**Custom Jardin des Langues :** `Typography` (variants `h1`–`h6`, `p`, `lead`, `large`, `small`, `muted`, `blockquote`, `code` — prop `as` pour override sémantique), `LevelBadge` (variantes: new/popular/beginner/intermediate/advanced), `StarRating` (0–5 étoiles, readonly ou interactif), `Stepper` (étapes numérotées), `SearchInput` (barre recherche + filtre), `FeatureCard` (image+titre+desc), `PersonCard` (avatar+rôle+socials), `TestimonialCard` (citation+auteur), `CtaBanner` (bannière CTA gradient), `Fab` (bouton action flottant)
+### Règle absolue : toujours `@core/components/ui/` en premier
+
+> Ne jamais écrire un `<button>`, `<a>`, `<h1>`–`<h6>` ou `<p>` raw quand un composant `core/ui` existe.
+
+**Boutons :**
+```typescript
+// ✅ Toujours
+<Button variant="ghost-white" size="icon"><Menu /></Button>
+
+// ❌ Jamais
+<button className="p-2 rounded-md text-white ..."><Menu /></button>
+```
+
+**Liens qui ressemblent à des boutons :**
+```typescript
+import { buttonVariants } from '@core/components/ui/button';
+import { cn } from '@/lib/utils';
+
+// ✅ buttonVariants() pour les <Link> TanStack Router avec style bouton
+<Link to="/register" className={cn(buttonVariants({ variant: 'inverted', size: 'sm' }), 'rounded-full')}>
+  Commencer
+</Link>
+```
+
+**Variants `Button` disponibles :**
+| Variant | Usage |
+|---------|-------|
+| `default` | Bouton principal (bg-primary) |
+| `outline` | Secondaire avec bordure |
+| `secondary` | Fond sauge clair |
+| `ghost` | Transparent, hover muted — sur fonds clairs |
+| `ghost-white` | Transparent, texte/hover blanc — sur fonds sombres/transparents (AppBar landing) |
+| `inverted` | Fond blanc, texte primary — CTA sur hero/bandeaux sombres |
+| `destructive` | Actions destructives |
+| `link` | Lien souligné |
+
+**Typographie — `<Typography>` :**
+```typescript
+import { Typography } from '@core/components/ui/typography';
+
+// ✅ Toujours
+<Typography variant="h1">Titre principal</Typography>
+<Typography variant="lead" className="text-white/80">Sous-titre hero</Typography>
+<Typography variant="small" as="span">texte inline</Typography>
+
+// ❌ Jamais
+<h1 className="font-heading text-4xl ...">Titre</h1>
+<p className="text-muted-foreground ...">Texte</p>
+```
 
 ### Alias de chemins
 ```
@@ -67,6 +117,8 @@ src/
 │   ├── services/
 │   ├── types/
 │   └── index.ts      ← exports publics
+├── features/landing/   ← landing page publique
+│   └── components/HeroSection.tsx  (section hero plein écran, HeroBackground.png)
 ├── core/
 │   ├── api/          ← hooks + types générés par orval (NE PAS modifier manuellement)
 │   │   ├── authentification/authentification.ts
@@ -76,13 +128,30 @@ src/
 │   │   └── model/        ← AuthResponseDto, LoginDto, RegisterDto, UserResponseDto...
 │   ├── components/
 │   │   ├── layout/       ← Layout, AppBar, Footer
+│   │   │   ├── AppBar          (bascule landing/app via useRouterState)
+│   │   │   ├── AppBarDesktop   (nav app : Dictionary, Flashcards, Exercises, Community)
+│   │   │   ├── AppBarMobile    (nav app mobile)
+│   │   │   ├── AppBarLandingNav        (nav landing desktop : scroll vers sections)
+│   │   │   └── AppBarLandingNavMobile  (nav landing mobile)
 │   │   ├── notifications/ ← GlobalNotifications, useNotify
-│   │   └── ui/           ← TOUS les composants UI (shadcn + custom LinguaGarden)
+│   │   └── ui/           ← TOUS les composants UI (shadcn + custom Jardin des Langues)
 │   ├── services/apiClient.ts  ← fetch custom (credentials, erreurs typées, intercepteur 401 → refresh)
 │   └── hooks, utils, types, i18n
 ├── lib/utils.ts      ← cn()
 └── routes/           ← TanStack Router
 ```
+
+### AppBar — comportement dual
+
+L'`AppBar` détecte la route via `useRouterState` et adapte son rendu :
+
+| Route | Position | Style | Composants nav |
+|-------|----------|-------|----------------|
+| `/` (landing) | `absolute top-0` | transparent, `text-white` | `AppBarLandingNav` + `AppBarLandingNavMobile` |
+| Autres | `sticky top-0` | `bg-primary text-primary-foreground` | `AppBarDesktop` + `AppBarMobile` |
+
+`LANDING_NAV_ITEMS` (dans `routes.config.ts`) : sections `#features`, `#languages`, `#about`, `#team`  
+`APP_NAV_ITEMS` (dans `routes.config.ts`) : Dictionary, Flashcards, Exercises, Community
 
 ## Storybook
 
@@ -143,10 +212,25 @@ make generate-api   # depuis la racine (requiert la DB)
 - **i18n** : `client/docs/I18N_GUIDE.md`
 - **Formulaires** : `.github/prompts/tanstack-form-guidelines.prompt.md`
 
+## Après chaque tâche
+
+Appeler **Doc Keeper** si au moins une condition du tableau est vraie :
+
+| Ce qui a changé | Doc Keeper requis ? | Cibles à mettre à jour |
+|---|---|---|
+| Nouvelle feature ajoutée dans `src/features/` | ✅ Oui | `client-dev.agent.md`, `docs/client/ARCHITECTURE.md` |
+| Nouveau composant dans `core/components/ui/` | ✅ Oui | `client-dev.agent.md`, `docs/client/THEME.md` |
+| Nouveau composant dans `core/components/layout/` | ✅ Oui | `client-dev.agent.md`, `docs/client/ARCHITECTURE.md` |
+| Nouveau hook ou service dans `core/` | ✅ Oui | `client-dev.agent.md`, `docs/client/ARCHITECTURE.md` |
+| Nouvelle convention de code établie | ✅ Oui | `client-dev.agent.md` + `.github/instructions/client.instructions.md` + `copilot-instructions.md` |
+| Dépendance ajoutée ou mise à jour | ✅ Oui | `docs/VERSIONS.md` |
+| Bugfix interne sans impact archi | ❌ Non | — |
+| Refacto sans nouveau concept | ❌ Non | — |
+
 ## Approche
 1. Lire les fichiers existants de la feature concernée
 2. Vérifier les types et les composants déjà disponibles
 3. Implémenter en respectant les conventions ci-dessus
 4. Vérifier qu'il n'y a pas d'erreurs TypeScript
 5. Si un composant `core/components/ui/` a été créé ou modifié → créer/mettre à jour sa story Storybook
-6. Notifier **Doc Keeper** si : nouveau composant core, nouvelle convention, dépendance ajoutée/modifiée, changement d'architecture
+6. Appliquer la section **Après chaque tâche** ci-dessus → déléguer à **Doc Keeper** si nécessaire

@@ -36,7 +36,7 @@ interface MyComponentProps { ... }
 ### Imports UI
 ```typescript
 // Composants UI (tous dans @core/components/ui/)
-import { Button } from '@core/components/ui/button';
+import { Button, buttonVariants } from '@core/components/ui/button';
 import { Input } from '@core/components/ui/input';
 import { Card, CardContent } from '@core/components/ui/card';
 import { Badge } from '@core/components/ui/badge';
@@ -45,7 +45,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@core/components/ui/avatar'
 import { Progress } from '@core/components/ui/progress';
 import { Switch } from '@core/components/ui/switch';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink } from '@core/components/ui/pagination';
-// Composants custom LinguaGarden
+// Composants custom Jardin des Langues
 import { LevelBadge } from '@core/components/ui/level-badge';
 import { StarRating } from '@core/components/ui/star-rating';
 import { Stepper } from '@core/components/ui/stepper';
@@ -55,12 +55,60 @@ import { PersonCard } from '@core/components/ui/person-card';
 import { TestimonialCard } from '@core/components/ui/testimonial-card';
 import { CtaBanner } from '@core/components/ui/cta-banner';
 import { Fab } from '@core/components/ui/fab';
+import { Typography } from '@core/components/ui/typography';
 import { cn } from '@/lib/utils'; // utilitaire clsx
 ```
 
+### Règle absolue : toujours `@core/components/ui/` en premier
+
+> **Ne jamais créer un élément raw quand un composant `core/ui` existe.**
+
+```typescript
+// ✅ Bouton — toujours <Button> ou buttonVariants()
+<Button variant="ghost-white" size="icon" onClick={fn}><Menu /></Button>
+<Link className={cn(buttonVariants({ variant: 'inverted' }), 'rounded-full')}>CTA</Link>
+
+// ❌ Jamais de <button> ou <a> raw pour des actions/navigation
+<button className="bg-white text-primary px-8 ...">CTA</button>
+<a href="/" className="hover:bg-muted ...">Lien</a>
+
+// ✅ Texte — toujours <Typography>
+<Typography variant="h1">Titre principal</Typography>
+<Typography variant="lead" className="text-white/80">Sous-titre hero</Typography>
+<Typography variant="small" as="span">texte inline</Typography>
+
+// ❌ Jamais de balises texte raw
+<h1 className="font-heading text-4xl ...">Titre</h1>
+<p className="text-muted-foreground ...">Texte</p>
+```
+
+**Variants `Button` disponibles :**
+| Variant | Usage |
+|---------|-------|
+| `default` | Bouton principal (bg-primary) |
+| `outline` | Bouton secondaire avec bordure |
+| `secondary` | Fond sauge clair |
+| `ghost` | Transparent, hover muted — sur fonds clairs |
+| `ghost-white` | Transparent, texte/hover blanc — sur fonds sombres/transparents |
+| `inverted` | Fond blanc, texte primary — CTA sur hero/bandeaux sombres |
+| `destructive` | Actions destructives |
+| `link` | Lien souligné |
+
+**Pattern `Link` + `buttonVariants` (quand la navigation doit avoir l'apparence d'un bouton) :**
+```typescript
+import { buttonVariants } from '@core/components/ui/button';
+import { cn } from '@/lib/utils';
+
+<Link to="/register" className={cn(buttonVariants({ variant: 'inverted', size: 'sm' }), 'rounded-full')}>
+  Commencer
+</Link>
+```
+
 ### Typographie
-- `font-heading` (Playfair Display Variable) pour les titres : `<h1 className="font-heading">...</h1>`
-- `font-sans` (Geist Variable) pour le texte UI/boutons (par défaut)
+- Utiliser `<Typography variant="...">` pour tous les titres et textes — **jamais de `<h1>`–`<h6>` ou `<p>` raw**
+- Prop `as` pour séparer la sémantique HTML du style visuel : `<Typography variant="h2" as="h3">`
+- `font-heading` (Playfair Display Variable) → variants `h1`–`h6`
+- `font-sans` (Geist Variable) → variants `p`, `lead`, `large`, `small`, `muted`, `blockquote`, `code`
 - Ne pas importer les fonts manuellement — déjà configurées dans `index.css`
 
 ### Storybook
@@ -85,6 +133,7 @@ const form = useForm({ defaultValues: { email: '' }, onSubmit: ... });
 ```
 src/
 ├── features/<feature>/{components,hooks,services,types,index.ts}
+├── features/landing/   ← landing page publique (HeroSection, sections marketing)
 ├── core/
 │   ├── api/          ← hooks + types générés (orval — ne pas modifier manuellement)
 │   │   ├── authentification/
@@ -93,14 +142,21 @@ src/
 │   │   ├── utilisateurs/
 │   │   └── model/        ← types TypeScript (AuthResponseDto, LoginDto, etc.)
 │   ├── components/
-│   │   ├── layout/       ← Layout, AppBar, Footer
+│   │   ├── layout/       ← Layout, AppBar (dual-mode), Footer
 │   │   ├── notifications/ ← GlobalNotifications, useNotify
-│   │   └── ui/           ← TOUS les composants UI (shadcn + custom LinguaGarden)
+│   │   └── ui/           ← TOUS les composants UI (shadcn + custom Jardin des Langues)
 │   ├── hooks, services, utils, types, i18n
 │   └── services/apiClient.ts  ← fetch custom (credentials, erreurs typées, intercepteur 401 → refresh)
 ├── lib/utils.ts        ← cn() de shadcn
 └── routes/             ← TanStack Router (un fichier par route)
 ```
+
+### AppBar dual-mode
+L'`AppBar` adapte son rendu selon `location.pathname` (via `useRouterState`) :
+- **`/` (landing)** : `absolute top-0`, transparent, `text-white`, nav vers les sections de la landing (`#features`, `#languages`, `#about`, `#team`) via `LANDING_NAV_ITEMS`
+- **Autres routes** : `sticky top-0`, `bg-primary`, `text-primary-foreground`, nav vers les modules app via `APP_NAV_ITEMS`
+
+Les deux configs sont dans `src/core/routes.config.ts`.
 
 ## Client API généré (orval)
 

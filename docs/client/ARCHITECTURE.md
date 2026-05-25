@@ -10,6 +10,7 @@ Cette application utilise une architecture **orientée fonctionnalités** (featu
 src/
 ├── features/           # 🎯 Fonctionnalités métier
 │   ├── auth/          # Authentification et autorisation
+│   ├── landing/       # Landing page publique (hero, sections marketing)
 │   ├── dictionary/    # Recherche et consultation du dictionnaire
 │   ├── flashcards/    # Gestion et étude des cartes mémoire
 │   ├── exercises/     # Exercices et jeux d'apprentissage
@@ -64,6 +65,7 @@ features/example/
 | Feature | Description | Statut |
 |---------|-------------|--------|
 | `auth` | Authentification, connexion, inscription | 🚧 En développement |
+| `landing` | Landing page publique (hero, sections marketing) | 🚧 En développement |
 | `dictionary` | Recherche de mots, définitions, traductions | 🚧 En développement |
 | `flashcards` | Création et étude de cartes mémoire | 🚧 En développement |
 | `exercises` | Exercices interactifs d'apprentissage | 🚧 En développement |
@@ -76,6 +78,11 @@ Le dossier `core` contient tous les éléments partagés entre les features :
 
 ### 🎨 Components
 - **`layout/`** : Composants de mise en page (`Layout`, `AppBar`, `Footer`) — Tailwind pur
+  - `AppBar` : bascule automatiquement entre deux modes selon la route :
+    - **mode landing** (`/`) : `absolute`, transparent, blanc, `AppBarLandingNav` + `AppBarLandingNavMobile`
+    - **mode app** (autres routes) : `sticky`, fond `bg-primary`, `AppBarDesktop` + `AppBarMobile`
+  - `AppBarLandingNav` / `AppBarLandingNavMobile` : liens scroll-to-section (`#features`, `#languages`, `#about`, `#team`) + bouton CTA
+  - `AppBarDesktop` / `AppBarMobile` : navigation entre modules de l'app (Dictionary, Flashcards, Exercises, Community)
 - **`notifications/`** : Système de notifications toast (`NotificationProvider`, `GlobalNotifications`, `useNotify`)
 - **`ui/`** : Composants UI (shadcn/base-ui + custom) dans `src/core/components/ui/` — voir `docs/client/THEME.md` pour la liste complète
 
@@ -150,7 +157,24 @@ Fonctions utilitaires :
 
 ### 🌍 i18n
 - **Config** : Configuration de l'internationalisation
-- **Locales** : Fichiers de traduction (fr, en, zh)
+- **Locales** : Fichiers de traduction (fr, en, zh) — clés organisées par domaine : `app`, `navigation`, `landing`, `features`, `auth`, `common`, `errors`
+
+### 🗺️ routes.config.ts
+
+Fichier central de configuration de la navigation (`src/core/routes.config.ts`) :
+
+```typescript
+// Constantes de routes
+export const ROUTES = { HOME, DICTIONARY, FLASHCARDS, EXERCISES, COMMUNITY, PROFILE };
+
+// Items pour la navigation in-app (mode "app")
+export type NavigationItem = { path, icon, translationKey };
+export const APP_NAV_ITEMS: NavigationItem[];   // Dictionary, Flashcards, Exercises, Community
+
+// Items pour la landing page (scroll vers sections)
+export type LandingNavItem = { sectionId, translationKey };
+export const LANDING_NAV_ITEMS: LandingNavItem[]; // #features, #languages, #about, #team
+```
 
 ## 📝 Conventions de nommage
 

@@ -1,7 +1,8 @@
 ---
 description: "Use when developing, creating, modifying or reviewing backend/server NestJS modules, controllers, services, guards, decorators, Prisma schema, database migrations, REST API endpoints, authentication (JWT/OAuth), or any file under server/src/ or server/prisma/."
 name: "Server Dev"
-tools: [read, edit, search, execute, todo]
+tools: [read, edit, search, execute, todo, agent]
+agents: ["Doc Keeper"]
 argument-hint: "Describe the backend feature, API endpoint or Prisma change to implement."
 ---
 
@@ -80,11 +81,16 @@ npm run generate:openapi   # génère openapi.json à la racine
 
 ## Après chaque tâche
 
-Notifier **Doc Keeper** si l'une de ces conditions est vraie :
-- Un nouveau module NestJS a été ajouté ou modifié structurellement
-- Le schéma Prisma a été modifié
-- Une nouvelle convention de code a été établie
-- Une dépendance a été ajoutée ou mise à jour
+Appeler **Doc Keeper** si au moins une condition du tableau est vraie :
+
+| Ce qui a changé | Doc Keeper requis ? | Cibles à mettre à jour |
+|---|---|---|
+| Nouveau module NestJS ajouté ou modifié structurellement | ✅ Oui | `server-dev.agent.md`, `docs/server/ARCHITECTURE.md` |
+| Schéma Prisma modifié | ✅ Oui | `server-dev.agent.md`, `.github/instructions/prisma.instructions.md`, `docs/server/ARCHITECTURE.md` |
+| Nouvelle convention de code établie | ✅ Oui | `server-dev.agent.md` + `.github/instructions/server.instructions.md` + `copilot-instructions.md` |
+| Dépendance ajoutée ou mise à jour | ✅ Oui | `docs/VERSIONS.md` |
+| Bugfix interne sans impact archi | ❌ Non | — |
+| Refacto sans nouveau concept | ❌ Non | — |
 
 ## Contraintes
 - NE PAS modifier les fichiers hors de `server/`
@@ -104,3 +110,4 @@ Notifier **Doc Keeper** si l'une de ces conditions est vraie :
 3. Implémenter en respectant l'architecture NestJS
 4. Ajouter les décorateurs de validation sur les DTOs
 5. Vérifier qu'il n'y a pas d'erreurs TypeScript (`server/tsconfig.json`)
+6. Appliquer la section **Après chaque tâche** ci-dessus → déléguer à **Doc Keeper** si nécessaire

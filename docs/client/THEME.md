@@ -2,7 +2,7 @@
 
 ## Vue d'ensemble
 
-Le design de "Le Jardin des Langues" s'inspire de la nature et de la croissance ("LinguaGarden" UI Kit). Le thème est géré via les **CSS variables shadcn/ui** définies dans `src/index.css`, avec style `base-nova` et primitives `@base-ui/react`.
+Le design de "Le Jardin des Langues" s'inspire de la nature et de la croissance ("Jardin des Langues" UI Kit). Le thème est géré via les **CSS variables shadcn/ui** définies dans `src/index.css`, avec style `base-nova` et primitives `@base-ui/react`.
 
 ## Typographie
 
@@ -12,11 +12,52 @@ Le design de "Le Jardin des Langues" s'inspire de la nature et de la croissance 
 | Corps de texte | **Lora** | — | `@fontsource/lora` |
 | UI / Boutons (`font-sans`) | **Geist Variable** | `--font-sans` | `@fontsource-variable/geist` |
 
-Utilisation :
+> **Règle** : utiliser le composant `<Typography>` plutôt que les balises `<h1>`–`<h6>` ou `<p>` raw — voir section [Composant Typography](#composant-typography) ci-dessous.
+
+### Composant Typography
+
+Le composant `Typography` (`@core/components/ui/typography`) centralise tous les styles textuels via CVA. Il expose 13 variants couvrant les titres et le corps de texte.
+
+**Fonts :**
+- `font-heading` (Playfair Display Variable) → variants `h1`–`h6`
+- `font-sans` (Geist Variable) → variants `p`, `lead`, `large`, `small`, `muted`, `blockquote`, `code`
+
+**Variants :**
+
+| Variant | Classes Tailwind | Élément par défaut |
+|---------|-----------------|-------------------|
+| `h1` | `font-heading scroll-m-20 text-4xl font-bold tracking-tight leading-tight` | `<h1>` |
+| `h2` | `font-heading scroll-m-20 text-3xl font-bold tracking-tight leading-tight` | `<h2>` |
+| `h3` | `font-heading scroll-m-20 text-2xl font-semibold leading-snug` | `<h3>` |
+| `h4` | `font-heading scroll-m-20 text-xl font-semibold leading-snug` | `<h4>` |
+| `h5` | `font-heading scroll-m-20 text-lg font-semibold` | `<h5>` |
+| `h6` | `font-heading scroll-m-20 text-base font-semibold` | `<h6>` |
+| `p` | `leading-relaxed` | `<p>` |
+| `lead` | `text-xl text-muted-foreground leading-relaxed` | `<p>` |
+| `large` | `text-lg font-semibold` | `<p>` |
+| `small` | `text-sm font-medium leading-none` | `<small>` |
+| `muted` | `text-sm text-muted-foreground` | `<p>` |
+| `blockquote` | `border-l-2 border-primary/30 pl-6 italic text-muted-foreground` | `<blockquote>` |
+| `code` | `relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold` | `<code>` |
+
+**Usage :**
 ```tsx
-<h1 className="font-heading text-2xl">Titre en Playfair Display</h1>
-<p className="font-sans text-base">Corps de texte Geist</p>
+import { Typography } from '@core/components/ui/typography';
+
+// Standard
+<Typography variant="h1">Titre principal</Typography>
+<Typography variant="muted">Texte secondaire</Typography>
+
+// Prop `as` — sépare la sémantique HTML du style visuel
+<Typography variant="small" as="span">texte inline</Typography>
+<Typography variant="h2" as="h3">style h2, sémantique h3</Typography>
+
+// Sur fond sombre
+<Typography variant="h1" className="text-white">Hero title</Typography>
+<Typography variant="lead" className="text-white/80">Sous-titre</Typography>
 ```
+
+> **Règle** : ne jamais utiliser `<h1>`–`<h6>` ou `<p>` raw — toujours `<Typography variant="...">`. La story Storybook est dans `.storybook/stories/typography.stories.tsx`.
 
 ## Système de couleurs
 
@@ -77,7 +118,7 @@ Tous les composants UI sont dans `@core/components/ui/` et s'importent via `@cor
 
 | Composant | Fichier | Description |
 |-----------|---------|-------------|
-| `Button`, `buttonVariants` | `button` | Bouton avec variants (default, outline, secondary, ghost, destructive, link) |
+| `Button`, `buttonVariants` | `button` | Bouton avec variants (voir tableau ci-dessous) |
 | `Input` | `input` | Champ de saisie |
 | `Card`, `CardHeader`, `CardTitle`, `CardContent`, `CardDescription`, `CardAction`, `CardFooter` | `card` | Carte composable |
 | `Badge`, `badgeVariants` | `badge` | Badge/étiquette |
@@ -91,7 +132,44 @@ Tous les composants UI sont dans `@core/components/ui/` et s'importent via `@cor
 | `Avatar`, `AvatarImage`, `AvatarFallback` | `avatar` | Avatar utilisateur |
 | `Pagination`, `PaginationContent`, `PaginationItem`, `PaginationLink`, `PaginationPrevious`, `PaginationNext`, `PaginationEllipsis` | `pagination` | Navigation paginée |
 
-### Composants custom (spécifiques au design LinguaGarden)
+#### Variants Button
+
+| Variant | Style | Usage typique |
+|---------|-------|---------------|
+| `default` | `bg-primary` + texte crème | Bouton principal |
+| `outline` | Bordure + bg transparent | Bouton secondaire |
+| `secondary` | `bg-secondary` sauge clair | Action alternative |
+| `ghost` | Transparent, hover muted | Nav sur fond clair |
+| `ghost-white` | Transparent, texte/hover blanc | Nav AppBar landing, fonds sombres |
+| `inverted` | `bg-white` + `text-primary` | CTA sur hero, bandeaux sombres |
+| `destructive` | Rouge doux | Actions destructives |
+| `link` | Lien souligné | Liens inline |
+
+> **Règle** : ne jamais utiliser `<button>` ou `<a>` raw — toujours `<Button>` ou `buttonVariants()` sur un `<Link>`.
+
+```typescript
+// Lien TanStack Router avec apparence bouton
+import { buttonVariants } from '@core/components/ui/button';
+import { cn } from '@/lib/utils';
+
+<Link to="/register" className={cn(buttonVariants({ variant: 'inverted', size: 'sm' }), 'rounded-full')}>
+  Commencer
+</Link>
+```
+| `Input` | `input` | Champ de saisie |
+| `Card`, `CardHeader`, `CardTitle`, `CardContent`, `CardDescription`, `CardAction`, `CardFooter` | `card` | Carte composable |
+| `Badge`, `badgeVariants` | `badge` | Badge/étiquette |
+| `Label` | `label` | Label accessible |
+| `Separator` | `separator` | Séparateur horizontal/vertical |
+| `Select`, `SelectContent`, `SelectItem`, `SelectTrigger`, `SelectValue` | `select` | Liste déroulante |
+| `Checkbox` | `checkbox` | Case à cocher |
+| `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`, `TabsIndicator` | `tabs` | Navigation par onglets |
+| `Progress` | `progress` | Barre de progression |
+| `Switch` | `switch` | Interrupteur toggle |
+| `Avatar`, `AvatarImage`, `AvatarFallback` | `avatar` | Avatar utilisateur |
+| `Pagination`, `PaginationContent`, `PaginationItem`, `PaginationLink`, `PaginationPrevious`, `PaginationNext`, `PaginationEllipsis` | `pagination` | Navigation paginée |
+
+### Composants custom (spécifiques au design Jardin des Langues)
 
 | Composant | Fichier | Description |
 |-----------|---------|-------------|
@@ -104,6 +182,22 @@ Tous les composants UI sont dans `@core/components/ui/` et s'importent via `@cor
 | `TestimonialCard` | `testimonial-card` | Carte témoignage : citation, auteur, avatar, rating |
 | `CtaBanner` | `cta-banner` | Bannière large avec gradient vert, titre et bouton CTA |
 | `Fab` | `fab` | Floating Action Button circulaire vert, tailles `sm/md/lg` |
+
+## AppBar et styles contextuels
+
+L'`AppBar` adapte automatiquement son style selon la route active :
+
+| Contexte | Position | Fond | Texte / liens |
+|----------|----------|------|---------------|
+| Landing page (`/`) | `absolute` (superposé au hero) | transparent | `text-white`, hover `bg-white/10` |
+| Pages app (autres routes) | `sticky top-0` | `bg-primary` | `text-primary-foreground`, hover `bg-white/10` |
+
+**Hero section landing (`HeroSection`) :**
+- Image de fond : `@/assets/HeroBackground.png` en `object-cover`
+- Overlay : `bg-gradient-to-r from-black/55 via-black/25 to-transparent`
+- Titre : `<Typography variant="h1" className="text-white">` (Playfair Display, bold)
+- Sous-titre : `<Typography variant="lead" className="text-white/80">`
+- CTA : `bg-white text-primary rounded-full px-8 py-3` (pill)
 
 ## Évolutions futures
 

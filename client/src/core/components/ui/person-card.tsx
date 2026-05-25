@@ -3,6 +3,7 @@ import { Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@core/components/ui/avatar";
 import { Card, CardContent } from "@core/components/ui/card";
+import { Typography } from "@core/components/ui/typography";
 
 type SocialLink = {
   type: 'twitter' | 'linkedin' | 'email' | 'github';
@@ -83,10 +84,8 @@ export const PersonCard = ({
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col gap-0.5">
-          <h3 className="font-heading text-base font-semibold">{name}</h3>
-          {role && (
-            <p className="text-sm text-muted-foreground">{role}</p>
-          )}
+          <Typography variant="h6">{name}</Typography>
+          {role && <Typography variant="muted">{role}</Typography>}
         </div>
         {socialLinks && socialLinks.length > 0 && (
           <div className="flex items-center gap-2">

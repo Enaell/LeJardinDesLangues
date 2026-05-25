@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@core/components/ui/button";
+import { Typography } from "@core/components/ui/typography";
 
 type CtaBannerProps = {
   title: string;
@@ -42,13 +43,13 @@ export const CtaBanner = ({
       )}
 
       <div className="relative z-10 mx-auto flex max-w-2xl flex-col items-center gap-4">
-        <h2 className="font-heading text-2xl font-semibold leading-tight sm:text-3xl">
+        <Typography variant="h3" className="sm:text-3xl">
           {title}
-        </h2>
+        </Typography>
         {description && (
-          <p className="text-sm text-muted-foreground sm:text-base">
+          <Typography variant="muted" className="sm:text-base">
             {description}
-          </p>
+          </Typography>
         )}
         <Button size="lg" onClick={onCtaClick} className="mt-2">
           {ctaLabel}

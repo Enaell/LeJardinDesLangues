@@ -20,7 +20,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    quote: 'LinguaGarden transformed my learning.',
+    quote: 'Jardin des Langues transformed my learning.',
     authorName: 'Emma R.',
     authorRole: 'Advanced learner',
   },

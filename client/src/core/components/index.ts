@@ -11,3 +11,4 @@ export * from './ui/person-card';
 export * from './ui/testimonial-card';
 export * from './ui/cta-banner';
 export * from './ui/fab';
+export * from './ui/typography';
