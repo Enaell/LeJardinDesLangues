@@ -146,5 +146,20 @@
       "serverError": "Internal server error",
       "network": "Network connection error"
     }
+  },
+  "landing": {
+    "nav": {
+      "features": "Features",
+      "languages": "Languages",
+      "about": "About",
+      "team": "Team"
+    },
+    "cta": "Start growing",
+    "hero": {
+      "title": "Learn a language like a garden",
+      "subtitle": "Grow your skills naturally. Stay consistent. Watch your language blossom as you learn in a calm, beautiful space.",
+      "cta": "Start your journey 🌿",
+      "ctaSubtext": "It's free to begin"
+    }
   }
 }

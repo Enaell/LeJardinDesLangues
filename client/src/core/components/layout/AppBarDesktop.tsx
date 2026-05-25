@@ -1,29 +1,26 @@
 import { Link } from '@tanstack/react-router';
-import { Button } from '@mui/material';
 import { useTranslation } from '@core/hooks';
-import { FlexRow } from '@core/components';
-import type { NavigationItem } from '@core/routes.config';
+import { APP_NAV_ITEMS } from '@core/routes.config';
+import { buttonVariants } from '@core/components/ui/button';
+import { cn } from '@/lib/utils';
 
-type AppBarDesktopProps = {
-  navigationItems: NavigationItem[];
-};
-
-export const AppBarDesktop = ({ navigationItems }: AppBarDesktopProps) => {
+export const AppBarDesktop = () => {
   const { t } = useTranslation();
-  const [_homeItem, ...restNavigationItems] = navigationItems;
 
   return (
-    <FlexRow className="hidden md:flex" spacing={1}>
-      {restNavigationItems.map((item) => (
-        <Button
+    <nav className="hidden md:flex items-center gap-1 flex-grow">
+      {APP_NAV_ITEMS.map((item) => (
+        <Link
           key={item.path}
-          component={Link}
           to={item.path}
-          color="inherit"
+          className={cn(
+            buttonVariants({ variant: 'ghost', size: 'sm' }),
+            'text-primary-foreground/80 hover:text-primary-foreground hover:bg-white/10'
+          )}
         >
           {t(item.translationKey)}
-        </Button>
+        </Link>
       ))}
-    </FlexRow>
+    </nav>
   );
 };

@@ -92,18 +92,32 @@ src/core/i18n/locales/
 
 ## Composants
 
-### LanguageSelector
-
-Un sélecteur de langue prêt à l'emploi :
+> Il n'existe pas de composant `LanguageSelector` générique dans `@core/components`. Pour changer de langue, utiliser directement `changeLanguage` exposé par `useTranslation` :
 
 ```typescript
-import { LanguageSelector } from '@core/components/ui';
+const { changeLanguage, currentLanguage } = useTranslation();
 
-export const MonComposant = () => (
-  <div>
-    <LanguageSelector />
-  </div>
-);
+// Exemple avec les composants shadcn/ui
+import { Button } from '@/components/ui/button';
+
+const languages = ['fr', 'en', 'zh'];
+
+export const LanguageSwitcher = () => {
+  const { changeLanguage, currentLanguage } = useTranslation();
+  return (
+    <div className="flex gap-2">
+      {languages.map((lang) => (
+        <Button
+          key={lang}
+          variant={currentLanguage === lang ? 'default' : 'outline'}
+          onClick={() => changeLanguage(lang)}
+        >
+          {lang.toUpperCase()}
+        </Button>
+      ))}
+    </div>
+  );
+};
 ```
 
 ## Bonnes pratiques
@@ -130,19 +144,23 @@ export const MonComposant = () => (
 
 ```typescript
 import { useTranslation } from '@core/hooks';
-import { Button, TextField } from '@mui/material';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export const ExempleFormulaire = () => {
   const { t } = useTranslation();
 
   return (
-    <form>
-      <TextField
-        label={t('auth.login.email')}
-        placeholder={t('auth.login.emailPlaceholder')}
-        error={hasError}
-        helperText={hasError ? t('auth.validation.emailInvalid') : ''}
-      />
+    <form className="flex flex-col gap-4">
+      <div className="flex flex-col gap-1">
+        <Label htmlFor="email">{t('auth.login.email')}</Label>
+        <Input
+          id="email"
+          placeholder={t('auth.login.emailPlaceholder')}
+        />
+        {hasError && <p className="text-sm text-destructive">{t('auth.validation.emailInvalid')}</p>}
+      </div>
       <Button type="submit">
         {t('auth.login.submitButton')}
       </Button>

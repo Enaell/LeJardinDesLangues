@@ -146,5 +146,20 @@
       "serverError": "服务器内部错误",
       "network": "网络连接错误"
     }
+  },
+  "landing": {
+    "nav": {
+      "features": "功能",
+      "languages": "语言",
+      "about": "关于",
+      "team": "团队"
+    },
+    "cta": "开始学习",
+    "hero": {
+      "title": "像花园一样学习语言",
+      "subtitle": "自然地培养您的技能。保持一致。在平静美丽的空间中见证您的语言绽放。",
+      "cta": "开始您的旅程 🌿",
+      "ctaSubtext": "免费开始"
+    }
   }
 }

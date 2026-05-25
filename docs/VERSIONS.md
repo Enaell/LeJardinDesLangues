@@ -80,6 +80,14 @@
 - **RedisModule** : Module global NestJS exposant un client IoRedis (connexion lazy via `REDIS_URL`)
 - **CacheModule** : Configuré globalement — mémoire en dev, Redis en production si `REDIS_URL` est défini
 
+### Storybook 10
+- **Package** : `storybook@^10.4.1`, `@storybook/react-vite@^10.4.1`
+- **Addons** : `@storybook/addon-docs`, `@storybook/addon-a11y`, `@storybook/addon-vitest`, `@chromatic-com/storybook`, `@storybook/addon-mcp`
+- **Config** : `client/.storybook/main.ts` + `client/.storybook/preview.tsx`
+- **Stories** : `client/.storybook/stories/` (une story par composant `core/components/ui/`)
+- **Commandes** : `npm run storybook` (dev, port 6006), `npm run build-storybook` (build statique)
+- Hérite de la config Vite (aliases `@core`, `@features`, Tailwind CSS v4)
+
 ### Tests Frontend — Vitest
 - **Package** : `vitest`, `@vitest/coverage-v8`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`, `jsdom`
 - **Config** : `client/vitest.config.ts` avec jsdom, globals, alias de chemin
@@ -88,6 +96,28 @@
 
 ### Jest — version alignée
 - `jest@^29.7.0` et `@types/jest@^29.5.0` (compatible avec `ts-jest@^29.1.0`)
+
+## 🔄 Pipeline OpenAPI / génération de client TypeScript (Mai 2026)
+
+### orval v8
+- **Package client** : `orval@^8` (devDependency dans `client/`)
+- **Rôle** : Génère des hooks TanStack Query + types TypeScript depuis le spec OpenAPI
+- **Config** : `client/orval.config.ts` — mode `tags-split`, mutateur custom `apiClient.ts`
+- **Commande** : `cd client && npm run generate:api`
+- **Sortie** : `client/src/core/api/` (hooks par tag Swagger) + `client/src/core/api/model/` (types)
+
+### @nestjs/swagger
+- **Package serveur** : `@nestjs/swagger` (déjà présent)
+- **Rôle** : Génère le spec OpenAPI 3.0 depuis les décorateurs NestJS
+- **Décorateurs clés** : `@ApiTags`, `@ApiOperation`, `@ApiResponse`, `@ApiProperty`, `@ApiBearerAuth`
+- **UI** : Swagger UI sur `/api/docs` (hors production)
+
+### ts-node + tsconfig-paths (génération serveur)
+- **Packages** : `ts-node@^10.9.2`, `tsconfig-paths@^4.2.0` (devDependencies server)
+- **Rôle** : Exécute `scripts/generate-openapi.ts` avec support `emitDecoratorMetadata` (requis par NestJS DI)
+- **Pourquoi pas `tsx`** : esbuild (utilisé par tsx) ne supporte pas `emitDecoratorMetadata` → injection de dépendances NestJS cassée
+- **Config dédiée** : `server/tsconfig.scripts.json` — étend `tsconfig.json` avec `rootDir: "."` pour les fichiers hors `src/`
+- **Commande** : `cd server && npm run generate:openapi`
 
 ## 🎯 Avantages pour Le Jardin des Langues
 

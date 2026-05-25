@@ -16,7 +16,8 @@ import { GoogleStrategy } from './strategies/google.strategy';
         // Secret par défaut pour la vérification (overridé par sign options dans AuthService)
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRES_IN') || '15m',
+          // Cast nécessaire : ConfigService retourne string, mais @nestjs/jwt attend StringValue (ms)
+          expiresIn: (configService.get<string>('JWT_EXPIRES_IN') || '15m') as unknown as number,
         },
       }),
       inject: [ConfigService],

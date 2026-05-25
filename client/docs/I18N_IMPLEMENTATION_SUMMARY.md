@@ -21,7 +21,8 @@
 - ✅ `LoginForm` - Formulaire de connexion complet
 - ✅ `RegisterForm` - Formulaire d'inscription complet
 - ✅ `HomePage` - Page d'accueil avec toutes les features
-- ✅ `LanguageSelector` - Sélecteur de langue
+
+> Il n'existe pas de composant `LanguageSelector` générique. Pour changer de langue, utiliser `changeLanguage` exposé par `useTranslation` (voir `I18N_GUIDE.md`).
 
 ### 4. Configuration mise à jour
 - ✅ `routes.config.ts` - Navigation avec clés de traduction
@@ -72,29 +73,9 @@ src/core/i18n/locales/
 
 ### Pour étendre l'i18n :
 
-1. **Nouveaux composants** - Utiliser `useTranslation()` et ajouter les clés
-2. **Nouvelles langues** - Créer le fichier JSON et l'ajouter dans config
-3. **Traductions dynamiques** - Utiliser les paramètres : `t('welcome', { name })`
-4. **Namespace** - Organiser par features : `useTranslation('auth')`
-
-### Exemples d'usage courants :
-
-```typescript
-// Texte simple
-{t('navigation.home')}
-
-// Bouton avec état loading
-{isLoading ? t('common.loading') : t('common.save')}
-
-// Messages d'erreur conditionnels
-{error && t('auth.validation.required')}
-
-// Listes avec traductions
-options={languages.map(lang => ({ 
-  value: lang.code, 
-  label: t(`languages.${lang.code}`)
-}))}
-```
+1. **Nouveaux composants** — utiliser `useTranslation()` depuis `@core/hooks` et ajouter les clés dans les 3 fichiers de locale
+2. **Nouvelles langues** — créer le fichier JSON dans `locales/` et l'ajouter dans `config.ts`
+3. **Namespace** — organiser par features : `useTranslation('auth')`
 
 ## ✨ Avantages de cette implémentation
 

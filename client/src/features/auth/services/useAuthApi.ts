@@ -1,71 +1,70 @@
 import { useCallback } from 'react';
-import { useApi, createApiUrl } from '@core/services/api';
-import type { AuthResponse, RegisterRequest, LoginRequest, User } from '../types';
+import {
+  authControllerRegister,
+  authControllerLogin,
+  authControllerGetProfile,
+  authControllerLogout,
+  getAuthControllerGoogleAuthUrl,
+} from '@core/api/authentification/authentification';
+import type { AuthResponseDto, LoginDto, RegisterDto } from '@core/api/model';
 
-// Hook spécialisé pour les API d'authentification
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000';
+
 export const useAuthApi = () => {
-  const { request } = useApi();
-
-  // Inscription d'un nouvel utilisateur
   const register = useCallback(
-    async (data: RegisterRequest): Promise<AuthResponse> => {
-      return await request('/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
+    async (data: RegisterDto): Promise<AuthResponseDto> => {
+      const response = await authControllerRegister(data);
+      if (response.status === 201) return response.data;
+      throw new Error('Unexpected registration response');
     },
-    [request],
+    [],
   );
 
-  // Connexion d'un utilisateur
   const login = useCallback(
-    async (data: LoginRequest): Promise<AuthResponse> => {
-      return await request('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
+    async (data: LoginDto): Promise<AuthResponseDto> => {
+      const response = await authControllerLogin(data);
+      if (response.status === 200) return response.data;
+      throw new Error('Unexpected login response');
     },
-    [request],
+    [],
   );
 
-  // Obtenir le profil — les cookies httpOnly sont envoyés automatiquement
-  const getProfile = useCallback(async (): Promise<User> => {
-    return await request('/auth/profile', { method: 'GET' });
-  }, [request]);
+  const getProfile = useCallback(
+    async (): Promise<AuthResponseDto['user']> => {
+      const response = await authControllerGetProfile();
+      if (response.status === 200) return response.data;
+      throw new Error('Unauthorized');
+    },
+    [],
+  );
 
-  // Déconnexion — invalide la session côté serveur et efface les cookies
-  const logout = useCallback(async (): Promise<void> => {
-    await request('/auth/logout', { method: 'POST' });
-  }, [request]);
+  const logout = useCallback(
+    async (): Promise<void> => {
+      await authControllerLogout();
+    },
+    [],
+  );
 
-  // Authentification Google (popup)
-  const googleAuth = useCallback((): Promise<AuthResponse> => {
+  const googleAuth = useCallback((): Promise<AuthResponseDto> => {
     return new Promise((resolve, reject) => {
       const popup = window.open(
-        createApiUrl('/auth/google'),
+        getAuthControllerGoogleAuthUrl(),
         'googleAuth',
         'width=500,height=600,scrollbars=yes,resizable=yes',
       );
 
       if (!popup) {
-        reject(
-          new Error(
-            "Impossible d'ouvrir la popup. Vérifiez que les popups ne sont pas bloquées.",
-          ),
-        );
+        reject(new Error("Impossible d'ouvrir la popup. Vérifiez que les popups ne sont pas bloquées."));
         return;
       }
 
       const handleMessage = (event: MessageEvent) => {
-        // Vérifier l'origine pour la sécurité
-        const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-        if (event.origin !== apiBaseUrl) return;
-
+        if (event.origin !== API_BASE_URL) return;
         if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
           window.removeEventListener('message', handleMessage);
           clearInterval(checkClosed);
           popup.close();
-          resolve(event.data.payload as AuthResponse);
+          resolve(event.data.payload as AuthResponseDto);
         } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
           window.removeEventListener('message', handleMessage);
           clearInterval(checkClosed);
@@ -80,17 +79,12 @@ export const useAuthApi = () => {
         if (popup.closed) {
           clearInterval(checkClosed);
           window.removeEventListener('message', handleMessage);
-          reject(new Error('Authentification annulée par l\'utilisateur'));
+          reject(new Error("Authentification annulée par l'utilisateur"));
         }
       }, 1000);
     });
   }, []);
 
-  return {
-    register,
-    login,
-    getProfile,
-    logout,
-    googleAuth,
-  };
+  return { register, login, getProfile, logout, googleAuth };
 };
+

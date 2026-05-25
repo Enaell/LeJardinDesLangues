@@ -1,55 +1,43 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { IconButton, Menu, MenuItem } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Menu, X } from 'lucide-react';
 import { useTranslation } from '@core/hooks';
-import { FlexRow } from '@core/components';
-import type { NavigationItem } from '@core/routes.config';
+import { APP_NAV_ITEMS } from '@core/routes.config';
+import { Button, buttonVariants } from '@core/components/ui/button';
+import { cn } from '@/lib/utils';
 
-type AppBarMobileProps = {
-  navigationItems: NavigationItem[];
-};
-
-export const AppBarMobile = ({ navigationItems }: AppBarMobileProps) => {
+export const AppBarMobile = () => {
   const { t } = useTranslation();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  const [open, setOpen] = useState(false);
 
   return (
-    <FlexRow className="flex md:hidden">
-      <IconButton
-        size="large"
-        edge="start"
-        color="inherit"
+    <div className="flex md:hidden relative">
+      <Button
+        variant="ghost"
+        size="icon"
         aria-label={t('common.menu')}
-        onClick={handleMenuClick}
+        onClick={() => setOpen((v) => !v)}
+        className="text-primary-foreground hover:bg-white/10"
       >
-        <MenuIcon />
-      </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleMenuClose}
-      >
-        {navigationItems.map((item) => (
-          <MenuItem
-            key={item.path}
-            component={Link}
-            to={item.path}
-            onClick={handleMenuClose}
-          >
-            {item.icon} {t(item.translationKey)}
-          </MenuItem>
-        ))}
-      </Menu>
-    </FlexRow>
+        {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+      </Button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1 w-48 rounded-md border border-white/20 bg-primary shadow-md z-50">
+          {APP_NAV_ITEMS.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => setOpen(false)}
+              className={cn(
+                buttonVariants({ variant: 'ghost', size: 'sm' }),
+                'w-full justify-start h-auto py-3 rounded-none text-primary-foreground/90 hover:text-primary-foreground hover:bg-white/10 first:rounded-t-md last:rounded-b-md'
+              )}
+            >
+              {item.icon} {t(item.translationKey)}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };

@@ -1,77 +1,43 @@
-# Debug: Snackbars ne s'affichent pas
+# Système de notifications — référence
 
-## Problème rencontré
-Les erreurs d'inscription sont bien loggées dans la console via `useAuth` et `RegisterForm`, mais aucune snackbar n'apparaît.
+## Architecture
 
-## Solutions mises en place
-
-### ✅ 1. Intégration des notifications dans les hooks auth
-- **Modifié** `useRegister` et `useLogin` pour utiliser `notifyApiError`
-- **Ajouté** les notifications de succès traduites
-- **Importé** `useNotify` et `useTranslation`
-
-### ✅ 2. Amélioration du service API
-- **Modifié** `api.ts` pour lancer des erreurs avec `statusCode`
-- **Ajouté** gestion des erreurs réseau
-- **Configuré** `credentials: 'include'` pour les cookies
-
-### ✅ 3. Traductions complètes
-- **Ajouté** `auth.success.registrationSuccess` et `loginSuccess`
-- **Traduit** en français, anglais et chinois
-
-### ✅ 4. Configuration App.tsx vérifiée
 ```tsx
+// App.tsx
 <NotificationProvider>
   <RouterProvider router={router} />
   <GlobalNotifications />
 </NotificationProvider>
 ```
 
-## Comment tester
+Le `NotificationProvider` expose le contexte. `GlobalNotifications` rend les toasts dans le DOM. Les deux doivent être présents.
 
-### 1. Test des notifications de base
-- Aller sur `/test-notifications`
-- Cliquer sur les boutons de test
-- Vérifier que les snackbars apparaissent
-
-### 2. Test avec authentification
-- Essayer de s'inscrire avec des données invalides
-- Vérifier que l'erreur apparaît en snackbar
-- Essayer une inscription valide
-- Vérifier que le succès apparaît
-
-### 3. Debug étapes
-Si les notifications ne fonctionnent toujours pas :
-
-1. **Vérifier le context** : Les hooks `useNotify` ont-ils accès au context ?
-2. **Vérifier les erreurs** : Les erreurs ont-elles la bonne structure ?
-3. **Vérifier l'ordre** : `GlobalNotifications` est-il rendu après le provider ?
-
-## Code de debug
+## Utilisation
 
 ```typescript
-// Dans le component qui ne fonctionne pas
-const { notifySuccess } = useNotify();
+import { useNotify } from '@core/hooks';
 
-// Test direct
-const testNotification = () => {
-  console.log('Test notification déclenchée');
-  notifySuccess('Test direct depuis le composant');
-};
+const { notifySuccess, notifyError, notifyApiError } = useNotify();
 
-// Dans useRegister onError
-onError: (error) => {
-  console.log('Erreur capturée:', error);
-  console.log('Type de l\'erreur:', typeof error);
-  console.log('notifyApiError disponible:', typeof notifyApiError);
-  notifyApiError(error);
-},
+notifySuccess('Connexion réussie');
+notifyError('Une erreur est survenue');
+notifyApiError(error); // extrait automatiquement message + statusCode
 ```
 
-## Points de vérification
+## Debug — notifications qui n'apparaissent pas
 
-- [ ] `NotificationProvider` wrappé correctement
-- [ ] `GlobalNotifications` rendu dans l'arbre
-- [ ] `useNotify` fonctionne en mode test
-- [ ] Erreurs ont `statusCode` et `message`
-- [ ] Console logs montrent l'exécution des callbacks
+1. **Vérifier que `NotificationProvider` wrappe le composant** — un composant rendu en dehors du provider ne peut pas accéder au contexte
+2. **Vérifier que `GlobalNotifications` est rendu** — il doit être enfant du provider
+3. **Vérifier la structure de l'erreur** — `notifyApiError` attend un objet avec `message` et optionnellement `statusCode`
+
+```typescript
+// Test rapide dans un composant
+const { notifySuccess } = useNotify();
+<button onClick={() => notifySuccess('Test direct')}>Test</button>
+```
+
+## Structure interne
+
+- `NotificationContext.tsx` — contexte + `NotificationProvider`, gère l'auto-suppression (défaut : 5 s)
+- `GlobalNotifications.tsx` — rendu des toasts
+- `useNotify` (dans `@core/hooks`) — API publique avec helpers typés

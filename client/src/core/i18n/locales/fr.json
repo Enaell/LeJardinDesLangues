@@ -146,5 +146,20 @@
       "serverError": "Erreur interne du serveur",
       "network": "Erreur de connexion réseau"
     }
+  },
+  "landing": {
+    "nav": {
+      "features": "Fonctionnalités",
+      "languages": "Langues",
+      "about": "À propos",
+      "team": "Équipe"
+    },
+    "cta": "Commencer",
+    "hero": {
+      "title": "Apprenez une langue comme un jardin",
+      "subtitle": "Cultivez vos compétences naturellement. Restez constant. Regardez votre langue s'épanouir dans un espace calme et beau.",
+      "cta": "Commencer votre voyage 🌿",
+      "ctaSubtext": "C'est gratuit pour commencer"
+    }
   }
 }

@@ -9,7 +9,8 @@
     ],
     "types": [
       "vitest/globals",
-      "@testing-library/jest-dom"
+      "@testing-library/jest-dom",
+      "vite/client"
     ],
     "module": "ESNext",
     "skipLibCheck": true,
@@ -49,6 +50,7 @@
     }
   },
   "include": [
-    "src"
+    "src",
+    ".storybook"
   ]
 }

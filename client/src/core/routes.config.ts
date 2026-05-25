@@ -19,6 +19,11 @@ export type NavigationItem = {
   translationKey: string;
 };
 
+export type LandingNavItem = {
+  sectionId: string;
+  translationKey: string;
+};
+
 export const NAVIGATION_ITEMS: NavigationItem[] = [
   { path: ROUTES.HOME, icon: '🏠', translationKey: 'navigation.home' },
   { path: ROUTES.DICTIONARY, icon: '📚', translationKey: 'navigation.dictionary' },
@@ -26,4 +31,18 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   { path: ROUTES.EXERCISES, icon: '🎯', translationKey: 'navigation.exercises' },
   { path: ROUTES.COMMUNITY, icon: '👥', translationKey: 'navigation.community' },
   { path: ROUTES.PROFILE, icon: '👤', translationKey: 'navigation.profile' },
+];
+
+export const APP_NAV_ITEMS: NavigationItem[] = [
+  { path: ROUTES.DICTIONARY, icon: '📚', translationKey: 'navigation.dictionary' },
+  { path: ROUTES.FLASHCARDS, icon: '🗂️', translationKey: 'navigation.flashcards' },
+  { path: ROUTES.EXERCISES, icon: '🎯', translationKey: 'navigation.exercises' },
+  { path: ROUTES.COMMUNITY, icon: '👥', translationKey: 'navigation.community' },
+];
+
+export const LANDING_NAV_ITEMS: LandingNavItem[] = [
+  { sectionId: 'features', translationKey: 'landing.nav.features' },
+  { sectionId: 'languages', translationKey: 'landing.nav.languages' },
+  { sectionId: 'about', translationKey: 'landing.nav.about' },
+  { sectionId: 'team', translationKey: 'landing.nav.team' },
 ];

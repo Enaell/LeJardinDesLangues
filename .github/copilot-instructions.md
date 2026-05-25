@@ -51,7 +51,7 @@ When provided with a code block and an instructions file, follow these steps:
 
 ### Frontend Web
 - **Framework** : React + TypeScript 6.
-- **UI** : Material-UI couplé avec Tailwind CSS pour une personnalisation avancée.
+- **UI** : shadcn/ui (style `base-nova`) couplé avec Tailwind CSS v4.
 - **Build Tool** : Vite 8 (Rolldown + Oxc) pour un développement rapide.
 - **Runtime** : Node.js 22.
 
@@ -104,30 +104,28 @@ When provided with a code block and an instructions file, follow these steps:
 
 ## Styles et CSS
 
-### Approche hybride Material-UI + Tailwind
-- **Utiliser Tailwind CSS pour** :
-  - Responsive design : `hidden md:flex`, `flex md:hidden`
-  - Layouts et spacing : `flex`, `flex-col`, `min-h-screen`, `ml-2`
-  - Couleurs et backgrounds : `bg-gray-100`, `text-inherit`
-- **Utiliser Material-UI pour** :
-  - Composants complexes : `Autocomplete`, `DataGrid`, `DatePicker`
-  - États interactifs : focus, hover, disabled
-- **Éviter** : La prop `sx` de Material-UI quand Tailwind peut faire l'équivalent
-- **Utiliser `sx` uniquement pour** :
-  - Styles dynamiques complexes liés au thème Material-UI
-  - Intégrations spécifiques avec le système de thème MUI
+### Approche shadcn/ui + Tailwind
+- **Tailwind CSS v4** : Layouts, spacing, responsive (`hidden md:flex`, `flex flex-col`, `min-h-screen`)
+- **shadcn/ui** : Composants interactifs (`Button`, `Input`, `Card`, `Select`, `Checkbox`, `Badge`, `Label`)
+- **Pas de prop `sx`** : Aucune dépendance Material-UI — utiliser exclusivement Tailwind pour les styles
 
 ### Hiérarchie des composants
-- **1. Composants Core** (`@core/components`) : Toujours en priorité
-  - Composants UI de base : `Button`, `Input`, `Card`, `Container`
-  - Composants layout : `Header`, `Sidebar`, `Layout`, `AppBar`
-  - Composants formulaires : `FormTextField`, `FormSelect`, `FormCheckbox`
-- **2. Composants Material-UI** : Pour les fonctionnalités complexes
-  - Composants avancés : `Autocomplete`, `DataGrid`, `DatePicker`
-  - Composants spécialisés : `Stepper`, `Timeline`, `SpeedDial`
-- **3. Balises HTML natives** : Uniquement si aucune alternative composant n'existe
-  - Éviter : `<div>`, `<span>`, `<button>`, `<input>`, `<form>`
-  - Préférer : Composants équivalents du système de design
+- **1. Composants layout core** (`@core/components/layout`) : `Layout`, `AppBar`, `Footer`
+- **2. Composants shadcn/ui** (`@/components/ui/`) : Composants interactifs et formulaires
+  ```typescript
+  import { Button } from '@/components/ui/button';
+  import { Input } from '@/components/ui/input';
+  import { Card, CardContent } from '@/components/ui/card';
+  ```
+- **3. Balises HTML natives** : Uniquement pour les conteneurs sémantiques (`<header>`, `<main>`, `<footer>`, `<nav>`, `<section>`)
+  - Éviter `<div>` non sémantique quand un composant shadcn/ui existe
+
+### Alias de chemins
+```
+@        → src/
+@core    → src/core/
+@/       → src/   (alias shadcn — components, lib, hooks)
+```
 
 ---
 
@@ -223,17 +221,17 @@ src/
 │   ├── community/     # Communauté
 │   └── profile/       # Profil utilisateur
 ├── core/              # Code partagé et utilitaires
-│   ├── components/    # Composants UI réutilisables
-│   │   ├── ui/        # Composants de base
+│   ├── components/    # Composants réutilisables
 │   │   ├── layout/    # Composants de mise en page
-│   │   └── forms/     # Composants de formulaires
+│   │   └── notifications/ # Système toast
 │   ├── hooks/         # Hooks personnalisés
-│   ├── services/      # Services partagés (API, etc.)
+│   ├── services/      # queryClient
 │   ├── utils/         # Fonctions utilitaires
 │   ├── types/         # Types TypeScript globaux
 │   └── i18n/          # Configuration et traductions
-├── pages/             # Pages principales de l'application
-├── routes/            # Configuration du routage
+├── components/ui/     # Composants shadcn/ui générés
+├── lib/               # Utilitaires shadcn (cn())
+├── routes/            # Configuration du routage (TanStack Router)
 └── store/             # Gestion d'état globale
 ```
 
@@ -307,7 +305,8 @@ Pour l'implémentation des formulaires avec TanStack Form, consulter le guide d�
 **[Guide TanStack Form](./prompts/tanstack-form-guidelines.md)**
 
 ### Principes clés
-- **Composants wrapper** : Utiliser des wrappers dans `core/components/forms/` pour encapsuler la logique TanStack Form + Material-UI
-- **Éviter les render props** : Ne pas utiliser `form.Field` directement dans les formulaires  
-- **Type-safety** : Typage complet des formulaires avec TypeScript
-- **Intégration** : Compatible avec TanStack Router et React Query
+- **Approche vanilla** : Utiliser `useForm` + `form.Field` directement dans les composants formulaire
+- **Pas de wrappers** : Aucun `FormProvider`, `Form`, ni composant d'encapsulation
+- **shadcn/ui** : Associer `Input`, `Label`, `Select`, `Checkbox` (`@/components/ui/`) avec les champs TanStack Form
+- **Type-safety** : Typer les `defaultValues` pour l'inférence automatique TypeScript
+- **Intégration** : Compatible avec React Query (`useMutation`) et TanStack Router
