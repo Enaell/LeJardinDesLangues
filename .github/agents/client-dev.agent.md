@@ -117,6 +117,7 @@ src/
 │   ├── services/
 │   ├── types/
 │   └── index.ts      ← exports publics
+├── features/auth/      ← `AuthModalContext` expose `openModal(tab?)`, `closeModal()`, `openOnboarding(nativeLanguage)` via `useAuthModalContext()` ; `LanguageOnboardingModal` déclenché par `openOnboarding` après première connexion Google (`isNewUser: true`)
 ├── features/landing/   ← landing page publique
 │   └── components/HeroSection.tsx  (section hero plein écran, HeroBackground.png)
 ├── core/
@@ -135,6 +136,7 @@ src/
 │   │   │   └── AppBarLandingNavMobile  (nav landing mobile)
 │   │   ├── notifications/ ← GlobalNotifications, useNotify
 │   │   └── ui/           ← TOUS les composants UI (shadcn + custom Jardin des Langues)
+│   ├── icons/            ← Icônes SVG custom : GoogleIcon, XIcon, LinkedinIcon, GithubIcon
 │   ├── services/apiClient.ts  ← fetch custom (credentials, erreurs typées, intercepteur 401 → refresh)
 │   └── hooks, utils, types, i18n
 ├── lib/utils.ts      ← cn()

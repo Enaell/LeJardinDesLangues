@@ -89,6 +89,15 @@
     "success": {
       "registrationSuccess": "Inscription réussie ! Bienvenue !",
       "loginSuccess": "Connexion réussie ! Bon retour parmi nous !"
+    },
+    "onboarding": {
+      "title": "Encore une petite chose...",
+      "subtitle": "Pour personnaliser votre expérience, indiquez-nous vos langues.",
+      "nativeLanguage": "Votre langue maternelle",
+      "targetLanguage": "La langue que vous souhaitez apprendre",
+      "targetLanguagePlaceholder": "Choisir une langue",
+      "submitButton": "Commencer l'aventure !",
+      "submitButtonLoading": "Enregistrement..."
     }
   },
   "languages": {

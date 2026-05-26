@@ -59,6 +59,8 @@ import { Fab } from '@core/components/ui/fab';
 import { Typography } from '@core/components/ui/typography';
 import { LanguageSelector } from '@core/components/ui/language-selector';
 import { cn } from '@/lib/utils'; // utilitaire clsx
+// Icônes SVG custom (non disponibles dans lucide-react)
+import { GoogleIcon, XIcon, LinkedinIcon, GithubIcon } from '@core/icons';
 ```
 
 ### Règle absolue : toujours `@core/components/ui/` en premier
@@ -147,6 +149,7 @@ src/
 │   │   ├── layout/       ← Layout, AppBar (dual-mode), Footer
 │   │   ├── notifications/ ← GlobalNotifications, useNotify
 │   │   └── ui/           ← TOUS les composants UI (shadcn + custom Jardin des Langues)
+│   ├── icons/            ← Icônes SVG custom : GoogleIcon, XIcon, LinkedinIcon, GithubIcon
 │   ├── hooks, services, utils, types, i18n
 │   └── services/apiClient.ts  ← fetch custom (credentials, erreurs typées, intercepteur 401 → refresh)
 ├── lib/utils.ts        ← cn() de shadcn

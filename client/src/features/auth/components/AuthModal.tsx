@@ -10,9 +10,10 @@ type AuthModalProps = {
   activeTab: AuthModalTab;
   onClose: () => void;
   onSwitchTab: (tab: AuthModalTab) => void;
+  onGoogleNewUser: (nativeLanguage: string) => void;
 };
 
-export const AuthModal = ({ isOpen, activeTab, onClose, onSwitchTab }: AuthModalProps) => {
+export const AuthModal = ({ isOpen, activeTab, onClose, onSwitchTab, onGoogleNewUser }: AuthModalProps) => {
   const { t } = useTranslation();
 
   return (
@@ -38,11 +39,11 @@ export const AuthModal = ({ isOpen, activeTab, onClose, onSwitchTab }: AuthModal
           </TabsList>
 
           <TabsContent value="login">
-            <LoginForm onSuccess={onClose} switchTab={onSwitchTab} />
+            <LoginForm onSuccess={onClose} switchTab={onSwitchTab} onGoogleNewUser={onGoogleNewUser} />
           </TabsContent>
 
           <TabsContent value="register">
-            <RegisterForm onSuccess={onClose} switchTab={onSwitchTab} />
+            <RegisterForm onSuccess={onClose} switchTab={onSwitchTab} onGoogleNewUser={onGoogleNewUser} />
           </TabsContent>
         </Tabs>
       </DialogContent>

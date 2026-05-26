@@ -89,6 +89,15 @@
     "success": {
       "registrationSuccess": "Registration successful! Welcome!",
       "loginSuccess": "Login successful! Welcome back!"
+    },
+    "onboarding": {
+      "title": "One more thing...",
+      "subtitle": "To personalize your experience, let us know your languages.",
+      "nativeLanguage": "Your native language",
+      "targetLanguage": "The language you want to learn",
+      "targetLanguagePlaceholder": "Choose a language",
+      "submitButton": "Start the adventure!",
+      "submitButtonLoading": "Saving..."
     }
   },
   "languages": {

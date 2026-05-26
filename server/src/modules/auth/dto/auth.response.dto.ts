@@ -35,4 +35,7 @@ export class UserResponseDto {
 export class AuthResponseDto {
   @ApiProperty({ type: UserResponseDto })
   user: UserResponseDto;
+
+  @ApiProperty({ example: false, description: 'Indique si l\'utilisateur vient d\'être créé (via OAuth)' })
+  isNewUser: boolean;
 }

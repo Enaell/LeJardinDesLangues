@@ -178,7 +178,7 @@ export class AuthController {
   try {
     window.opener.postMessage({
       type: 'GOOGLE_AUTH_SUCCESS',
-      payload: ${JSON.stringify({ user: authResponse.user })}
+      payload: ${JSON.stringify({ user: authResponse.user, isNewUser: authResponse.isNewUser ?? false })}
     }, '${corsOrigin}');
     window.close();
   } catch (e) {

@@ -89,6 +89,15 @@
     "success": {
       "registrationSuccess": "注册成功！欢迎您！",
       "loginSuccess": "登录成功！欢迎回来！"
+    },
+    "onboarding": {
+      "title": "还有一件事...",
+      "subtitle": "为了个性化您的体验，请告诉我们您的语言偏好。",
+      "nativeLanguage": "您的母语",
+      "targetLanguage": "您想学习的语言",
+      "targetLanguagePlaceholder": "选择语言",
+      "submitButton": "开始冒险！",
+      "submitButtonLoading": "保存中..."
     }
   },
   "languages": {

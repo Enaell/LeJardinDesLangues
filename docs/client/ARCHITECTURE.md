@@ -27,6 +27,7 @@ src/
 │   ├── components/    # Composants UI réutilisables
 │   │   ├── layout/    # Composants de mise en page (AppBar, Footer)
 │   │   └── notifications/ # Système toast
+│   ├── icons/         # Icônes SVG custom (GoogleIcon, XIcon, LinkedinIcon, GithubIcon)
 │   ├── hooks/         # Hooks personnalisés partagés
 │   ├── services/      # Services et configuration API
 │   │   ├── queryClient.ts  # QueryClient global TanStack Query
@@ -64,7 +65,7 @@ features/example/
 
 | Feature | Description | Statut |
 |---------|-------------|--------|
-| `auth` | Authentification, connexion, inscription | 🚧 En développement |
+| `auth` | Authentification, connexion, inscription ; flow onboarding OAuth (`LanguageOnboardingModal` non-closable après première connexion Google) | 🚧 En développement |
 | `landing` | Landing page publique (hero, sections marketing) | 🚧 En développement |
 | `dictionary` | Recherche de mots, définitions, traductions | 🚧 En développement |
 | `flashcards` | Création et étude de cartes mémoire | 🚧 En développement |
@@ -85,6 +86,7 @@ Le dossier `core` contient tous les éléments partagés entre les features :
   - `AppBarDesktop` / `AppBarMobile` : navigation entre modules de l'app (Dictionary, Flashcards, Exercises, Community)
 - **`notifications/`** : Système de notifications toast (`NotificationProvider`, `GlobalNotifications`, `useNotify`)
 - **`ui/`** : Composants UI (shadcn/base-ui + custom) dans `src/core/components/ui/` — voir `docs/client/THEME.md` pour la liste complète
+- **`icons/`** (`src/core/icons/`) : Icônes SVG custom non disponibles dans lucide-react — `GoogleIcon`, `XIcon`, `LinkedinIcon`, `GithubIcon`. Importer via `@core/icons`.
 
 ### 🌐 Providers au niveau racine (`routes/__root.tsx`)
 
@@ -92,7 +94,7 @@ Les providers qui doivent être accessibles sur toutes les routes sont placés d
 
 | Provider | Source | Rôle |
 |----------|--------|------|
-| `AuthModalProvider` | `@features/auth/components/AuthModalContext` | Expose `openModal(tab?)` et `closeModal()` via `useAuthModalContext()` ; rend le composant `AuthModal` une seule fois pour toute l'app |
+| `AuthModalProvider` | `@features/auth/components/AuthModalContext` | Expose `openModal(tab?)`, `closeModal()`, et `openOnboarding(nativeLanguage)` via `useAuthModalContext()` ; rend `AuthModal` et `LanguageOnboardingModal` une seule fois pour toute l'app |
 
 **Pattern context + modale :** quand plusieurs composants distants dans l'arbre (ex. `HeroSection` et `AppBarLandingNav`) doivent déclencher la même modale, utiliser un context provider placé au niveau racine :
 
@@ -227,6 +229,8 @@ import { LevelBadge } from '@core/components/ui/level-badge';
 import { StarRating } from '@core/components/ui/star-rating';
 import { Stepper } from '@core/components/ui/stepper';
 import { SearchInput } from '@core/components/ui/search-input';
+// Icônes SVG custom
+import { GoogleIcon, XIcon, LinkedinIcon, GithubIcon } from '@core/icons';
 ```
 
 

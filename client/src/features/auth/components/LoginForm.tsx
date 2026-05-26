@@ -1,20 +1,25 @@
 import { useForm } from '@tanstack/react-form';
+import { useRouter } from '@tanstack/react-router';
 import { Button } from '@core/components/ui/button';
 import { Input } from '@core/components/ui/input';
 import { Label } from '@core/components/ui/label';
 import { Typography } from '@core/components/ui/typography';
 import { useTranslation } from '@core/hooks';
-import { useLogin } from '../hooks/useAuth';
+import { useLogin, useGoogleAuth } from '../hooks/useAuth';
+import { GoogleIcon } from '@core/icons';
 import type { LoginFormData } from '../types/forms';
 
 type LoginFormProps = {
   onSuccess: () => void;
   switchTab: (tab: 'register') => void;
+  onGoogleNewUser: (nativeLanguage: string) => void;
 };
 
-export const LoginForm = ({ onSuccess, switchTab }: LoginFormProps) => {
+export const LoginForm = ({ onSuccess, switchTab, onGoogleNewUser }: LoginFormProps) => {
   const { t } = useTranslation();
   const loginMutation = useLogin();
+  const googleMutation = useGoogleAuth();
+  const router = useRouter();
 
   const form = useForm({
     defaultValues: {
@@ -87,6 +92,35 @@ export const LoginForm = ({ onSuccess, switchTab }: LoginFormProps) => {
 
       <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
         {loginMutation.isPending ? t('auth.login.submitButtonLoading') : t('auth.login.submitButton')}
+      </Button>
+
+      <div className="relative flex items-center gap-3">
+        <div className="flex-1 border-t border-border" />
+        <Typography variant="small" className="text-muted-foreground">
+          {t('auth.login.dividerText')}
+        </Typography>
+        <div className="flex-1 border-t border-border" />
+      </div>
+
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full gap-2"
+        onClick={() => googleMutation.mutate(undefined, {
+          onSuccess: (data) => {
+            if (data.isNewUser) {
+              onSuccess();
+              onGoogleNewUser(data.user.nativeLanguage);
+            } else {
+              onSuccess();
+              router.navigate({ to: '/profile' }).catch(() => router.navigate({ to: '/' }));
+            }
+          },
+        })}
+        disabled={googleMutation.isPending}
+      >
+        <GoogleIcon />
+        {googleMutation.isPending ? t('auth.login.googleButtonLoading') : t('auth.login.googleButton')}
       </Button>
 
       <Typography variant="small" className="text-center text-muted-foreground">

@@ -173,6 +173,9 @@ When provided with a code block and an instructions file, follow these steps:
   - **Passport.js** avec des stratégies OAuth (Google, Facebook).
   - **@nestjs/passport** pour l'intégration avec NestJS.
 
+### Flow post-OAuth onboarding
+Après une première connexion Google (`isNewUser: true`), un `LanguageOnboardingModal` s'affiche pour capturer `nativeLanguage` et `targetLanguage`. Le contexte `AuthModalContext` expose `openOnboarding(nativeLanguage)` pour le déclencher. `AuthResponseDto` inclut `isNewUser?: boolean`. `UserResponseDto` inclut `nativeLanguage`, `targetLanguage`, `createdAt`, `updatedAt`.
+
 ### Unification des sessions
 - Paire de tokens après authentification : **access token** (15 min, httpOnly cookie) + **refresh token** (7 jours, httpOnly cookie).
 - Cookie non-httpOnly `is_authenticated` lisible par le JS pour détecter l'état de connexion sans exposer le token.
