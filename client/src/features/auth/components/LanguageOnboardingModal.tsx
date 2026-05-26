@@ -35,7 +35,7 @@ export const LanguageOnboardingModal = ({
   const [targetError, setTargetError] = useState('');
 
   const mutation = useMutation({
-    mutationFn: (data: { nativeLanguage: string; targetLanguage: string }) =>
+    mutationFn: (data: { nativeLanguage: string; targetLanguage: string; }) =>
       usersControllerUpdateMyProfile(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: authKeys.profile() });
@@ -53,7 +53,7 @@ export const LanguageOnboardingModal = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={() => {}}>
+    <Dialog open={isOpen} onOpenChange={() => { }}>
       <DialogContent hideCloseButton>
         <DialogTitle className="sr-only">
           {t('auth.onboarding.title')}
