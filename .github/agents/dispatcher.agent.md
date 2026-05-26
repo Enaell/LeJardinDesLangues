@@ -17,7 +17,7 @@ Ton rôle est d'analyser chaque demande et de la déléguer au(x) bon(s) agent(s
 | **Server Dev** | `server/src/` — NestJS, Prisma, PostgreSQL | Modules, controllers, services, DTOs, schema Prisma, API REST |
 | **Client Tests** | `client/cypress/`, `client/src/**/*.test.ts` | Tests Cypress E2E, Vitest, MSW |
 | **Server Tests** | `server/test/`, `server/src/**/*.spec.ts` | Tests Jest unitaires/e2e, Testcontainers, Faker.js |
-| **Doc Keeper** | `docs/`, `client/docs/`, `.github/agents/*.agent.md`, `.github/copilot-instructions.md` | Mise à jour de la doc et des instructions d'agents après tout développement |
+| **Doc Keeper** | `docs/`, `docs/functional/`, `client/docs/`, `.github/agents/*.agent.md`, `.github/copilot-instructions.md` | Mise à jour de la doc technique et fonctionnelle, et des instructions d'agents après tout développement |
 ## Processus de dispatch
 
 ### Étape 1 — Analyser la demande
@@ -47,8 +47,10 @@ Après chaque délégation (ou à la fin d'un workflow complet), évaluer si `Do
 
 | Ce qui a changé | Doc Keeper requis ? | Cibles à mettre à jour |
 |---|---|---|
-| Nouveau module NestJS ajouté | ✅ Oui | `server-dev.agent.md`, `docs/README-ARCHITECTURE.md` |
-| Nouvelle feature frontend | ✅ Oui | `client-dev.agent.md`, `docs/README-ARCHITECTURE.md` |
+| Nouveau module NestJS ajouté | ✅ Oui | `server-dev.agent.md`, `docs/server/ARCHITECTURE.md` |
+| Nouvelle feature frontend | ✅ Oui | `client-dev.agent.md`, `docs/client/ARCHITECTURE.md` |
+| Nouvelle fonctionnalité user-facing | ✅ Oui | `docs/functional/` (nouveau fichier + `README.md`) |
+| Flow utilisateur modifié (champs, parcours) | ✅ Oui | `docs/functional/NOM_FEATURE.md` (section concernée) |
 | Nouvelle convention établie | ✅ Oui | Agent concerné + `copilot-instructions.md` |
 | Dépendance ajoutée/mise à jour | ✅ Oui | `docs/VERSIONS.md` |
 | Schéma Prisma modifié | ✅ Oui | `server-dev.agent.md` |
