@@ -1,24 +1,24 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 import { useAuth } from '../hooks';
-import { useTranslation } from '@core/hooks';
 
 type ProtectedRouteProps = {
   children: ReactNode;
-  fallback?: ReactNode;
   requireAuth?: boolean;
 };
 
-const DefaultFallback = () => {
-  const { t } = useTranslation();
-  return <div>{t('auth.status.accessDenied')}</div>;
-};
-
-export const ProtectedRoute = ({
-  children,
-  fallback,
-  requireAuth = true
-}: ProtectedRouteProps) => {
+export const ProtectedRoute = ({ children, requireAuth = false }: ProtectedRouteProps) => {
   const { isAuthenticated, isUnauthenticated, isLoading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (requireAuth && isUnauthenticated) {
+      navigate({ to: '/' });
+    } else if (!requireAuth && isAuthenticated) {
+      navigate({ to: '/profile' });
+    }
+  }, [isLoading, requireAuth, isAuthenticated, isUnauthenticated, navigate]);
 
   if (isLoading) {
     return (
@@ -28,13 +28,8 @@ export const ProtectedRoute = ({
     );
   }
 
-  if (requireAuth && isUnauthenticated) {
-    return <>{fallback || <DefaultFallback />}</>;
-  }
-
-  if (!requireAuth && isAuthenticated) {
-    return <>{fallback || <DefaultFallback />}</>;
-  }
+  if (requireAuth && isUnauthenticated) return null;
+  if (!requireAuth && isAuthenticated) return null;
 
   return <>{children}</>;
 };

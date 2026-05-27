@@ -170,47 +170,10 @@ export class AuthController {
       const tokens = await this.authService.generateTokenPair(payload);
       this.setAuthCookies(res, tokens);
 
-      const html = `<!DOCTYPE html>
-<html>
-<head><title>Authentification réussie</title></head>
-<body>
-<script>
-  try {
-    window.opener.postMessage({
-      type: 'GOOGLE_AUTH_SUCCESS',
-      payload: ${JSON.stringify({ user: authResponse.user, isNewUser: authResponse.isNewUser ?? false })}
-    }, '${corsOrigin}');
-    window.close();
-  } catch (e) {
-    document.body.innerHTML = '<p>Authentification réussie. Vous pouvez fermer cette fenêtre.</p>';
-  }
-</script>
-<p>Authentification en cours...</p>
-</body>
-</html>`;
-
-      res.send(html);
+      const isNewUser = authResponse.isNewUser ?? false;
+      res.redirect(`${corsOrigin}/auth/google/callback?status=success&isNewUser=${isNewUser}`);
     } catch {
-      const html = `<!DOCTYPE html>
-<html>
-<head><title>Erreur d'authentification</title></head>
-<body>
-<script>
-  try {
-    window.opener.postMessage({
-      type: 'GOOGLE_AUTH_ERROR',
-      error: "Erreur lors de l'authentification"
-    }, '${corsOrigin}');
-    window.close();
-  } catch (e) {
-    document.body.innerHTML = '<p>Erreur lors de l\\'authentification. Vous pouvez fermer cette fenêtre.</p>';
-  }
-</script>
-<p>Erreur lors de l'authentification...</p>
-</body>
-</html>`;
-
-      res.send(html);
+      res.redirect(`${corsOrigin}/auth/google/callback?status=error`);
     }
   }
 

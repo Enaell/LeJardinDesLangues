@@ -1,12 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { HeroSection } from '@features/landing';
+import { ProtectedRoute } from '@features/auth/components/ProtectedRoute';
 
-export const HomePage = () => {
+const HomePage = () => {
   return <HeroSection />;
 };
 
 export const Route = createFileRoute('/')({
-  component: HomePage,
+  component: () => (
+    <ProtectedRoute>
+      <HomePage />
+    </ProtectedRoute>
+  ),
 });
-
 

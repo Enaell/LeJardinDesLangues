@@ -27,7 +27,12 @@ export const LoginForm = ({ onSuccess, switchTab, onGoogleNewUser }: LoginFormPr
       password: '',
     } satisfies LoginFormData,
     onSubmit: ({ value }) => {
-      loginMutation.mutate(value, { onSuccess });
+      loginMutation.mutate(value, {
+        onSuccess: () => {
+          onSuccess();
+          router.navigate({ to: '/profile' });
+        },
+      });
     },
   });
 

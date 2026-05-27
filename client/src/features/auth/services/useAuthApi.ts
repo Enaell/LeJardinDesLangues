@@ -47,38 +47,35 @@ export const useAuthApi = () => {
 
   const googleAuth = useCallback((): Promise<AuthResponseDto> => {
     return new Promise((resolve, reject) => {
+      const channel = new BroadcastChannel('google_auth');
+
       const popup = window.open(
-        getAuthControllerGoogleAuthUrl(),
+        `${API_BASE_URL}${getAuthControllerGoogleAuthUrl()}`,
         'googleAuth',
         'width=500,height=600,scrollbars=yes,resizable=yes',
       );
 
       if (!popup) {
+        channel.close();
         reject(new Error("Impossible d'ouvrir la popup. Vérifiez que les popups ne sont pas bloquées."));
         return;
       }
 
-      const handleMessage = (event: MessageEvent) => {
-        if (event.origin !== API_BASE_URL) return;
+      channel.onmessage = (event) => {
+        channel.close();
+        clearInterval(checkClosed);
+        popup.close();
         if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
-          window.removeEventListener('message', handleMessage);
-          clearInterval(checkClosed);
-          popup.close();
           resolve(event.data.payload as AuthResponseDto);
         } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
-          window.removeEventListener('message', handleMessage);
-          clearInterval(checkClosed);
-          popup.close();
           reject(new Error(event.data.error || "Erreur lors de l'authentification Google"));
         }
       };
 
-      window.addEventListener('message', handleMessage);
-
       const checkClosed = setInterval(() => {
         if (popup.closed) {
           clearInterval(checkClosed);
-          window.removeEventListener('message', handleMessage);
+          channel.close();
           reject(new Error("Authentification annulée par l'utilisateur"));
         }
       }, 1000);

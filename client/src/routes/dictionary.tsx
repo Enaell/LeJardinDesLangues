@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ProtectedRoute } from '@features/auth/components/ProtectedRoute';
 
 const DictionaryPage = () => {
   return (
@@ -12,6 +13,10 @@ const DictionaryPage = () => {
 };
 
 export const Route = createFileRoute('/dictionary')({
-  component: DictionaryPage,
+  component: () => (
+    <ProtectedRoute requireAuth>
+      <DictionaryPage />
+    </ProtectedRoute>
+  ),
 });
 

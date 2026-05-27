@@ -44,7 +44,7 @@ Deux méthodes sont proposées :
 1. L'utilisateur clique sur « Se connecter » dans la barre de navigation.
 2. Une modale s'ouvre sur l'onglet **Connexion**.
 3. Il saisit son email ou nom d'utilisateur et son mot de passe.
-4. Un message de succès s'affiche et la modale se ferme.
+4. Un message de succès s'affiche, la modale se ferme et l'utilisateur est redirigé vers `/profile`.
 
 > L'onglet actif (connexion ou inscription) peut être préselectionné selon le bouton cliqué dans l'interface.
 
@@ -67,14 +67,15 @@ Deux méthodes sont proposées :
 
 1. L'utilisateur clique sur le bouton **Continuer avec Google** (disponible dans les deux onglets de la modale).
 2. Une popup s'ouvre vers Google pour l'authentification.
-3. Après validation, la popup se ferme automatiquement.
+3. Après validation par Google, la popup est redirigée vers la page relay `/auth/google/callback` (frontend).
+4. Cette page récupère le profil depuis l'API, notifie la fenêtre parente via `BroadcastChannel`, puis se ferme automatiquement.
 
 **Si c'est la première connexion Google :**
 - Une modale d'**onboarding** s'affiche pour que l'utilisateur confirme ou modifie sa langue natale et choisisse sa langue cible.
 - Ces informations sont enregistrées sur son profil via l'API.
 
 **Si l'utilisateur a déjà un compte Google :**
-- La modale se ferme directement et l'utilisateur est connecté.
+- La modale se ferme et l'utilisateur est redirigé vers `/profile`.
 
 ### Comportement en cas d'erreur
 
@@ -127,9 +128,14 @@ Une fois connecté, les données suivantes sont accessibles dans toute l'applica
 
 ## Accès aux routes protégées
 
-Certaines pages de l'application nécessitent d'être connecté. Si un utilisateur non authentifié tente d'y accéder, un message d'accès refusé s'affiche à la place du contenu.
+Les routes de l'application sont divisées en deux catégories :
 
-Le composant `ProtectedRoute` gère ce comportement — il affiche un indicateur de chargement le temps de vérifier la session, puis redirige ou bloque selon l'état d'authentification.
+| Route | Accessible | Comportement si condition non remplie |
+|---|---|---|
+| `/` (landing) | Non connecté uniquement | Redirigé vers `/profile` |
+| `/profile`, `/dictionary`, `/flashcards`, `/exercises`, `/community` | Connecté uniquement | Redirigé vers `/` |
+
+Le composant `ProtectedRoute` gère ce comportement — il affiche un indicateur de chargement le temps de vérifier la session, puis déclenche la redirection appropriée.
 
 ---
 
@@ -144,5 +150,7 @@ Le composant `ProtectedRoute` gère ce comportement — il affiche un indicateur
 | Mutation inscription | `useRegister()` |
 | Mutation Google | `useGoogleAuth()` |
 | Mutation déconnexion | `useLogout()` |
+| Flow Google (popup) | Popup → Google → relay `GET /auth/google/callback?status=success&isNewUser=...` → `BroadcastChannel('google_auth')` → fermeture popup |
+| Route relay OAuth | `client/src/routes/auth/google/callback.tsx` — appelle `authControllerGetProfile()`, envoie le message BroadcastChannel, ferme la fenêtre |
 | Hashage mot de passe | Argon2id (côté serveur) |
 | Stratégies auth serveur | JWT + Google OAuth 2.0 (Passport.js) |

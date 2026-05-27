@@ -16,6 +16,16 @@ src/
 │   ├── exercises/     # Exercices et jeux d'apprentissage
 │   ├── community/     # Fonctionnalités sociales et communautaires
 │   └── profile/       # Gestion du profil utilisateur
+├── routes/            # 🛣️ Fichiers de routes (TanStack Router file-based)
+│   ├── __root.tsx     # Layout racine (AuthModalProvider + Layout)
+│   ├── index.tsx      # `/` — landing (public uniquement, redirige vers /profile si connecté)
+│   ├── profile.tsx    # `/profile` — protégé
+│   ├── dictionary.tsx # `/dictionary` — protégé
+│   ├── flashcards.tsx # `/flashcards` — protégé
+│   ├── exercises.tsx  # `/exercises` — protégé
+│   ├── community.tsx  # `/community` — protégé
+│   └── auth/google/
+│       └── callback.tsx  # `/auth/google/callback` — page relay OAuth (popup uniquement)
 ├── core/              # 🔧 Code partagé et fondations
 │   ├── api/           # 🤖 Client API généré (orval — ne pas modifier manuellement)
 │   │   ├── authentification/
