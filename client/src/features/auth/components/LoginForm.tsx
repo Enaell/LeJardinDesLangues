@@ -30,7 +30,7 @@ export const LoginForm = ({ onSuccess, switchTab, onGoogleNewUser }: LoginFormPr
       loginMutation.mutate(value, {
         onSuccess: () => {
           onSuccess();
-          router.navigate({ to: '/profile' });
+          router.navigate({ to: '/dashboard' });
         },
       });
     },
@@ -118,7 +118,7 @@ export const LoginForm = ({ onSuccess, switchTab, onGoogleNewUser }: LoginFormPr
               onGoogleNewUser(data.user.nativeLanguage);
             } else {
               onSuccess();
-              router.navigate({ to: '/profile' }).catch(() => router.navigate({ to: '/' }));
+              router.navigate({ to: '/dashboard' }).catch(() => router.navigate({ to: '/' }));
             }
           },
         })}

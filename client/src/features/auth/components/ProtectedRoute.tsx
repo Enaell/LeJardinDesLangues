@@ -16,7 +16,7 @@ export const ProtectedRoute = ({ children, requireAuth = false }: ProtectedRoute
     if (requireAuth && isUnauthenticated) {
       navigate({ to: '/' });
     } else if (!requireAuth && isAuthenticated) {
-      navigate({ to: '/profile' });
+      navigate({ to: '/dashboard' });
     }
   }, [isLoading, requireAuth, isAuthenticated, isUnauthenticated, navigate]);
 

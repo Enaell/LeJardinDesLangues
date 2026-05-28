@@ -1,14 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { ProtectedRoute } from '@features/auth/components/ProtectedRoute';
+import { Typography } from '@core/components/ui/typography';
 
 const ProfilePage = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Profil</h1>
-      <p className="text-muted-foreground">
-        Gérez votre profil et vos préférences d'apprentissage.
-      </p>
-    </div>
+    <main className="container mx-auto px-4 py-8">
+      <Typography variant="h2">Paramètres du profil</Typography>
+      <Typography variant="lead" className="text-muted-foreground mt-2">
+        Gérez vos informations personnelles et vos préférences d'apprentissage.
+      </Typography>
+    </main>
   );
 };
 

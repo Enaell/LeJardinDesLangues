@@ -1,6 +1,7 @@
 // Routes configuration and constants
 export const ROUTES = {
   HOME: '/',
+  DASHBOARD: '/dashboard',
   DICTIONARY: '/dictionary',
   FLASHCARDS: '/flashcards',
   EXERCISES: '/exercises',
@@ -34,6 +35,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
 ];
 
 export const APP_NAV_ITEMS: NavigationItem[] = [
+  { path: ROUTES.DASHBOARD, icon: '🏠', translationKey: 'navigation.dashboard' },
   { path: ROUTES.DICTIONARY, icon: '📚', translationKey: 'navigation.dictionary' },
   { path: ROUTES.FLASHCARDS, icon: '🗂️', translationKey: 'navigation.flashcards' },
   { path: ROUTES.EXERCISES, icon: '🎯', translationKey: 'navigation.exercises' },

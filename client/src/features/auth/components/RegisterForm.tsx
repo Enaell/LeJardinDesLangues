@@ -248,7 +248,7 @@ export const RegisterForm = ({ onSuccess, switchTab, onGoogleNewUser }: Register
               onGoogleNewUser(data.user.nativeLanguage);
             } else {
               onSuccess();
-              router.navigate({ to: '/profile' }).catch(() => router.navigate({ to: '/' }));
+              router.navigate({ to: '/dashboard' }).catch(() => router.navigate({ to: '/' }));
             }
           },
         })}
