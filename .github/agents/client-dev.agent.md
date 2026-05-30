@@ -118,8 +118,23 @@ src/
 │   ├── types/
 │   └── index.ts      ← exports publics
 ├── features/auth/      ← `AuthModalContext` expose `openModal(tab?)`, `closeModal()`, `openOnboarding(nativeLanguage)` via `useAuthModalContext()` ; `LanguageOnboardingModal` déclenché par `openOnboarding` après première connexion Google (`isNewUser: true`)
-├── features/landing/   ← landing page publique
-│   └── components/HeroSection.tsx  (section hero plein écran, HeroBackground.png)
+├── features/dashboard/ ← tableau de bord utilisateur (route `/dashboard` — protégée) ; layout 2 colonnes (`lg:grid-cols-[3fr_2fr]`), fond dégradé jardin
+│   └── components/
+│       ├── DailyGrowthCard.tsx    (objectif XP + Progress bar + CTA)
+│       ├── QuickExerciseCard.tsx  (exercice caractère chinois, choix de réponses)
+│       ├── NewsCard.tsx           (3 actualités, badges catégorie + vignettes)
+│       ├── ProgressCard.tsx       (XP circulaire, streak, mots appris)
+│       ├── QuoteCard.tsx          (citation motivationnelle, bg-primary)
+│       ├── DailyTasksCard.tsx     (4 tâches quotidiennes + ChevronRight)
+│       └── ExploreSection.tsx     (6 cartes navigation + 1 carte CTA)
+├── features/landing/   ← landing page publique (route `/` — pas de `ProtectedRoute`, redirige vers `/profile` si connecté)
+│   └── components/
+│       ├── HeroSection.tsx        (hero plein écran, HeroBackground.png)
+│       ├── FeaturesSection.tsx    ("Learn. Grow. Blossom.", 3 FeatureCard)
+│       ├── HowItWorksSection.tsx  (4 étapes, cercles + ligne pointillés)
+│       ├── LanguagesSection.tsx   (6 cartes langues, grille responsive)
+│       ├── WhyUsSection.tsx       (4 cartes bénéfices, 2×2 → 4 cols)
+│       └── TeamSection.tsx        (4 PersonCard)
 ├── core/
 │   ├── api/          ← hooks + types générés par orval (NE PAS modifier manuellement)
 │   │   ├── authentification/authentification.ts
@@ -133,7 +148,8 @@ src/
 │   │   │   ├── AppBarDesktop   (nav app : Dictionary, Flashcards, Exercises, Community)
 │   │   │   ├── AppBarMobile    (nav app mobile)
 │   │   │   ├── AppBarLandingNav        (nav landing desktop : scroll vers sections)
-│   │   │   └── AppBarLandingNavMobile  (nav landing mobile)
+│   │   │   ├── AppBarLandingNavMobile  (nav landing mobile)
+│   │   │   └── Footer                  (multi-colonnes, bg-primary — logo + 3 colonnes liens + icônes sociales + copyright)
 │   │   ├── notifications/ ← GlobalNotifications, useNotify
 │   │   └── ui/           ← TOUS les composants UI (shadcn + custom Jardin des Langues)
 │   ├── icons/            ← Icônes SVG custom : GoogleIcon, XIcon, LinkedinIcon, GithubIcon

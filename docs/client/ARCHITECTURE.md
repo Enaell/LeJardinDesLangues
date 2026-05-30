@@ -76,12 +76,46 @@ features/example/
 | Feature | Description | Statut |
 |---------|-------------|--------|
 | `auth` | Authentification, connexion, inscription ; flow onboarding OAuth (`LanguageOnboardingModal` non-closable après première connexion Google) | 🚧 En développement |
-| `landing` | Landing page publique (hero, sections marketing) | 🚧 En développement |
+| `landing` | Landing page publique : `HeroSection`, `FeaturesSection`, `HowItWorksSection`, `LanguagesSection`, `WhyUsSection`, `TeamSection`, `CtaBanner` — route `/` publique (redirige vers `/profile` si connecté) | ✅ Implémenté |
+| `dashboard` | Tableau de bord utilisateur : 7 widgets composés dans un layout 2 colonnes (`lg:grid-cols-[3fr_2fr]`), fond dégradé jardin — route `/dashboard` protégée | ✅ Implémenté |
 | `dictionary` | Recherche de mots, définitions, traductions | 🚧 En développement |
 | `flashcards` | Création et étude de cartes mémoire | 🚧 En développement |
 | `exercises` | Exercices interactifs d'apprentissage | 🚧 En développement |
 | `community` | Partage, discussions, profils publics | 🚧 En développement |
 | `profile` | Gestion du profil et préférences utilisateur | 🚧 En développement |
+
+### 🌿 Feature: `landing` — Structure des sections
+
+La landing page est composée des sections suivantes, toutes dans `features/landing/components/` :
+
+| Composant | Description | Composants core utilisés |
+|-----------|-------------|------------------------|
+| `HeroSection` | Hero plein écran avec image de fond (`HeroBackground.png`) | `Typography`, `Button`, `buttonVariants` |
+| `FeaturesSection` | Section "Learn. Grow. Blossom." — 2 colonnes, 3 `FeatureCard` | `Typography`, `FeatureCard` |
+| `HowItWorksSection` | 4 étapes avec cercles et ligne en pointillés | `Typography` |
+| `LanguagesSection` | 6 cartes de langues en grille responsive | `Typography`, `Card` |
+| `WhyUsSection` | 4 cartes bénéfices (grille 2×2 → 4 cols) | `Typography`, `Card` |
+| `TeamSection` | 4 `PersonCard` (équipe) | `Typography`, `PersonCard` |
+
+**Route :** `/` — publique (pas de `ProtectedRoute`) ; redirige vers `/profile` si l'utilisateur est déjà connecté.
+
+**i18n :** namespace `landing` — clés : `landing.features.*`, `landing.howItWorks.*`, `landing.languages.*`, `landing.whyUs.*`, `landing.team.*`
+
+### 🌿 Feature: `dashboard` — Widgets du tableau de bord
+
+Le dashboard est composé de 7 widgets dans `features/dashboard/components/`, assemblés dans `routes/dashboard.tsx` en 2 colonnes (`lg:grid-cols-[3fr_2fr]`) sur fond dégradé jardin :
+
+| Composant | Description |
+|-----------|-------------|
+| `DailyGrowthCard` | Carte objectif XP avec barre de progression (`Progress`) et CTA « Continuer l'apprentissage » |
+| `QuickExerciseCard` | Widget exercice — caractère chinois à identifier avec choix de réponses |
+| `NewsCard` | 3 actualités avec badges de catégorie et vignettes |
+| `ProgressCard` | Progression circulaire XP, série de jours (streak) et mots appris |
+| `QuoteCard` | Citation motivationnelle sur fond `bg-primary` (vert jardin foncé) |
+| `DailyTasksCard` | 4 tâches quotidiennes en lignes avec `ChevronRight` |
+| `ExploreSection` | 6 cartes de navigation + 1 carte CTA motivationnelle |
+
+**Route :** `/dashboard` — protégée (`ProtectedRoute`).
 
 ## 🔧 Core (Fondations)
 
@@ -94,6 +128,7 @@ Le dossier `core` contient tous les éléments partagés entre les features :
     - **mode app** (autres routes) : `sticky`, fond `bg-primary`, `AppBarDesktop` + `AppBarMobile`
   - `AppBarLandingNav` / `AppBarLandingNavMobile` : liens scroll-to-section (`#features`, `#languages`, `#about`, `#team`) + bouton CTA
   - `AppBarDesktop` / `AppBarMobile` : navigation entre modules de l'app (Dictionary, Flashcards, Exercises, Community)
+  - `Footer` : footer multi-colonnes (`bg-primary`) — logo + 3 colonnes de liens (Product, Company, Support) + icônes sociales + ligne copyright
 - **`notifications/`** : Système de notifications toast (`NotificationProvider`, `GlobalNotifications`, `useNotify`)
 - **`ui/`** : Composants UI (shadcn/base-ui + custom) dans `src/core/components/ui/` — voir `docs/client/THEME.md` pour la liste complète
 - **`icons/`** (`src/core/icons/`) : Icônes SVG custom non disponibles dans lucide-react — `GoogleIcon`, `XIcon`, `LinkedinIcon`, `GithubIcon`. Importer via `@core/icons`.

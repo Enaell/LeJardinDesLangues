@@ -8,190 +8,190 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root';
-import { Route as DashboardRouteImport } from './routes/dashboard';
-import { Route as ProfileRouteImport } from './routes/profile';
-import { Route as FlashcardsRouteImport } from './routes/flashcards';
-import { Route as ExercisesRouteImport } from './routes/exercises';
-import { Route as DictionaryRouteImport } from './routes/dictionary';
-import { Route as CommunityRouteImport } from './routes/community';
-import { Route as IndexRouteImport } from './routes/index';
-import { Route as AuthGoogleCallbackRouteImport } from './routes/auth/google/callback';
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as FlashcardsRouteImport } from './routes/flashcards'
+import { Route as ExercisesRouteImport } from './routes/exercises'
+import { Route as DictionaryRouteImport } from './routes/dictionary'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as CommunityRouteImport } from './routes/community'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthGoogleCallbackRouteImport } from './routes/auth/google/callback'
 
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any);
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const FlashcardsRoute = FlashcardsRouteImport.update({
   id: '/flashcards',
   path: '/flashcards',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ExercisesRoute = ExercisesRouteImport.update({
   id: '/exercises',
   path: '/exercises',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const DictionaryRoute = DictionaryRouteImport.update({
   id: '/dictionary',
   path: '/dictionary',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CommunityRoute = CommunityRouteImport.update({
   id: '/community',
   path: '/community',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AuthGoogleCallbackRoute = AuthGoogleCallbackRouteImport.update({
   id: '/auth/google/callback',
   path: '/auth/google/callback',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute;
-  '/community': typeof CommunityRoute;
-  '/dashboard': typeof DashboardRoute;
-  '/dictionary': typeof DictionaryRoute;
-  '/exercises': typeof ExercisesRoute;
-  '/flashcards': typeof FlashcardsRoute;
-  '/profile': typeof ProfileRoute;
-  '/auth/google/callback': typeof AuthGoogleCallbackRoute;
+  '/': typeof IndexRoute
+  '/community': typeof CommunityRoute
+  '/dashboard': typeof DashboardRoute
+  '/dictionary': typeof DictionaryRoute
+  '/exercises': typeof ExercisesRoute
+  '/flashcards': typeof FlashcardsRoute
+  '/profile': typeof ProfileRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute;
-  '/community': typeof CommunityRoute;
-  '/dashboard': typeof DashboardRoute;
-  '/dictionary': typeof DictionaryRoute;
-  '/exercises': typeof ExercisesRoute;
-  '/flashcards': typeof FlashcardsRoute;
-  '/profile': typeof ProfileRoute;
-  '/auth/google/callback': typeof AuthGoogleCallbackRoute;
+  '/': typeof IndexRoute
+  '/community': typeof CommunityRoute
+  '/dashboard': typeof DashboardRoute
+  '/dictionary': typeof DictionaryRoute
+  '/exercises': typeof ExercisesRoute
+  '/flashcards': typeof FlashcardsRoute
+  '/profile': typeof ProfileRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  '/': typeof IndexRoute;
-  '/community': typeof CommunityRoute;
-  '/dashboard': typeof DashboardRoute;
-  '/dictionary': typeof DictionaryRoute;
-  '/exercises': typeof ExercisesRoute;
-  '/flashcards': typeof FlashcardsRoute;
-  '/profile': typeof ProfileRoute;
-  '/auth/google/callback': typeof AuthGoogleCallbackRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/community': typeof CommunityRoute
+  '/dashboard': typeof DashboardRoute
+  '/dictionary': typeof DictionaryRoute
+  '/exercises': typeof ExercisesRoute
+  '/flashcards': typeof FlashcardsRoute
+  '/profile': typeof ProfileRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-  | '/'
-  | '/community'
-  | '/dashboard'
-  | '/dictionary'
-  | '/exercises'
-  | '/flashcards'
-  | '/profile'
-  | '/auth/google/callback';
-  fileRoutesByTo: FileRoutesByTo;
+    | '/'
+    | '/community'
+    | '/dashboard'
+    | '/dictionary'
+    | '/exercises'
+    | '/flashcards'
+    | '/profile'
+    | '/auth/google/callback'
+  fileRoutesByTo: FileRoutesByTo
   to:
-  | '/'
-  | '/community'
-  | '/dashboard'
-  | '/dictionary'
-  | '/exercises'
-  | '/flashcards'
-  | '/profile'
-  | '/auth/google/callback';
+    | '/'
+    | '/community'
+    | '/dashboard'
+    | '/dictionary'
+    | '/exercises'
+    | '/flashcards'
+    | '/profile'
+    | '/auth/google/callback'
   id:
-  | '__root__'
-  | '/'
-  | '/community'
-  | '/dashboard'
-  | '/dictionary'
-  | '/exercises'
-  | '/flashcards'
-  | '/profile'
-  | '/auth/google/callback';
-  fileRoutesById: FileRoutesById;
+    | '__root__'
+    | '/'
+    | '/community'
+    | '/dashboard'
+    | '/dictionary'
+    | '/exercises'
+    | '/flashcards'
+    | '/profile'
+    | '/auth/google/callback'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  CommunityRoute: typeof CommunityRoute;
-  DashboardRoute: typeof DashboardRoute;
-  DictionaryRoute: typeof DictionaryRoute;
-  ExercisesRoute: typeof ExercisesRoute;
-  FlashcardsRoute: typeof FlashcardsRoute;
-  ProfileRoute: typeof ProfileRoute;
-  AuthGoogleCallbackRoute: typeof AuthGoogleCallbackRoute;
+  IndexRoute: typeof IndexRoute
+  CommunityRoute: typeof CommunityRoute
+  DashboardRoute: typeof DashboardRoute
+  DictionaryRoute: typeof DictionaryRoute
+  ExercisesRoute: typeof ExercisesRoute
+  FlashcardsRoute: typeof FlashcardsRoute
+  ProfileRoute: typeof ProfileRoute
+  AuthGoogleCallbackRoute: typeof AuthGoogleCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dashboard': {
-      id: '/dashboard';
-      path: '/dashboard';
-      fullPath: '/dashboard';
-      preLoaderRoute: typeof DashboardRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
     '/profile': {
-      id: '/profile';
-      path: '/profile';
-      fullPath: '/profile';
-      preLoaderRoute: typeof ProfileRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/flashcards': {
-      id: '/flashcards';
-      path: '/flashcards';
-      fullPath: '/flashcards';
-      preLoaderRoute: typeof FlashcardsRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/flashcards'
+      path: '/flashcards'
+      fullPath: '/flashcards'
+      preLoaderRoute: typeof FlashcardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/exercises': {
-      id: '/exercises';
-      path: '/exercises';
-      fullPath: '/exercises';
-      preLoaderRoute: typeof ExercisesRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/exercises'
+      path: '/exercises'
+      fullPath: '/exercises'
+      preLoaderRoute: typeof ExercisesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dictionary': {
-      id: '/dictionary';
-      path: '/dictionary';
-      fullPath: '/dictionary';
-      preLoaderRoute: typeof DictionaryRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/dictionary'
+      path: '/dictionary'
+      fullPath: '/dictionary'
+      preLoaderRoute: typeof DictionaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/community': {
-      id: '/community';
-      path: '/community';
-      fullPath: '/community';
-      preLoaderRoute: typeof CommunityRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/google/callback': {
-      id: '/auth/google/callback';
-      path: '/auth/google/callback';
-      fullPath: '/auth/google/callback';
-      preLoaderRoute: typeof AuthGoogleCallbackRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/auth/google/callback'
+      path: '/auth/google/callback'
+      fullPath: '/auth/google/callback'
+      preLoaderRoute: typeof AuthGoogleCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,7 +204,7 @@ const rootRouteChildren: RootRouteChildren = {
   FlashcardsRoute: FlashcardsRoute,
   ProfileRoute: ProfileRoute,
   AuthGoogleCallbackRoute: AuthGoogleCallbackRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
