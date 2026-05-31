@@ -5,7 +5,7 @@ applyTo: "client/src/**"
 # Conventions Frontend — Le Jardin des Langues
 
 ## Stack
-- React 19 + TypeScript, Vite, Node.js 22
+- React 19 + TypeScript, Vite, Node.js 24
 - **UI** : shadcn/ui (`@base-ui/react`, style `base-nova`) + Tailwind CSS v4 — **pas de Material-UI**
 - **Routing** : TanStack Router (fichiers dans `src/routes/`, tree généré dans `routeTree.gen.ts`)
 - **Data fetching** : TanStack Query (`useQuery`, `useMutation`)

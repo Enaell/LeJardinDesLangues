@@ -5,7 +5,7 @@ applyTo: "server/src/**"
 # Conventions Backend — Le Jardin des Langues
 
 ## Stack
-- Node.js 22 + NestJS 11 + TypeScript
+- Node.js 24 + NestJS 11 + TypeScript
 - **ORM** : Prisma 7 — client généré dans `src/generated/prisma`, driver `@prisma/adapter-pg`
 - **BDD** : PostgreSQL 16
 - **Auth** : JWT (`@nestjs/jwt`) + OAuth 2.0 (Passport.js) + argon2id (hashage)

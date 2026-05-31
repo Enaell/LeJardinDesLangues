@@ -17,7 +17,7 @@ Tu travailles exclusivement dans le dossier `client/`.
 - TanStack Query (gestion des requêtes API)
 - TanStack Form (formulaires)
 - react-i18next (i18n)
-- Node.js 22
+- Node.js 24
 - Storybook (visualisation et documentation des composants `core/components/ui/`)
 
 ## Conventions de code (OBLIGATOIRES)

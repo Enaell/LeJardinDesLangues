@@ -16,9 +16,9 @@ export const AppBar = () => {
   if (isLandingPage) {
     return (
       <header className="absolute top-0 left-0 right-0 z-50 bg-transparent">
-        <div className="flex items-center h-16 px-4 max-w-screen-xl mx-auto">
-          <Link to="/" className="font-bold text-lg mr-6 flex-shrink-0 flex items-center gap-2 text-white font-heading">
-            <img src={logo} alt={t('app.title')} className="h-8 w-auto" />
+        <div className="flex items-center h-20 px-8 w-full">
+          <Link to="/" className="font-logo  font-semibold text-2xl mr-6 flex-shrink-0 flex items-center gap-2 text-white tracking-wide">
+            <img src={logo} alt={t('app.title')} className="h-10 w-auto" />
             {t('app.title')}
           </Link>
           <AppBarLandingNav />
@@ -32,9 +32,9 @@ export const AppBar = () => {
 
   return (
     <header className="bg-primary sticky top-0 z-50 shadow-sm">
-      <div className="flex items-center h-16 px-4 max-w-screen-xl mx-auto">
-        <Link to="/" className="font-bold text-lg mr-6 flex-shrink-0 flex items-center gap-2 text-primary-foreground font-heading">
-          <img src={logo} alt={t('app.title')} className="h-8 w-auto" />
+      <div className="flex items-center h-20 px-4 max-w-screen-xl mx-auto">
+        <Link to="/" className="font-logo italic font-semibold text-2xl mr-6 flex-shrink-0 flex items-center gap-2 text-primary-foreground tracking-wide">
+          <img src={logo} alt={t('app.title')} className="h-10 w-auto" />
           {t('app.title')}
         </Link>
         {isAuthenticated && <AppBarDesktop />}

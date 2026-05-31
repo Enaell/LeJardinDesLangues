@@ -10,7 +10,7 @@ Tu es un expert en développement backend pour le projet **Le Jardin des Langues
 Tu travailles exclusivement dans le dossier `server/`.
 
 ## Stack technique
-- Node.js 22 + NestJS
+- Node.js 24 + NestJS
 - Prisma 7 (ORM) — client généré dans `src/generated/prisma`, driver `@prisma/adapter-pg`
 - PostgreSQL 16
 - JWT (`@nestjs/jwt`) + OAuth 2.0 (Passport.js, `@nestjs/passport`)

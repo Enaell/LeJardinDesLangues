@@ -223,7 +223,7 @@ Le hot reload est activé par défaut en mode développement :
 - **Cypress** pour les tests E2E
 
 ### Backend
-- **Node.js 22** avec **NestJS 11**
+- **Node.js 24** avec **NestJS 11**
 - **Prisma 6** comme ORM (IDs en `cuid()`)
 - **PostgreSQL 16** comme base de données
 - **Redis** pour le cache (production)

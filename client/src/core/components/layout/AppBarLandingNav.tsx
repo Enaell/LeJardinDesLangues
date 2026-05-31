@@ -20,17 +20,17 @@ export const AppBarLandingNav = () => {
         <Button
           key={item.sectionId}
           variant="ghost-white"
-          size="sm"
+          size="lg"
           onClick={() => handleScrollTo(item.sectionId)}
         >
           {t(item.translationKey)}
         </Button>
       ))}
       <div className="ml-auto flex items-center gap-2">
-        <Button variant="ghost-white" size="sm" onClick={() => openModal('login')}>
+        <Button variant="ghost-white" size="lg" onClick={() => openModal('login')}>
           {t('auth.login.submitButton')}
         </Button>
-        <Button variant="inverted" size="sm" className="rounded-full px-5" onClick={() => openModal('register')}>
+        <Button variant="inverted" size="lg" className="rounded-full px-6" onClick={() => openModal('register')}>
           {t('landing.cta')}
         </Button>
       </div>
