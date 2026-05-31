@@ -17,7 +17,7 @@ const DashboardPage = () => {
   const displayName = user?.name ?? user?.username ?? 'Apprenant';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-amber-50/30 to-emerald-50/20">
+    <div className="min-h-screen bg-background">
       <main className="px-6 py-8 max-w-screen-xl mx-auto flex flex-col gap-6">
         {/* Welcome */}
         <section>

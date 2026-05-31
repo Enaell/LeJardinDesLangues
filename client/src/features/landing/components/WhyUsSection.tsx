@@ -20,7 +20,7 @@ export const WhyUsSection = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="py-16 px-6 md:px-16 lg:px-24 bg-white">
+    <section className="py-16 px-6 md:px-16 lg:px-24 bg-surface">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <Typography variant="h2" className="mb-3">

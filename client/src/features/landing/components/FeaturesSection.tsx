@@ -7,7 +7,7 @@ export const FeaturesSection = () => {
   const { t } = useTranslation();
 
   return (
-    <section id="features" className="py-16 px-6 md:px-16 lg:px-24 bg-stone-50">
+    <section id="features" className="py-16 px-6 md:px-16 lg:px-24 bg-muted">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Left column */}
         <div className="flex flex-col gap-6">

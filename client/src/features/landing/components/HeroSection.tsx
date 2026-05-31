@@ -37,7 +37,7 @@ export const HeroSection = () => {
           viewBox="0 0 1400 350"
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="none"
-          className="w-full h-48 fill-stone-50"
+          className="w-full h-48 fill-muted"
         >
           <path d="M 0 250 C 880 360 920 10 1400 60 L 1400 370 L 0 370 Z" />
         </svg>

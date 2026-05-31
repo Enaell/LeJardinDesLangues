@@ -23,33 +23,33 @@ const FOOTER_LINKS = {
 
 export const Footer = () => {
   return (
-    <footer className="bg-primary text-primary-foreground">
+    <footer className="bg-muted-dark text-foreground">
       {/* Top section */}
       <div className="max-w-7xl mx-auto px-6 md:px-16 lg:px-24 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="flex flex-col gap-4">
-            <Typography variant="h5" className="text-primary-foreground">
+            <Typography variant="h5" className="text-foreground">
               🌿 LinguaGarden
             </Typography>
-            <Typography variant="small" className="text-primary-foreground/70">
+            <Typography variant="small" className="text-muted-foreground">
               Grow your language skills naturally.
             </Typography>
             <div className="flex items-center gap-2">
-              <Typography variant="small" className="text-primary-foreground/70">
+              <Typography variant="small" className="text-muted-foreground">
                 Follow us
               </Typography>
               <a
                 href="#"
                 aria-label="Twitter / X"
-                className={cn(buttonVariants({ variant: 'ghost-white', size: 'icon' }))}
+                className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}
               >
                 <XIcon className="size-4" />
               </a>
               <a
                 href="#"
                 aria-label="Instagram"
-                className={cn(buttonVariants({ variant: 'ghost-white', size: 'icon' }))}
+                className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}
               >
                 <InstagramIcon className="size-4" />
               </a>
@@ -58,12 +58,12 @@ export const Footer = () => {
 
           {/* Product */}
           <div className="flex flex-col gap-3">
-            <Typography variant="small" className="font-semibold text-primary-foreground uppercase tracking-wide">
+            <Typography variant="small" className="font-semibold text-foreground uppercase tracking-wide">
               Product
             </Typography>
             {FOOTER_LINKS.product.map((link) => (
               <a key={link.label} href={link.href}>
-                <Typography variant="small" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                <Typography variant="small" className="text-muted-foreground hover:text-foreground transition-colors">
                   {link.label}
                 </Typography>
               </a>
@@ -72,12 +72,12 @@ export const Footer = () => {
 
           {/* Company */}
           <div className="flex flex-col gap-3">
-            <Typography variant="small" className="font-semibold text-primary-foreground uppercase tracking-wide">
+            <Typography variant="small" className="font-semibold text-foreground uppercase tracking-wide">
               Company
             </Typography>
             {FOOTER_LINKS.company.map((link) => (
               <a key={link.label} href={link.href}>
-                <Typography variant="small" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                <Typography variant="small" className="text-muted-foreground hover:text-foreground transition-colors">
                   {link.label}
                 </Typography>
               </a>
@@ -86,12 +86,12 @@ export const Footer = () => {
 
           {/* Support */}
           <div className="flex flex-col gap-3">
-            <Typography variant="small" className="font-semibold text-primary-foreground uppercase tracking-wide">
+            <Typography variant="small" className="font-semibold text-foreground uppercase tracking-wide">
               Support
             </Typography>
             {FOOTER_LINKS.support.map((link) => (
               <a key={link.label} href={link.href}>
-                <Typography variant="small" className="text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                <Typography variant="small" className="text-muted-foreground hover:text-foreground transition-colors">
                   {link.label}
                 </Typography>
               </a>
@@ -101,9 +101,9 @@ export const Footer = () => {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-primary-foreground/20">
+      <div className="border-t border-border">
         <div className="max-w-7xl mx-auto px-6 py-4 text-center">
-          <Typography variant="small" className="text-primary-foreground/60">
+          <Typography variant="small" className="text-muted-foreground">
             © {new Date().getFullYear()} LinguaGarden. All rights reserved.
           </Typography>
         </div>

@@ -13,7 +13,7 @@ export const TeamSection = () => {
   const { t } = useTranslation();
 
   return (
-    <section id="team" className="py-16 px-6 md:px-16 lg:px-24 bg-stone-50">
+    <section id="team" className="py-16 px-6 md:px-16 lg:px-24 bg-muted-dark">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <Typography variant="h2" className="mb-3">
