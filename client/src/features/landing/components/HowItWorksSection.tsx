@@ -1,18 +1,22 @@
-import { useTranslation } from '@core/hooks';
+import { useParallax, useTranslation } from '@core/hooks';
 import { Typography } from '@core/components/ui/typography';
+import bonsai from '@/assets/landingPage/rounded_bonzai.png';
+import book from '@/assets/landingPage/rounded_book.png';
+import kiosk from '@/assets/landingPage/rounded_kiosk.png';
+import wateringCan from '@/assets/landingPage/rounded_watering_can.png';
 
 type Step = {
   number: number;
-  bg: string;
+  image: string;
   titleKey: string;
   descriptionKey: string;
 };
 
 const STEPS: Step[] = [
-  { number: 1, bg: 'bg-emerald-100', titleKey: 'landing.howItWorks.step1.title', descriptionKey: 'landing.howItWorks.step1.description' },
-  { number: 2, bg: 'bg-teal-100', titleKey: 'landing.howItWorks.step2.title', descriptionKey: 'landing.howItWorks.step2.description' },
-  { number: 3, bg: 'bg-green-200', titleKey: 'landing.howItWorks.step3.title', descriptionKey: 'landing.howItWorks.step3.description' },
-  { number: 4, bg: 'bg-emerald-200', titleKey: 'landing.howItWorks.step4.title', descriptionKey: 'landing.howItWorks.step4.description' },
+  { number: 1, image: bonsai, titleKey: 'landing.howItWorks.step1.title', descriptionKey: 'landing.howItWorks.step1.description' },
+  { number: 2, image: book, titleKey: 'landing.howItWorks.step2.title', descriptionKey: 'landing.howItWorks.step2.description' },
+  { number: 3, image: kiosk, titleKey: 'landing.howItWorks.step3.title', descriptionKey: 'landing.howItWorks.step3.description' },
+  { number: 4, image: wateringCan, titleKey: 'landing.howItWorks.step4.title', descriptionKey: 'landing.howItWorks.step4.description' },
 ];
 
 export const HowItWorksSection = () => {
@@ -39,8 +43,13 @@ export const HowItWorksSection = () => {
             <div key={step.number} className="relative flex flex-col items-center text-center flex-1 gap-4">
               {/* Circle with badge */}
               <div className="relative">
-                <div className={`w-32 h-32 rounded-full ${step.bg} flex items-center justify-center`} />
-                <span className="absolute bottom-0 left-0 w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center">
+                <img
+                  src={step.image}
+                  alt=""
+                  className="w-48 h-48 rounded-full object-cover"
+                  aria-hidden
+                />
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-10 h-10 rounded-full bg-primary text-primary-foreground text-default font-bold flex items-center justify-center border-4 border-surface">
                   {step.number}
                 </span>
               </div>

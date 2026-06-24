@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 
 import { Footer } from '@core/components/layout';
 import { CtaBanner } from '@core/components/ui/cta-banner';
+import { useParallax } from '@core/hooks';
 import { useAuthModalContext } from '@features/auth/components/AuthModalContext';
 import {
   HeroSection,

@@ -1,6 +1,7 @@
 import { useTranslation } from '@core/hooks';
 import { Typography } from '@core/components/ui/typography';
 import { PersonCard } from '@core/components/ui/person-card';
+import bridgeImg from '@/assets/landingPage/river_bridge_lantern.png';
 
 const TEAM_MEMBERS = [
   { name: 'Hina', roleKey: 'landing.team.hina.role', fallback: 'HI' },
@@ -13,7 +14,14 @@ export const TeamSection = () => {
   const { t } = useTranslation();
 
   return (
-    <section id="team" className="py-16 px-6 md:px-16 lg:px-24 bg-muted-dark">
+    <section id="team" className="relative overflow-hidden py-16 px-6 md:px-16 lg:px-24 bg-muted-dark">
+      {/* Decorative bridge — bottom right */}
+      <img
+        src={bridgeImg}
+        alt=""
+        aria-hidden
+        className="pointer-events-none select-none absolute -bottom-4 -right-8 w-80 md:w-[420px] lg:w-[520px] opacity-80"
+      />
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <Typography variant="h2" className="mb-3">

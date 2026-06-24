@@ -1,6 +1,7 @@
 import { useTranslation } from '@core/hooks';
 import { Typography } from '@core/components/ui/typography';
 import { Card, CardContent } from '@core/components/ui/card';
+import planteImg from '@/assets/landingPage/right_border_plants.png';
 
 type WhyUsItem = {
   bg: string;
@@ -20,7 +21,14 @@ export const WhyUsSection = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="py-16 px-6 md:px-16 lg:px-24 bg-surface">
+    <section className="relative overflow-hidden py-16 px-6 md:px-16 lg:px-24 bg-surface">
+      {/* Decorative plant — bottom right */}
+      <img
+        src={planteImg}
+        alt=""
+        aria-hidden
+        className="pointer-events-none select-none absolute -right-4 bottom-0 w-36 md:w-44 lg:w-56 opacity-90"
+      />
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <Typography variant="h2" className="mb-3">
