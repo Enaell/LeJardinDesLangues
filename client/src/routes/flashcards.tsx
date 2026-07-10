@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { ProtectedRoute } from '@features/auth/components/ProtectedRoute';
 
 const FlashcardsPage = () => {
   return (
@@ -12,6 +13,10 @@ const FlashcardsPage = () => {
 };
 
 export const Route = createFileRoute('/flashcards')({
-  component: FlashcardsPage,
+  component: () => (
+    <ProtectedRoute requireAuth>
+      <FlashcardsPage />
+    </ProtectedRoute>
+  ),
 });
 

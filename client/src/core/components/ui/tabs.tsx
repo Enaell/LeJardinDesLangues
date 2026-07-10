@@ -30,7 +30,7 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "relative z-10 inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-selected:text-foreground data-selected:font-semibold",
+        "relative z-10 inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 py-1 text-sm font-medium transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-[active]:text-primary-foreground data-[active]:font-semibold",
         className
       )}
       {...props}
@@ -53,7 +53,7 @@ function TabsIndicator({ className, ...props }: TabsPrimitive.Indicator.Props) {
     <TabsPrimitive.Indicator
       data-slot="tabs-indicator"
       className={cn(
-        "absolute inset-y-1 rounded-md bg-background shadow-sm transition-all duration-200 ease-in-out",
+        "absolute top-1 bottom-1 rounded-md bg-primary shadow-sm transition-all duration-200 ease-in-out [left:var(--active-tab-left)] [width:var(--active-tab-width)]",
         className
       )}
       {...props}

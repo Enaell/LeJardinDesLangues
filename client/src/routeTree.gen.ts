@@ -13,8 +13,10 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as FlashcardsRouteImport } from './routes/flashcards'
 import { Route as ExercisesRouteImport } from './routes/exercises'
 import { Route as DictionaryRouteImport } from './routes/dictionary'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthGoogleCallbackRouteImport } from './routes/auth/google/callback'
 
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
@@ -36,6 +38,11 @@ const DictionaryRoute = DictionaryRouteImport.update({
   path: '/dictionary',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CommunityRoute = CommunityRouteImport.update({
   id: '/community',
   path: '/community',
@@ -46,66 +53,85 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthGoogleCallbackRoute = AuthGoogleCallbackRouteImport.update({
+  id: '/auth/google/callback',
+  path: '/auth/google/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/community': typeof CommunityRoute
+  '/dashboard': typeof DashboardRoute
   '/dictionary': typeof DictionaryRoute
   '/exercises': typeof ExercisesRoute
   '/flashcards': typeof FlashcardsRoute
   '/profile': typeof ProfileRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/community': typeof CommunityRoute
+  '/dashboard': typeof DashboardRoute
   '/dictionary': typeof DictionaryRoute
   '/exercises': typeof ExercisesRoute
   '/flashcards': typeof FlashcardsRoute
   '/profile': typeof ProfileRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/community': typeof CommunityRoute
+  '/dashboard': typeof DashboardRoute
   '/dictionary': typeof DictionaryRoute
   '/exercises': typeof ExercisesRoute
   '/flashcards': typeof FlashcardsRoute
   '/profile': typeof ProfileRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/community'
+    | '/dashboard'
     | '/dictionary'
     | '/exercises'
     | '/flashcards'
     | '/profile'
+    | '/auth/google/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/community'
+    | '/dashboard'
     | '/dictionary'
     | '/exercises'
     | '/flashcards'
     | '/profile'
+    | '/auth/google/callback'
   id:
     | '__root__'
     | '/'
     | '/community'
+    | '/dashboard'
     | '/dictionary'
     | '/exercises'
     | '/flashcards'
     | '/profile'
+    | '/auth/google/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CommunityRoute: typeof CommunityRoute
+  DashboardRoute: typeof DashboardRoute
   DictionaryRoute: typeof DictionaryRoute
   ExercisesRoute: typeof ExercisesRoute
   FlashcardsRoute: typeof FlashcardsRoute
   ProfileRoute: typeof ProfileRoute
+  AuthGoogleCallbackRoute: typeof AuthGoogleCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -138,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DictionaryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/community': {
       id: '/community'
       path: '/community'
@@ -152,16 +185,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/google/callback': {
+      id: '/auth/google/callback'
+      path: '/auth/google/callback'
+      fullPath: '/auth/google/callback'
+      preLoaderRoute: typeof AuthGoogleCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CommunityRoute: CommunityRoute,
+  DashboardRoute: DashboardRoute,
   DictionaryRoute: DictionaryRoute,
   ExercisesRoute: ExercisesRoute,
   FlashcardsRoute: FlashcardsRoute,
   ProfileRoute: ProfileRoute,
+  AuthGoogleCallbackRoute: AuthGoogleCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

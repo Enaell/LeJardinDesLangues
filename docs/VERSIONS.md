@@ -2,16 +2,17 @@
 
 ## 🔄 Mise à jour des versions (Juillet 2025)
 
-### Node.js 22 LTS
-- **Version** : Node.js 22.x
-- **Type** : Long Term Support (LTS)
-- **Support jusqu'à** : Avril 2027
+### Node.js 24 LTS
+- **Version** : Node.js 24.x
+- **Type** : Long Term Support (LTS, depuis Octobre 2025)
+- **Support jusqu'à** : Avril 2028
 - **Nouvelles fonctionnalités** :
-  - Performance améliorée du moteur V8
-  - Support natif amélioré des modules ES
-  - Nouvelles APIs Web Standards
-  - Meilleure gestion de la mémoire
-  - Support des import maps natifs
+  - Moteur V8 v13.6 (performances améliorées)
+  - `require(esm)` activé par défaut
+  - Fetch API stable et améliorée
+  - URLPattern support natif
+  - Test runner amélioré
+  - Meilleure interopérabilité ESM/CJS
 
 ### PostgreSQL 16
 - **Version** : PostgreSQL 16.x
@@ -124,11 +125,11 @@
 ### Performance
 - **Recherche dans le dictionnaire** : PostgreSQL 16 améliore les performances des recherches textuelles
 - **Gestion des flashcards** : Optimisations pour les requêtes complexes
-- **API REST** : Node.js 22 offre de meilleures performances réseau
+- **API REST** : Node.js 24 offre de meilleures performances réseau
 - **Cache Redis** : Réduction de la charge base de données pour les données fréquentes
 
 ### Développement
-- **TypeScript** : Node.js 22 améliore le support des types natifs
+- **TypeScript** : Node.js 24 améliore le support des types natifs
 - **Debugging** : Meilleurs outils de diagnostic
 - **Hot reload** : Performance améliorée en développement
 - **Tests unitaires** : Vitest + Testing Library pour les composants React
@@ -142,7 +143,7 @@
 ## 🔧 Compatibilité
 
 ### Frameworks supportés
-- ✅ **NestJS 11** : Compatible avec Node.js 22
+- ✅ **NestJS 11** : Compatible avec Node.js 24
 - ✅ **Prisma 7** : Support complet de PostgreSQL 16 — client ESM natif + driver adapter pg
 - ✅ **React 19 / Vite 8** : Performance optimisée avec Rolldown + Oxc (remplace esbuild)
 - ✅ **Material-UI 7 / Tailwind 4** : Aucun impact
@@ -150,7 +151,7 @@
 - ✅ **Vitest** : Tests unitaires frontend
 
 ### Images Docker
-- **Base** : `node:22-alpine` (~120MB)
+- **Base** : `node:24-alpine` (~120MB)
 - **Database** : `postgres:16-alpine` (~85MB)
 - **Avantages Alpine** : Images légères et sécurisées
 
@@ -167,7 +168,7 @@ make up
 docker-compose exec server npx prisma db push
 
 # Vérifier les versions
-docker-compose exec server node --version  # v22.x.x
+docker-compose exec server node --version  # v24.x.x
 docker-compose exec postgres psql --version  # 16.x
 ```
 
@@ -179,5 +180,5 @@ docker-compose exec postgres psql --version  # 16.x
 4. **Production** : Ces versions sont prêtes pour la production
 
 ---
-*Dernière mise à jour : Juillet 2026*
+*Dernière mise à jour : Mai 2026*
 

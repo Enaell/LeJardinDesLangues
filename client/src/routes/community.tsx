@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { ProtectedRoute } from '@features/auth/components/ProtectedRoute';
 
 const CommunityPage = () => {
   return (
@@ -12,6 +13,10 @@ const CommunityPage = () => {
 };
 
 export const Route = createFileRoute('/community')({
-  component: CommunityPage,
+  component: () => (
+    <ProtectedRoute requireAuth>
+      <CommunityPage />
+    </ProtectedRoute>
+  ),
 });
 

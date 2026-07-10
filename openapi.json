@@ -17,7 +17,7 @@
         },
         "responses": {
           "201": {
-            "description": "Utilisateur cr\u00e9\u00e9 avec succ\u00e8s",
+            "description": "Utilisateur créé avec succès",
             "content": {
               "application/json": {
                 "schema": {
@@ -27,7 +27,7 @@
             }
           },
           "409": {
-            "description": "Email ou nom d'utilisateur d\u00e9j\u00e0 utilis\u00e9"
+            "description": "Email ou nom d'utilisateur déjà utilisé"
           }
         },
         "summary": "Inscription d'un nouvel utilisateur",
@@ -52,7 +52,7 @@
         },
         "responses": {
           "200": {
-            "description": "Connexion r\u00e9ussie",
+            "description": "Connexion réussie",
             "content": {
               "application/json": {
                 "schema": {
@@ -77,10 +77,10 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Tokens renouvel\u00e9s"
+            "description": "Tokens renouvelés"
           },
           "403": {
-            "description": "Refresh token invalide ou expir\u00e9"
+            "description": "Refresh token invalide ou expiré"
           }
         },
         "summary": "Renouveler les tokens via le refresh token",
@@ -95,10 +95,10 @@
         "parameters": [],
         "responses": {
           "204": {
-            "description": "D\u00e9connexion r\u00e9ussie"
+            "description": "Déconnexion réussie"
           }
         },
-        "summary": "D\u00e9connexion et invalidation de la session",
+        "summary": "Déconnexion et invalidation de la session",
         "tags": [
           "Authentification"
         ]
@@ -140,7 +140,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Profil utilisateur r\u00e9cup\u00e9r\u00e9",
+            "description": "Profil utilisateur récupéré",
             "content": {
               "application/json": {
                 "schema": {
@@ -150,7 +150,7 @@
             }
           },
           "401": {
-            "description": "Token invalide ou expir\u00e9"
+            "description": "Token invalide ou expiré"
           }
         },
         "security": [
@@ -158,7 +158,7 @@
             "JWT-auth": []
           }
         ],
-        "summary": "Obtenir le profil de l'utilisateur connect\u00e9",
+        "summary": "Obtenir le profil de l'utilisateur connecté",
         "tags": [
           "Authentification"
         ]
@@ -170,7 +170,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Profil utilisateur r\u00e9cup\u00e9r\u00e9"
+            "description": "Profil utilisateur récupéré"
           }
         },
         "security": [
@@ -198,7 +198,7 @@
         },
         "responses": {
           "200": {
-            "description": "Profil mis \u00e0 jour avec succ\u00e8s"
+            "description": "Profil mis à jour avec succès"
           }
         },
         "security": [
@@ -206,7 +206,7 @@
             "JWT-auth": []
           }
         ],
-        "summary": "Mettre \u00e0 jour son profil",
+        "summary": "Mettre à jour son profil",
         "tags": [
           "Utilisateurs"
         ]
@@ -216,7 +216,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Compte supprim\u00e9 avec succ\u00e8s"
+            "description": "Compte supprimé avec succès"
           }
         },
         "security": [
@@ -245,10 +245,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Profil utilisateur r\u00e9cup\u00e9r\u00e9"
+            "description": "Profil utilisateur récupéré"
           },
           "404": {
-            "description": "Utilisateur non trouv\u00e9"
+            "description": "Utilisateur non trouvé"
           }
         },
         "security": [
@@ -350,7 +350,7 @@
           },
           "password": {
             "type": "string",
-            "description": "Mot de passe s\u00e9curis\u00e9",
+            "description": "Mot de passe sécurisé",
             "example": "MonMotDePasse123!",
             "minLength": 8
           },
@@ -367,7 +367,7 @@
           },
           "targetLanguage": {
             "type": "string",
-            "description": "Code ISO 639-1 de la langue \u00e0 apprendre",
+            "description": "Code ISO 639-1 de la langue à apprendre",
             "example": "zh"
           }
         },
@@ -446,10 +446,16 @@
         "properties": {
           "user": {
             "$ref": "#/components/schemas/UserResponseDto"
+          },
+          "isNewUser": {
+            "type": "boolean",
+            "example": false,
+            "description": "Indique si l'utilisateur vient d'être créé (via OAuth)"
           }
         },
         "required": [
-          "user"
+          "user",
+          "isNewUser"
         ]
       },
       "LoginDto": {
@@ -491,7 +497,7 @@
           },
           "targetLanguage": {
             "type": "string",
-            "description": "Code ISO 639-1 de la langue \u00e0 apprendre",
+            "description": "Code ISO 639-1 de la langue à apprendre",
             "example": "zh"
           },
           "timezone": {
@@ -501,7 +507,7 @@
           },
           "preferences": {
             "type": "object",
-            "description": "Pr\u00e9f\u00e9rences utilisateur en JSON",
+            "description": "Préférences utilisateur en JSON",
             "example": "{\"theme\": \"dark\", \"notifications\": true}"
           }
         }

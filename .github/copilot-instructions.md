@@ -53,13 +53,13 @@ When provided with a code block and an instructions file, follow these steps:
 - **Framework** : React + TypeScript 6.
 - **UI** : shadcn/ui (style `base-nova`) couplé avec Tailwind CSS v4.
 - **Build Tool** : Vite 8 (Rolldown + Oxc) pour un développement rapide.
-- **Runtime** : Node.js 22.
+- **Runtime** : Node.js 24.
 
 ### Frontend Mobile
 - **Framework** : React Native.
 
 ### Backend
-- **Serveur** : Node.js 22 avec NestJS.
+- **Serveur** : Node.js 24 avec NestJS.
 - **ORM** : Prisma 7 — client généré localement (`src/generated/prisma`), driver adapter `@prisma/adapter-pg` pour PostgreSQL.
 
 ### Base de données
@@ -172,6 +172,9 @@ When provided with a code block and an instructions file, follow these steps:
 - **Outils** :
   - **Passport.js** avec des stratégies OAuth (Google, Facebook).
   - **@nestjs/passport** pour l'intégration avec NestJS.
+
+### Flow post-OAuth onboarding
+Après une première connexion Google (`isNewUser: true`), un `LanguageOnboardingModal` s'affiche pour capturer `nativeLanguage` et `targetLanguage`. Le contexte `AuthModalContext` expose `openOnboarding(nativeLanguage)` pour le déclencher. `AuthResponseDto` inclut `isNewUser?: boolean`. `UserResponseDto` inclut `nativeLanguage`, `targetLanguage`, `createdAt`, `updatedAt`.
 
 ### Unification des sessions
 - Paire de tokens après authentification : **access token** (15 min, httpOnly cookie) + **refresh token** (7 jours, httpOnly cookie).

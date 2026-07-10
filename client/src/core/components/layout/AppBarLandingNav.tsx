@@ -1,11 +1,11 @@
-import { Link } from '@tanstack/react-router';
 import { useTranslation } from '@core/hooks';
-import { LANDING_NAV_ITEMS, ROUTES } from '@core/routes.config';
-import { Button, buttonVariants } from '@core/components/ui/button';
-import { cn } from '@/lib/utils';
+import { LANDING_NAV_ITEMS } from '@core/routes.config';
+import { Button } from '@core/components/ui/button';
+import { useAuthModalContext } from '@features/auth/components/AuthModalContext';
 
 export const AppBarLandingNav = () => {
   const { t } = useTranslation();
+  const { openModal } = useAuthModalContext();
 
   const handleScrollTo = (sectionId: string) => {
     const el = document.getElementById(sectionId);
@@ -20,25 +20,19 @@ export const AppBarLandingNav = () => {
         <Button
           key={item.sectionId}
           variant="ghost-white"
-          size="sm"
+          size="lg"
           onClick={() => handleScrollTo(item.sectionId)}
         >
           {t(item.translationKey)}
         </Button>
       ))}
       <div className="ml-auto flex items-center gap-2">
-        <Link
-          to={ROUTES.HOME}
-          className={cn(buttonVariants({ variant: 'ghost-white', size: 'sm' }))}
-        >
+        <Button variant="ghost-white" size="lg" onClick={() => openModal('login')}>
           {t('auth.login.submitButton')}
-        </Link>
-        <Link
-          to={ROUTES.HOME}
-          className={cn(buttonVariants({ variant: 'inverted', size: 'sm' }), 'rounded-full px-5')}
-        >
+        </Button>
+        <Button variant="inverted" size="lg" className="rounded-full px-6" onClick={() => openModal('register')}>
           {t('landing.cta')}
-        </Link>
+        </Button>
       </div>
     </nav>
   );

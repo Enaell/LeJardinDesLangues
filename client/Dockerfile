@@ -1,5 +1,5 @@
 # Stage de base avec Node.js
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 
 # Installation des dépendances système
 RUN apk add --no-cache curl

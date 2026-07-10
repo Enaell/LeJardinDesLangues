@@ -89,6 +89,15 @@
     "success": {
       "registrationSuccess": "Registration successful! Welcome!",
       "loginSuccess": "Login successful! Welcome back!"
+    },
+    "onboarding": {
+      "title": "One more thing...",
+      "subtitle": "To personalize your experience, let us know your languages.",
+      "nativeLanguage": "Your native language",
+      "targetLanguage": "The language you want to learn",
+      "targetLanguagePlaceholder": "Choose a language",
+      "submitButton": "Start the adventure!",
+      "submitButtonLoading": "Saving..."
     }
   },
   "languages": {
@@ -160,6 +169,85 @@
       "subtitle": "Grow your skills naturally. Stay consistent. Watch your language blossom as you learn in a calm, beautiful space.",
       "cta": "Start your journey 🌿",
       "ctaSubtext": "It's free to begin"
+    },
+    "features": {
+      "heading": "Learn. Grow. Blossom.",
+      "description": "At LinguaGarden, every lesson helps your garden grow. Build your vocabulary, improve your grammar, and watch your world bloom.",
+      "cta": "Explore features",
+      "card1": {
+        "title": "Learn naturally",
+        "description": "Engaging lessons that feel like a breath of fresh air."
+      },
+      "card2": {
+        "title": "Track your growth",
+        "description": "See your progress come to life in your garden."
+      },
+      "card3": {
+        "title": "Stay motivated",
+        "description": "A peaceful space that inspires you every day."
+      }
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "step1": {
+        "title": "Learn",
+        "description": "Complete lessons and practice your skills."
+      },
+      "step2": {
+        "title": "Earn",
+        "description": "Earn experience and nourish your garden."
+      },
+      "step3": {
+        "title": "Grow",
+        "description": "Unlock new plants and beautiful decorations."
+      },
+      "step4": {
+        "title": "Blossom",
+        "description": "Reach new levels and create your dream garden."
+      }
+    },
+    "languages": {
+      "title": "Languages you can grow",
+      "japanese": "Japanese",
+      "korean": "Korean",
+      "chinese": "Chinese",
+      "french": "French",
+      "spanish": "Spanish",
+      "more": "More"
+    },
+    "whyUs": {
+      "title": "Why you'll love LinguaGarden",
+      "item1": {
+        "title": "Peaceful experience",
+        "description": "A calm environment to help you focus and enjoy the process."
+      },
+      "item2": {
+        "title": "Built for consistency",
+        "description": "Gentle reminders and meaningful progress."
+      },
+      "item3": {
+        "title": "Real progress",
+        "description": "From beginner to fluent, step by step."
+      },
+      "item4": {
+        "title": "Beautiful and unique",
+        "description": "A one-of-a-kind learning journey, just for you."
+      }
+    },
+    "team": {
+      "title": "Meet the team",
+      "hina": {
+        "role": "Co-founder & CEO"
+      },
+      "kenji": {
+        "role": "Co-founder & CTO"
+      },
+      "sora": {
+        "role": "Head of Design"
+      },
+      "minho": {
+        "role": "Lead Developer"
+      }
     }
   }
 }

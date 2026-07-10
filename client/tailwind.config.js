@@ -36,6 +36,7 @@ export default {
         },
       },
       fontFamily: {
+        logo: ['var(--font-logo)', 'serif'],
         chinese: ['Noto Sans SC', 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
         french: ['Roboto', 'system-ui', 'sans-serif'],
       },

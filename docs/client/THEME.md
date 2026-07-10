@@ -127,6 +127,7 @@ Tous les composants UI sont dans `@core/components/ui/` et s'importent via `@cor
 | `Select`, `SelectContent`, `SelectItem`, `SelectTrigger`, `SelectValue` | `select` | Liste déroulante |
 | `Checkbox` | `checkbox` | Case à cocher |
 | `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`, `TabsIndicator` | `tabs` | Navigation par onglets |
+| `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `DialogClose`, `DialogOverlay`, `DialogTrigger`, `DialogPortal` | `dialog` | Fenêtre modale accessible (overlay animé, bouton X) |
 | `Progress` | `progress` | Barre de progression |
 | `Switch` | `switch` | Interrupteur toggle |
 | `Avatar`, `AvatarImage`, `AvatarFallback` | `avatar` | Avatar utilisateur |
@@ -182,6 +183,7 @@ import { cn } from '@/lib/utils';
 | `TestimonialCard` | `testimonial-card` | Carte témoignage : citation, auteur, avatar, rating |
 | `CtaBanner` | `cta-banner` | Bannière large avec gradient vert, titre et bouton CTA |
 | `Fab` | `fab` | Floating Action Button circulaire vert, tailles `sm/md/lg` |
+| `LanguageSelector` | `language-selector` | Sélecteur de langue du site (Français / English / 中文), taille `sm` ou `default` |
 
 ## AppBar et styles contextuels
 

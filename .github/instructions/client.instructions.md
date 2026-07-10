@@ -5,7 +5,7 @@ applyTo: "client/src/**"
 # Conventions Frontend — Le Jardin des Langues
 
 ## Stack
-- React 19 + TypeScript, Vite, Node.js 22
+- React 19 + TypeScript, Vite, Node.js 24
 - **UI** : shadcn/ui (`@base-ui/react`, style `base-nova`) + Tailwind CSS v4 — **pas de Material-UI**
 - **Routing** : TanStack Router (fichiers dans `src/routes/`, tree généré dans `routeTree.gen.ts`)
 - **Data fetching** : TanStack Query (`useQuery`, `useMutation`)
@@ -41,6 +41,7 @@ import { Input } from '@core/components/ui/input';
 import { Card, CardContent } from '@core/components/ui/card';
 import { Badge } from '@core/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@core/components/ui/tabs';
+import { Dialog, DialogContent, DialogTitle, DialogClose } from '@core/components/ui/dialog';
 import { Avatar, AvatarImage, AvatarFallback } from '@core/components/ui/avatar';
 import { Progress } from '@core/components/ui/progress';
 import { Switch } from '@core/components/ui/switch';
@@ -56,7 +57,10 @@ import { TestimonialCard } from '@core/components/ui/testimonial-card';
 import { CtaBanner } from '@core/components/ui/cta-banner';
 import { Fab } from '@core/components/ui/fab';
 import { Typography } from '@core/components/ui/typography';
+import { LanguageSelector } from '@core/components/ui/language-selector';
 import { cn } from '@/lib/utils'; // utilitaire clsx
+// Icônes SVG custom (non disponibles dans lucide-react)
+import { GoogleIcon, XIcon, LinkedinIcon, GithubIcon } from '@core/icons';
 ```
 
 ### Règle absolue : toujours `@core/components/ui/` en premier
@@ -145,6 +149,7 @@ src/
 │   │   ├── layout/       ← Layout, AppBar (dual-mode), Footer
 │   │   ├── notifications/ ← GlobalNotifications, useNotify
 │   │   └── ui/           ← TOUS les composants UI (shadcn + custom Jardin des Langues)
+│   ├── icons/            ← Icônes SVG custom : GoogleIcon, XIcon, LinkedinIcon, GithubIcon
 │   ├── hooks, services, utils, types, i18n
 │   └── services/apiClient.ts  ← fetch custom (credentials, erreurs typées, intercepteur 401 → refresh)
 ├── lib/utils.ts        ← cn() de shadcn

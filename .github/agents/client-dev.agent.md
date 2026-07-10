@@ -17,7 +17,7 @@ Tu travailles exclusivement dans le dossier `client/`.
 - TanStack Query (gestion des requêtes API)
 - TanStack Form (formulaires)
 - react-i18next (i18n)
-- Node.js 22
+- Node.js 24
 - Storybook (visualisation et documentation des composants `core/components/ui/`)
 
 ## Conventions de code (OBLIGATOIRES)
@@ -48,9 +48,9 @@ export default function MyComponent() { ... }
 
 ### Composants UI disponibles (`@core/components/ui/`)
 
-**Shadcn/base-ui :** `Button`, `Input`, `Card`+sous-composants, `Badge`, `Label`, `Separator`, `Select`, `Checkbox`, `Tabs`, `Progress`, `Switch`, `Avatar`, `Pagination`
+**Shadcn/base-ui :** `Button`, `Input`, `Card`+sous-composants, `Badge`, `Label`, `Separator`, `Select`, `Checkbox`, `Tabs`, `Dialog`+sous-composants, `Progress`, `Switch`, `Avatar`, `Pagination`
 
-**Custom Jardin des Langues :** `Typography` (variants `h1`–`h6`, `p`, `lead`, `large`, `small`, `muted`, `blockquote`, `code` — prop `as` pour override sémantique), `LevelBadge` (variantes: new/popular/beginner/intermediate/advanced), `StarRating` (0–5 étoiles, readonly ou interactif), `Stepper` (étapes numérotées), `SearchInput` (barre recherche + filtre), `FeatureCard` (image+titre+desc), `PersonCard` (avatar+rôle+socials), `TestimonialCard` (citation+auteur), `CtaBanner` (bannière CTA gradient), `Fab` (bouton action flottant)
+**Custom Jardin des Langues :** `Typography` (variants `h1`–`h6`, `p`, `lead`, `large`, `small`, `muted`, `blockquote`, `code` — prop `as` pour override sémantique), `LevelBadge` (variantes: new/popular/beginner/intermediate/advanced), `StarRating` (0–5 étoiles, readonly ou interactif), `Stepper` (étapes numérotées), `SearchInput` (barre recherche + filtre), `FeatureCard` (image+titre+desc), `PersonCard` (avatar+rôle+socials), `TestimonialCard` (citation+auteur), `CtaBanner` (bannière CTA gradient), `Fab` (bouton action flottant), `LanguageSelector` (sélecteur langue du site, tailles `sm`/`default`)
 ### Règle absolue : toujours `@core/components/ui/` en premier
 
 > Ne jamais écrire un `<button>`, `<a>`, `<h1>`–`<h6>` ou `<p>` raw quand un composant `core/ui` existe.
@@ -117,8 +117,24 @@ src/
 │   ├── services/
 │   ├── types/
 │   └── index.ts      ← exports publics
-├── features/landing/   ← landing page publique
-│   └── components/HeroSection.tsx  (section hero plein écran, HeroBackground.png)
+├── features/auth/      ← `AuthModalContext` expose `openModal(tab?)`, `closeModal()`, `openOnboarding(nativeLanguage)` via `useAuthModalContext()` ; `LanguageOnboardingModal` déclenché par `openOnboarding` après première connexion Google (`isNewUser: true`)
+├── features/dashboard/ ← tableau de bord utilisateur (route `/dashboard` — protégée) ; layout 2 colonnes (`lg:grid-cols-[3fr_2fr]`), fond dégradé jardin
+│   └── components/
+│       ├── DailyGrowthCard.tsx    (objectif XP + Progress bar + CTA)
+│       ├── QuickExerciseCard.tsx  (exercice caractère chinois, choix de réponses)
+│       ├── NewsCard.tsx           (3 actualités, badges catégorie + vignettes)
+│       ├── ProgressCard.tsx       (XP circulaire, streak, mots appris)
+│       ├── QuoteCard.tsx          (citation motivationnelle, bg-primary)
+│       ├── DailyTasksCard.tsx     (4 tâches quotidiennes + ChevronRight)
+│       └── ExploreSection.tsx     (6 cartes navigation + 1 carte CTA)
+├── features/landing/   ← landing page publique (route `/` — pas de `ProtectedRoute`, redirige vers `/profile` si connecté)
+│   └── components/
+│       ├── HeroSection.tsx        (hero plein écran, HeroBackground.png)
+│       ├── FeaturesSection.tsx    ("Learn. Grow. Blossom.", 3 FeatureCard)
+│       ├── HowItWorksSection.tsx  (4 étapes, cercles + ligne pointillés)
+│       ├── LanguagesSection.tsx   (6 cartes langues, grille responsive)
+│       ├── WhyUsSection.tsx       (4 cartes bénéfices, 2×2 → 4 cols)
+│       └── TeamSection.tsx        (4 PersonCard)
 ├── core/
 │   ├── api/          ← hooks + types générés par orval (NE PAS modifier manuellement)
 │   │   ├── authentification/authentification.ts
@@ -132,9 +148,11 @@ src/
 │   │   │   ├── AppBarDesktop   (nav app : Dictionary, Flashcards, Exercises, Community)
 │   │   │   ├── AppBarMobile    (nav app mobile)
 │   │   │   ├── AppBarLandingNav        (nav landing desktop : scroll vers sections)
-│   │   │   └── AppBarLandingNavMobile  (nav landing mobile)
+│   │   │   ├── AppBarLandingNavMobile  (nav landing mobile)
+│   │   │   └── Footer                  (multi-colonnes, bg-primary — logo + 3 colonnes liens + icônes sociales + copyright)
 │   │   ├── notifications/ ← GlobalNotifications, useNotify
 │   │   └── ui/           ← TOUS les composants UI (shadcn + custom Jardin des Langues)
+│   ├── icons/            ← Icônes SVG custom : GoogleIcon, XIcon, LinkedinIcon, GithubIcon
 │   ├── services/apiClient.ts  ← fetch custom (credentials, erreurs typées, intercepteur 401 → refresh)
 │   └── hooks, utils, types, i18n
 ├── lib/utils.ts      ← cn()

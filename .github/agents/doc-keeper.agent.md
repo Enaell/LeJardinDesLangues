@@ -13,6 +13,8 @@ Tu maintiens la cohérence entre ce qui est développé et ce qui est documenté
 ### Documentation technique
 | Dossier/Fichier | Contenu |
 |---|---|
+| `docs/functional/README.md` | Index des fonctionnalités documentées (état d'avancement) |
+| `docs/functional/AUTHENTIFICATION.md` | Parcours utilisateur connexion / inscription / Google OAuth |
 | `docs/client/ARCHITECTURE.md` | Architecture frontend (features, core, routes) |
 | `docs/client/THEME.md` | Conventions de thème et design |
 | `docs/server/ARCHITECTURE.md` | Architecture backend (modules, API, auth, BDD) |
@@ -44,6 +46,30 @@ Tu maintiens la cohérence entre ce qui est développé et ce qui est documenté
 - Un nouveau composant est ajouté dans `core/components/ui/` → vérifier que sa story Storybook existe dans `.storybook/stories/` + mettre à jour `docs/client/THEME.md` (table des composants)
 - Une nouvelle convention de code est établie → mettre à jour l'agent concerné + l'instruction auto-injectée concernée + `copilot-instructions.md`
 - Une dépendance est ajoutée/mise à jour → mettre à jour `docs/VERSIONS.md`
+- Une fonctionnalité utilisateur est implémentée ou modifiée → mettre à jour `docs/functional/` (voir règles ci-dessous)
+
+### Documentation fonctionnelle (`docs/functional/`)
+
+Cette section documente les fonctionnalités **du point de vue utilisateur** (parcours, champs, comportements, erreurs).
+
+| Déclencheur | Action |
+|---|---|
+| Une nouvelle fonctionnalité user-facing est développée | Créer `docs/functional/NOM_FEATURE.md` + mettre à jour `docs/functional/README.md` (table + statut) |
+| Un parcours existant évolue (nouveaux champs, nouveau flow) | Mettre à jour la section concernée dans le fichier existant |
+| Une fonctionnalité est retirée ou remplacée | Supprimer ou marquer `❌ Retiré` dans `docs/functional/README.md` |
+| Le statut d'une feature change (ex : partiellement implémenté) | Mettre à jour la colonne **Statut** dans `docs/functional/README.md` |
+
+**Statuts utilisés dans `docs/functional/README.md` :**
+- `✅ Implémenté` — fonctionnalité complète et stable
+- `🚧 En cours` — partiellement développée
+- `📋 Prévu` — planifiée, pas encore développée
+
+**Structure d'un fichier fonctionnel (`docs/functional/NOM_FEATURE.md`) :**
+1. Vue d'ensemble (1–2 phrases)
+2. Parcours utilisateur (étapes numérotées)
+3. Champs / données (tableaux)
+4. Comportements en cas d'erreur
+5. Section "Points techniques" (hooks, composants, endpoints — pour les devs)
 
 ### Après modification de l'architecture
 - Nouvelle feature ajoutée dans `src/features/` → mettre à jour `docs/client/ARCHITECTURE.md` (table des features)
@@ -53,7 +79,7 @@ Tu maintiens la cohérence entre ce qui est développé et ce qui est documenté
 ### Sur demande directe
 - L'utilisateur demande explicitement de documenter quelque chose
 - L'utilisateur veut qu'un agent connaisse une nouvelle règle ou convention
-- Création d'un nouveau fichier de doc dans `client/docs/` ou `docs/`
+- Création d'un nouveau fichier de doc dans `client/docs/`, `docs/` ou `docs/functional/`
 
 ## Approche
 

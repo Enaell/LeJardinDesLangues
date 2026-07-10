@@ -9,4 +9,6 @@ import type { UserResponseDto } from './userResponseDto.ts';
 
 export interface AuthResponseDto {
   user: UserResponseDto;
+  /** Indique si l'utilisateur vient d'être créé (via OAuth) */
+  isNewUser: boolean;
 }

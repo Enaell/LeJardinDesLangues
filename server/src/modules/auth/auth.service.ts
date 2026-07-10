@@ -27,10 +27,15 @@ export type UserResponse = {
   name: string;
   role: Role;
   avatarUrl?: string;
+  nativeLanguage: string;
+  targetLanguage: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type AuthResponse = {
   user: UserResponse;
+  isNewUser?: boolean;
 };
 
 export type TokenPair = {
@@ -53,6 +58,10 @@ export class AuthService {
     name: string;
     role: Role;
     avatarUrl?: string | null;
+    nativeLanguage: string;
+    targetLanguage: string;
+    createdAt: Date;
+    updatedAt: Date;
   }): UserResponse {
     return {
       id: user.id,
@@ -61,6 +70,10 @@ export class AuthService {
       name: user.name,
       role: user.role,
       avatarUrl: user.avatarUrl ?? undefined,
+      nativeLanguage: user.nativeLanguage,
+      targetLanguage: user.targetLanguage,
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
     };
   }
 
@@ -183,6 +196,8 @@ export class AuthService {
       oauthUserDto.providerId,
     );
 
+    const isNewUser = !user;
+
     if (!user) {
       user = await this.usersService.createOAuthUser(oauthUserDto);
     } else {
@@ -191,7 +206,7 @@ export class AuthService {
 
     await this.usersService.updateLastLogin(user.id);
 
-    return { user: this.buildUserResponse(user) };
+    return { user: this.buildUserResponse(user), isNewUser };
   }
 
   async validateUser(payload: JwtPayload) {

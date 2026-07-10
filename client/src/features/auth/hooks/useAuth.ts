@@ -118,20 +118,19 @@ export const useAuth = () => {
 // Hook pour la redirection Google OAuth
 export const useGoogleAuth = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const authApi = useAuthApi();
+  const { notifyApiError } = useNotify();
 
   return useMutation<AuthResponse, AuthError, void>({
     mutationFn: () => authApi.googleAuth(),
     onSuccess: (data) => {
       // Le cookie httpOnly est posé par le serveur dans la popup
+      // La navigation et l'onboarding sont gérés par les composants appelants
       queryClient.setQueryData(authKeys.profile(), data.user);
-      router.navigate({ to: '/profile' }).catch(() => {
-        router.navigate({ to: '/' });
-      });
     },
     onError: (error) => {
       console.error("Erreur lors de l'authentification Google:", error);
+      notifyApiError(error);
     },
   });
 };
